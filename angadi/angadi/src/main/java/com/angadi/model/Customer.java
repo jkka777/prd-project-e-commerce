@@ -19,6 +19,6 @@ public class Customer {
     private String password;
     private String city;
     private String state;
-    private RoleType role;
+    private String role;
 
 }
