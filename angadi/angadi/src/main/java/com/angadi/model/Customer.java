@@ -13,14 +13,12 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer customerId;
-
-    private String customerName;
-    private String customerMobile;
-    private String customerEmail;
-    private String customerPassword;
-    private String customerCity;
-    private String customerPinCode;
-    private String customerState;
+    private String name;
+    private String mobile;
+    private String email;
+    private String password;
+    private String city;
+    private String state;
     private RoleType role;
 
 }
