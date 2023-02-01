@@ -29,8 +29,8 @@ public class CustomerUserDetails implements UserDetailsService {
 
             List<GrantedAuthority> authorities = new ArrayList<>();
 
-            SimpleGrantedAuthority sga = new SimpleGrantedAuthority(customer.getRole());
-            authorities.add(sga);
+            /*SimpleGrantedAuthority sga = new SimpleGrantedAuthority(customer.getCustomerType());
+            authorities.add(sga);*/
 
             return new User(customer.getEmail(), customer.getPassword(), authorities);
         }

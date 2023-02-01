@@ -1,10 +1,10 @@
 package com.angadi.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -13,12 +13,19 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer customerId;
-    private String name;
-    private String mobile;
-    private String email;
-    private String password;
-    private String city;
-    private String state;
-    private String role;
 
+    private String name;
+
+    private String mobile;
+
+    private String email;
+
+    private String password;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private Set<Address> addresses = new HashSet<>();
+
+    private CustomerType customerType;
+
+    private LocalDateTime registeredTime;
 }
