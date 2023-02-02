@@ -29,8 +29,8 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
             String jwt = Jwts.builder()
                     .setIssuer("admin@angadi")
                     .setSubject("jwt token")
-                    .claim("username", authentication.getName())
-                    .claim("role", authentication.getAuthorities())
+                    .claim("email", authentication.getName())
+                    .claim("authorities", authentication.getAuthorities())
                     .setIssuedAt(new Date())
                     .setExpiration(new Date(new Date().getTime() + 30000000))
                     .signWith(secretKey).compact();
@@ -41,6 +41,7 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    /*
     private String getRole(Collection<? extends GrantedAuthority> collection) {
 
         String role = "";
@@ -49,6 +50,7 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
         }
         return role;
     }
+    */
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
