@@ -1,13 +1,13 @@
 package com.angadi.service;
 
 import com.angadi.exception.CustomerException;
+import com.angadi.model.Address;
 import com.angadi.model.Customer;
 import com.angadi.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -24,13 +24,14 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer updateCustomer(Customer customer) throws CustomerException {
 
-        Optional<Customer> optional = Optional.ofNullable(customerRepository.findByEmail(customer.getEmail()));
+//        Optional<Customer> optional = Optional.ofNullable(customerRepository.findByEmail(customer.getEmail()));
 
-        if (optional.isPresent()) {
-            Customer c = optional.get();
-            return customerRepository.save(customer);
+        Customer rc = customerRepository.findByEmail(customer.getEmail());
+
+        if (rc == null) {
+            throw new CustomerException("No customer found with given Email -> " + customer.getEmail());
         }
-        throw new CustomerException("No customer found with given Email -> " + customer.getEmail());
+        return customerRepository.save(customer);
     }
 
     @Override
@@ -61,4 +62,25 @@ public class CustomerServiceImpl implements CustomerService {
         List<Customer> customerList = customerRepository.findAll();
         return customerList;
     }
+
+    @Override
+    public Set<Address> addAddress(Address address, String email) throws CustomerException {
+
+        Set<Address> addressList = new HashSet<>();
+        addressList.add(address);
+        Customer customer = customerRepository.findByEmail(email);
+
+        if (customer == null) {
+            throw new CustomerException("No customer found with given Email -> " + email);
+        } else {
+            customer.setAddresses(addressList);
+            address.setCustomer(customer);
+            customerRepository.save(customer);
+        }
+        return addressList;
+    }
+
+
+
+
 }

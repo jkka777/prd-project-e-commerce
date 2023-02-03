@@ -1,9 +1,11 @@
 package com.angadi.service;
 
 import com.angadi.exception.CustomerException;
+import com.angadi.model.Address;
 import com.angadi.model.Customer;
 
 import java.util.List;
+import java.util.Set;
 
 public interface CustomerService {
 
@@ -20,4 +22,6 @@ public interface CustomerService {
 
     /*admin specific method*/
     public List<Customer> getAllCustmerDetails() throws CustomerException;
+
+    public Set<Address> addAddress(Address address, String email) throws CustomerException;
 }
