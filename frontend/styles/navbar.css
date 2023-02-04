@@ -1,0 +1,66 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: monospace;
+}
+
+.navbar {
+    height: 80px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    overflow: hidden;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-bottom: 1px solid gainsboro;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.nav-div-1 {
+    width: 30%;
+    height: 70%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    /* border: 1px solid black; */
+}
+
+.nav-div-1>a {
+    color: rgb(96, 96, 96);
+    font-weight: 400;
+    font-size: 32px;
+    text-decoration: none;
+    text-align: center;
+    /* border: 1px solid black; */
+}
+
+.nav-div-1>a:hover {
+    color: black;
+}
+
+
+.nav-div-2 {
+    width: 70%;
+    height: 40%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.nav-div-2>a {
+    color: rgb(96, 96, 96);
+    font-weight: 400;
+    font-size: 15px;
+    text-decoration: none;
+}
+
+.nav-div-2>a:hover {
+    color: black;
+    text-decoration: underline;
+}
