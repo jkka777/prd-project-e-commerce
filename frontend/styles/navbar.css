@@ -15,7 +15,9 @@
     margin: auto;
     display: flex;
     align-items: center;
+    background-color: white;
     border-bottom: 1px solid gainsboro;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 .nav-div-1 {
