@@ -34,11 +34,24 @@ public class Product {
     @DecimalMax(value = "5.0")
     private Double productRatings;
 
+    @NotBlank(message = "Stock cannot be blank")
+    @NotEmpty(message = "Stock cannot be empty")
+    @NotNull(message = "Stock cannot be null")
+    @DecimalMin(value = "0.0")
+    private Double productStock;
+
+    @NotBlank(message = "Quantity cannot be blank")
+    @NotEmpty(message = "Quantity cannot be empty")
+    @NotNull(message = "Quantity cannot be null")
+    @DecimalMin(value = "0.0")
+    private Double productQuantity;
+
     @ManyToOne
     @JoinColumn(name = "categoryId")
     private Category category;
 
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name = "orderId")
     private Orders orders;
+    */
 }
