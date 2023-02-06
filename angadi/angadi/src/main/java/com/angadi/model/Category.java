@@ -1,5 +1,6 @@
 package com.angadi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -25,6 +26,7 @@ public class Category {
             "and can contain a-z or A-Z or 0-9")
     private String categoryName;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private Set<Product> products = new HashSet<>();
 

@@ -1,9 +1,6 @@
 package com.angadi.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -33,10 +30,8 @@ public class Shipping {
     @Pattern(regexp = "^[6-9][0-9]{9}", message = "Enter valid 10 digit mobile number")
     private String phone;
 
-    @NotBlank(message = "Mobile cannot be blank")
-    @NotEmpty(message = "Mobile cannot be empty")
-    @NotNull(message = "Mobile cannot be null")
-    @Min(1)
-    private Integer orderId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private Orders orders;
 
 }

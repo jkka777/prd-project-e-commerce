@@ -20,11 +20,11 @@ public interface ProductService {
 
     public Set<Product> getAllProductsByCategoryAndByPriceLowToHigh(String category, Long minPrice, Long maxPrice, String email) throws ProductException, CustomerException;
 
-    public Set<Product> getAllProductsByCategoryAndByRatingsHighToLow(String category, Double minRating, Double maxRating) throws ProductException, CustomerException;
+    public Set<Product> getAllProductsByCategoryAndByRatingsHighToLow(String category, Double minRating, Double maxRating, String email) throws ProductException, CustomerException;
 
-    public Set<Product> getAllProductsByCategoryAndByRatingsLowToHigh(String category, Double minRating, Double maxRating) throws ProductException, CustomerException;
+    public Set<Product> getAllProductsByCategoryAndByRatingsLowToHigh(String category, Double minRating, Double maxRating, String email) throws ProductException, CustomerException;
 
-    public boolean getStockAvailabilityForAProduct(String product, String email) throws CustomerException, ProductException;
+    public Set<Product> getAllProductsByCategoryAndByRatings(String category, Double minRating,String email) throws ProductException, CustomerException;
 
     public Double getStockNumberForProduct(String product, String email) throws CustomerException, ProductException;
 }

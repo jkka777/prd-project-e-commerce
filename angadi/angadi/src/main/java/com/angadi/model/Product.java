@@ -50,8 +50,8 @@ public class Product {
     @JoinColumn(name = "categoryId")
     private Category category;
 
-    /*@ManyToOne
-    @JoinColumn(name = "orderId")
-    private Orders orders;
-    */
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    private OrderDetails orderDetails;
+
 }
