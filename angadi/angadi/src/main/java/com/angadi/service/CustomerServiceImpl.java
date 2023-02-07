@@ -3,7 +3,10 @@ package com.angadi.service;
 import com.angadi.exception.CustomerException;
 import com.angadi.model.Address;
 import com.angadi.model.Customer;
+import com.angadi.model.Wallet;
+import com.angadi.repository.AddressRepository;
 import com.angadi.repository.CustomerRepository;
+import com.angadi.repository.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,12 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private AddressRepository addressRepository;
+
+    @Autowired
+    private WalletRepository walletRepository;
+
     @Override
     public Customer saveCustomer(Customer customer) {
 
@@ -23,8 +32,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer updateCustomer(Customer customer) throws CustomerException {
-
-//        Optional<Customer> optional = Optional.ofNullable(customerRepository.findByEmail(customer.getEmail()));
 
         Customer rc = customerRepository.findByEmail(customer.getEmail());
 
@@ -65,17 +72,22 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Set<Address> addAddress(Address address, String email) throws CustomerException {
 
-        Set<Address> addressList = new HashSet<>();
-        addressList.add(address);
         Customer customer = customerRepository.findByEmail(email);
 
         if (customer == null) {
             throw new CustomerException("No customer found with given Email -> " + email);
         } else {
+            Set<Address> addressList = customer.getAddresses();
+
+            addressList.add(address);
             customer.setAddresses(addressList);
+
             address.setCustomer(customer);
+
             customerRepository.save(customer);
+            addressRepository.save(address);
+
+            return addressList;
         }
-        return addressList;
     }
 }

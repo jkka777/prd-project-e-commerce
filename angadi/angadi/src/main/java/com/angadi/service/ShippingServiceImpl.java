@@ -6,6 +6,7 @@ import com.angadi.model.Customer;
 import com.angadi.model.Orders;
 import com.angadi.model.Shipping;
 import com.angadi.repository.CustomerRepository;
+import com.angadi.repository.OrderRepository;
 import com.angadi.repository.ShippingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class ShippingServiceImpl implements ShippingService {
     @Autowired
     private ShippingRepository shippingRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
+
     @Override
     public Shipping addShippingDetails(Shipping shipping, String email) {
 
@@ -31,6 +35,7 @@ public class ShippingServiceImpl implements ShippingService {
             Orders orders = shipping.getOrders();
             orders.setShipping(shipping);
 
+            orderRepository.save(orders);
             return shippingRepository.save(shipping);
         }
         throw new CustomerException("No customer found with given email -> " + email);
@@ -51,6 +56,8 @@ public class ShippingServiceImpl implements ShippingService {
 
                 Orders orders = shipping.getOrders();
                 orders.setShipping(shipping);
+
+                orderRepository.save(orders);
 
                 return shippingRepository.save(shipping);
             }

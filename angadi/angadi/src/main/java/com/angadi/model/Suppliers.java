@@ -29,6 +29,7 @@ public class Suppliers {
     @NotBlank(message = "Email cannot be blank")
     @NotEmpty(message = "Email cannot be empty")
     @NotNull(message = "Email cannot be null")
+    @Column(unique = true)
     private String email;
 
     @NotBlank(message = "Street cannot be blank")

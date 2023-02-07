@@ -5,6 +5,7 @@ import com.angadi.exception.OrderException;
 import com.angadi.model.*;
 import com.angadi.repository.CustomerRepository;
 import com.angadi.repository.OrderRepository;
+import com.angadi.repository.ShippingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private ShippingRepository shippingRepository;
 
     /* Update order details such as customer info, payments info, shipping info by providing order id  */
 
@@ -45,6 +48,7 @@ public class OrderServiceImpl implements OrderService {
                 o.setShipping(shipping);
 
                 orderRepository.save(orders);
+                shippingRepository.save(shipping);
                 return orders;
             }
             throw new OrderException("No order details found with given order id -> " + orders.getOrderId());
