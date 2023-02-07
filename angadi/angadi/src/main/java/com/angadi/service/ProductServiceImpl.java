@@ -91,6 +91,7 @@ public class ProductServiceImpl implements ProductService {
             Optional<Product> optional = productRepository.findById(product.getProductId());
 
             if (optional.isPresent()) {
+
                 Product p = optional.get();
                 productRepository.delete(product);
                 return p;
@@ -140,7 +141,7 @@ public class ProductServiceImpl implements ProductService {
 
                 for (Long i = minPrice; i <= maxPrice; i++) {
                     for (Product p : list) {
-                        if (p.getProductPrice() == i) {
+                        if (p.getProductPrice().equals(i)) {
                             resultList.add(p);
                         }
                     }
@@ -171,7 +172,9 @@ public class ProductServiceImpl implements ProductService {
                 List<Product> resultList = new ArrayList<>();
 
                 for (Long i = minPrice; i <= maxPrice; i++) {
+
                     for (Product p : list) {
+
                         if (p.getProductPrice() == i) {
                             resultList.add(p);
                         }
@@ -203,7 +206,9 @@ public class ProductServiceImpl implements ProductService {
                 List<Product> resultList = new ArrayList<>();
 
                 for (Double i = minRating; i <= maxRating; i++) {
+
                     for (Product p : list) {
+
                         if (p.getProductRatings().equals(i)) {
                             resultList.add(p);
                         }
@@ -236,7 +241,9 @@ public class ProductServiceImpl implements ProductService {
                 List<Product> resultList = new ArrayList<>();
 
                 for (Double i = minRating; i <= maxRating; i++) {
+
                     for (Product p : list) {
+
                         if (p.getProductRatings().equals(i)) {
                             resultList.add(p);
                         }

@@ -21,52 +21,53 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public Set<Address> addAddress(Address address, String email) throws CustomerException {
 
-        Set<Address> addressList = new HashSet<>();
-        addressList.add(address);
-
         Customer customer = customerRepository.findByEmail(email);
 
         if (customer == null) {
             throw new CustomerException("No customer found with given Email -> " + email);
         } else {
+            Set<Address> addressList = customer.getAddresses();
+            addressList.add(address);
+
             customer.setAddresses(addressList);
+
             address.setCustomer(customer);
+
             customerRepository.save(customer);
+            addressRepository.save(address);
+
+            return addressList;
         }
-        return addressList;
     }
 
     @Override
     public Address updateAddress(Address address, String email) throws CustomerException, AddressException {
 
-        List<Address> list = addressRepository.findAll();
+        Customer customer = customerRepository.findByEmail(email);
 
-        if (list.size() != 0) {
+        if (customer != null) {
 
-            Optional<Address> optional = addressRepository.findById(address.getAddressId());
+            Set<Address> addressList = customer.getAddresses();
 
-            if (optional.isPresent()) {
+            if (!addressList.isEmpty()) {
 
-                Address a = optional.get();
-                Customer customer = customerRepository.findByEmail(email);
+                for (Address a : addressList) {
 
-                if (customer.getEmail().equals(a.getCustomer().getEmail())) {
+                    if (a.getAddressId().equals(address.getAddressId())) {
 
-                    Set<Address> addresses = new HashSet<>();
-                    addresses.add(address);
+                        customer.setAddresses(addressList);
+                        address.setCustomer(customer);
 
-                    customer.setAddresses(addresses);
-
-                    addressRepository.save(address);
-                    address.setCustomer(customer);
-
-                    return address;
+                        customerRepository.save(customer);
+                        return addressRepository.save(address);
+                    }
+                    throw new AddressException("No address details found with given address!");
                 }
-                throw new CustomerException("Customer details did not match with given email -> " + email);
             }
-            throw new AddressException("No address found with given details!");
+            throw new AddressException("Customer with given email does not have any address. Please add one!");
         }
-        throw new AddressException("No address found with given details!");
+        throw new CustomerException("No customer found with given email -> " + email);
+
     }
 
     @Override

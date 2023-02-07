@@ -44,6 +44,7 @@ public class Customer {
             "character")
     private String password;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<Address> addresses = new HashSet<>();
 
@@ -57,6 +58,10 @@ public class Customer {
     @NotEmpty
     private LocalDateTime registeredTime;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<Orders> orders = new HashSet<>();
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Wallet wallet;
 }

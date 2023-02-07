@@ -94,4 +94,27 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
         }
         throw new CustomerException("No customer found with given email -> " + email);
     }
+
+    @Override
+    public Double getPriceOfOrderDetails(OrderDetails orderDetails, String email) throws OrderDetailsException, CustomerException {
+
+        Customer customer = customerRepository.findByEmail(email);
+
+        if (customer != null) {
+
+            Optional<OrderDetails> optional = orderDetailsRepository.findById(orderDetails.getOrderDetailsId());
+
+            if (optional.isPresent()) {
+
+                OrderDetails od = optional.get();
+
+                Product product = od.getProduct();
+                Double productPrice = (double) product.getProductPrice();
+
+                return productPrice * od.getQuantity();
+            }
+            throw new OrderDetailsException("No data found with given order details!");
+        }
+        throw new CustomerException("No Customer found with given email -> " + email);
+    }
 }
