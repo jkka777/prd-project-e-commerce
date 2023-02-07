@@ -2,14 +2,20 @@ package com.angadi.service;
 
 import com.angadi.exception.CustomerException;
 import com.angadi.exception.WalletException;
+import com.angadi.exception.WalletTransactionException;
 import com.angadi.model.Customer;
 import com.angadi.model.Wallet;
+import com.angadi.model.WalletTransactions;
 import com.angadi.repository.CustomerRepository;
 import com.angadi.repository.WalletRepository;
+import com.angadi.repository.WalletTransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class WalletServiceImpl implements WalletService {
@@ -19,7 +25,9 @@ public class WalletServiceImpl implements WalletService {
 
     @Autowired
     private WalletRepository walletRepository;
-    private Optional<Wallet> desOpt;
+
+    @Autowired
+    private WalletTransactionRepository walletTransactionRepository;
 
     @Override
     public Wallet addWallet(Wallet wallet, String email) throws CustomerException {
@@ -81,7 +89,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public Customer transferAmount(Integer walletId, Double amount, String email) throws WalletException, CustomerException {
+    public Customer transferAmount(Integer walletId, String description, Double transferAmount, String email) throws WalletException, CustomerException {
 
         Customer sourceCustomer = customerRepository.findByEmail(email);
 
@@ -92,7 +100,34 @@ public class WalletServiceImpl implements WalletService {
             if (optional.isPresent()) {
 
                 Wallet sourceWallet = optional.get();
-                sourceWallet.setWalletBalance(sourceWallet.getWalletBalance() - amount);
+
+                Double sourceBalance = sourceWallet.getWalletBalance();
+
+                if (transferAmount > sourceBalance) {
+                    throw new WalletException("Insufficient amount in wallet! Please add balance to proceed fund transfer.");
+                }
+                sourceWallet.setWalletBalance(sourceBalance - transferAmount);
+
+                /* For recording new wallet transaction, create object */
+
+                WalletTransactions walletTransactions = new WalletTransactions();
+                WalletTransactionService swts = new WalletTransactionServiceImpl();
+
+                walletTransactions.setTransactionTime(LocalDateTime.now());
+                walletTransactions.setAmount(transferAmount);
+                walletTransactions.setWallet(sourceWallet);
+                walletTransactions.setDescription(description);
+
+                /* Saving the new wallet transaction from above object by calling add function of Wallet transaction services */
+
+                WalletTransactions sourceWalletTransaction = swts.addTransaction(walletTransactions, email);
+
+                /* set the above saved transaction to customer wallet */
+
+                Set<WalletTransactions> transactions = sourceWallet.getWalletTransactions();
+                transactions.add(sourceWalletTransaction);
+
+                sourceWallet.setWalletTransactions(transactions);
 
                 sourceCustomer.setWallet(sourceWallet);
                 sourceWallet.setCustomer(sourceCustomer);
@@ -110,7 +145,30 @@ public class WalletServiceImpl implements WalletService {
 
                     if (destinationCustomer != null) {
 
-                        destinationWallet.setWalletBalance(destinationWallet.getWalletBalance() + amount);
+                        /* For recording new wallet transaction, create object */
+
+                        WalletTransactions wt = new WalletTransactions();
+                        WalletTransactionService dwts = new WalletTransactionServiceImpl();
+
+                        wt.setTransactionTime(LocalDateTime.now());
+                        wt.setAmount(transferAmount);
+                        wt.setWallet(destinationWallet);
+                        wt.setDescription(description);
+
+                        /* Saving the new wallet transaction from above object by calling add function of Wallet transaction services */
+
+                        WalletTransactions destinationWalletTransaction = dwts.addTransaction(wt, destinationCustomer.getEmail());
+
+                        /* set the above saved transaction to customer wallet */
+
+                        Set<WalletTransactions> destWalletTransactionSet = destinationWallet.getWalletTransactions();
+                        destWalletTransactionSet.add(destinationWalletTransaction);
+
+                        destinationWallet.setWalletTransactions(destWalletTransactionSet);
+
+                        Double destBalance = destinationWallet.getWalletBalance();
+
+                        destinationWallet.setWalletBalance(destBalance + transferAmount);
 
                         destinationCustomer.setWallet(destinationWallet);
                         destinationWallet.setCustomer(destinationCustomer);

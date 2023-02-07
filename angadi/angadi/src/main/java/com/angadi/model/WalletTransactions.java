@@ -34,7 +34,7 @@ public class WalletTransactions {
     @NotEmpty(message = "Description cannot be empty")
     private String description;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "walletId")
     private Wallet wallet;
 

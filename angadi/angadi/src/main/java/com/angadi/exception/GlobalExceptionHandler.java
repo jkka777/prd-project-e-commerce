@@ -1,5 +1,6 @@
 package com.angadi.exception;
 
+import com.angadi.model.WalletTransactions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -88,6 +89,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(WalletException.class)
     ResponseEntity<ErrorDetails> walletExceptionHandler(WalletException we, WebRequest webRequest) {
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), we.getMessage(), webRequest.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(WalletTransactionException.class)
+    ResponseEntity<ErrorDetails> walletTransactionExceptionHandler(WalletTransactionException wte, WebRequest webRequest) {
+        ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), wte.getMessage(), webRequest.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 }

@@ -13,7 +13,7 @@ public interface WalletService {
 
     public Double showBalance(Integer walletId, String email) throws WalletException, CustomerException;
 
-    public Customer transferAmount(Integer walletId, Double amount, String email) throws WalletException, CustomerException;
+    public Customer transferAmount(Integer walletId, String description, Double amount, String email) throws WalletException, CustomerException;
 
 
 }
