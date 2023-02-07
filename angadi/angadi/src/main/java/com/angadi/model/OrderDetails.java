@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Data
 public class OrderDetails {
@@ -12,12 +15,12 @@ public class OrderDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer orderDetailsId;
 
-    @OneToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "orderId")
     private Orders orders;
 
-    @OneToOne
-    @JoinColumn(name = "productId")
+    @OneToOne(mappedBy = "orderDetails", cascade = CascadeType.ALL)
+    @JoinColumn(name = "orderDetailsId")
     private Product product;
 
     @NotBlank(message = "Quantity cannot be blank")
@@ -27,7 +30,7 @@ public class OrderDetails {
     @Max(value = 10, message = "Maximum quantity cannot be greater than 10")
     private Integer quantity;
 
-    @OneToOne
+    @OneToOne(mappedBy = "orderDetails", cascade = CascadeType.ALL)
     @JoinColumn(name = "supplierId")
     private Suppliers suppliers;
 }

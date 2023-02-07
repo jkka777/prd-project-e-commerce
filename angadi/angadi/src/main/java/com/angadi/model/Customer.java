@@ -1,5 +1,6 @@
 package com.angadi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -55,4 +56,7 @@ public class Customer {
     @NotBlank
     @NotEmpty
     private LocalDateTime registeredTime;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private Set<Orders> orders = new HashSet<>();
 }

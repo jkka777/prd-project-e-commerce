@@ -9,11 +9,16 @@ import com.angadi.model.Product;
 import com.angadi.repository.CategoryRepository;
 import com.angadi.repository.CustomerRepository;
 import com.angadi.repository.ProductRepository;
+import com.angadi.utility.SortByPriceHighToLow;
+import com.angadi.utility.SortByPriceLowToHigh;
+import com.angadi.utility.SortByRatingHighToLow;
+import com.angadi.utility.SortByRatingsLowToHigh;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
+@Service
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
@@ -36,6 +41,7 @@ public class ProductServiceImpl implements ProductService {
 
             Set<Product> categoryProducts = category.getProducts();
             categoryProducts.add(product);
+
             category.setProducts(categoryProducts);
             categoryRepository.save(category);
 
@@ -114,6 +120,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Set<Product> getAllProductsByCategoryAndByPriceHighToLow(String category, Long minPrice, Long maxPrice, String email) throws ProductException, CustomerException {
 
+        /*
+        getting a product by price of high to low from category
+        */
+
         Customer customer = customerRepository.findByEmail(email);
 
         if (customer != null) {
@@ -126,11 +136,18 @@ public class ProductServiceImpl implements ProductService {
 
                 List<Product> list = new ArrayList<>(products);
 
-                List<Product> sortedList = list.stream().
-                        sorted(Comparator.comparingLong(Product::getProductPrice).reversed())
-                        .toList();
+                List<Product> resultList = new ArrayList<>();
 
-                return new HashSet<>(sortedList);
+                for (Long i = minPrice; i <= maxPrice; i++) {
+                    for (Product p : list) {
+                        if (p.getProductPrice() == i) {
+                            resultList.add(p);
+                        }
+                    }
+                }
+
+                resultList.sort(new SortByPriceHighToLow());
+                return new HashSet<>(resultList);
             }
         }
         throw new CustomerException("No user found with given email -> " + email);
@@ -151,32 +168,126 @@ public class ProductServiceImpl implements ProductService {
 
                 List<Product> list = new ArrayList<>(products);
 
-                List<Product> sortedList = list.stream().
-                        sorted(Comparator.comparingLong(Product::getProductPrice)).toList();
+                List<Product> resultList = new ArrayList<>();
 
-                return new HashSet<>(sortedList);
+                for (Long i = minPrice; i <= maxPrice; i++) {
+                    for (Product p : list) {
+                        if (p.getProductPrice() == i) {
+                            resultList.add(p);
+                        }
+                    }
+                }
+
+                resultList.sort(new SortByPriceLowToHigh());
+                return new HashSet<>(resultList);
             }
         }
         throw new CustomerException("No user found with given email -> " + email);
     }
 
     @Override
-    public Set<Product> getAllProductsByCategoryAndByRatingsHighToLow(String category, Double minRating, Double maxRating) throws ProductException, CustomerException {
-        return null;
+    public Set<Product> getAllProductsByCategoryAndByRatingsHighToLow(String category, Double minRating, Double maxRating, String email) throws ProductException, CustomerException {
+
+        Customer customer = customerRepository.findByEmail(email);
+
+        if (customer != null) {
+
+            Category c = categoryRepository.findByCategoryName(category);
+
+            if (c != null) {
+
+                Set<Product> products = c.getProducts();
+
+                List<Product> list = new ArrayList<>(products);
+
+                List<Product> resultList = new ArrayList<>();
+
+                for (Double i = minRating; i <= maxRating; i++) {
+                    for (Product p : list) {
+                        if (p.getProductRatings().equals(i)) {
+                            resultList.add(p);
+                        }
+                    }
+                }
+
+                resultList.sort(new SortByRatingHighToLow());
+                return new HashSet<>(resultList);
+            }
+        }
+        throw new CustomerException("No user found with given email -> " + email);
+
     }
 
     @Override
-    public Set<Product> getAllProductsByCategoryAndByRatingsLowToHigh(String category, Double minRating, Double maxRating) throws ProductException, CustomerException {
-        return null;
+    public Set<Product> getAllProductsByCategoryAndByRatingsLowToHigh(String category, Double minRating, Double maxRating, String email) throws ProductException, CustomerException {
+
+        Customer customer = customerRepository.findByEmail(email);
+
+        if (customer != null) {
+
+            Category c = categoryRepository.findByCategoryName(category);
+
+            if (c != null) {
+
+                Set<Product> products = c.getProducts();
+
+                List<Product> list = new ArrayList<>(products);
+
+                List<Product> resultList = new ArrayList<>();
+
+                for (Double i = minRating; i <= maxRating; i++) {
+                    for (Product p : list) {
+                        if (p.getProductRatings().equals(i)) {
+                            resultList.add(p);
+                        }
+                    }
+                }
+
+                resultList.sort(new SortByRatingsLowToHigh());
+                return new HashSet<>(resultList);
+            }
+        }
+        throw new CustomerException("No user found with given email -> " + email);
     }
 
     @Override
-    public boolean getStockAvailabilityForAProduct(String product, String email) throws CustomerException, ProductException {
-        return false;
+    public Set<Product> getAllProductsByCategoryAndByRatings(String category, Double minRating, String email) throws ProductException, CustomerException {
+
+        Customer customer = customerRepository.findByEmail(email);
+
+        if (customer != null) {
+
+            Category c = categoryRepository.findByCategoryName(category);
+
+            if (c != null) {
+
+                Set<Product> products = c.getProducts();
+
+                List<Product> list = new ArrayList<>(products);
+
+                List<Product> resultList = (List<Product>) list.stream().filter(product -> product.getProductRatings() >= minRating);
+                resultList.sort(new SortByRatingHighToLow());
+
+                return new HashSet<>(resultList);
+            }
+        }
+        throw new CustomerException("No user found with given email -> " + email);
     }
 
     @Override
     public Double getStockNumberForProduct(String product, String email) throws CustomerException, ProductException {
-        return null;
+
+        Customer customer = customerRepository.findByEmail(email);
+
+        if (customer != null) {
+
+            Product p = productRepository.findByProductName(product);
+
+            if (p != null) {
+                return p.getProductStock();
+            }
+            throw new ProductException("No Product available with given product name!");
+        }
+        throw new CustomerException("No user found with given email -> " + email);
     }
 }

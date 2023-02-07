@@ -59,8 +59,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> getAllCustmerDetails() throws CustomerException {
-        List<Customer> customerList = customerRepository.findAll();
-        return customerList;
+        return customerRepository.findAll();
     }
 
     @Override
@@ -79,8 +78,4 @@ public class CustomerServiceImpl implements CustomerService {
         }
         return addressList;
     }
-
-
-
-
 }
