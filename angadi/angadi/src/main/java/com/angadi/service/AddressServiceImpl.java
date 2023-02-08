@@ -7,9 +7,10 @@ import com.angadi.model.Customer;
 import com.angadi.repository.AddressRepository;
 import com.angadi.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
-
+@Service
 public class AddressServiceImpl implements AddressService {
 
     @Autowired

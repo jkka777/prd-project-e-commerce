@@ -20,12 +20,12 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @PostMapping("/addCustomer/")
+    @PostMapping("/addCustomer")
     public ResponseEntity<Customer> saveCustomerHandler(@Valid @RequestBody Customer customer) {
         return new ResponseEntity<>(customerService.saveCustomer(customer), HttpStatus.CREATED);
     }
 
-    @PostMapping("/addCustomerAddress/")
+    @PostMapping("/addCustomerAddress/{email}")
     public ResponseEntity<Set<Address>> saveCustomerAddressHandler(@Valid @RequestBody Address address, @PathVariable String email) throws CustomerException {
         return new ResponseEntity<>(customerService.addAddress(address, email), HttpStatus.CREATED);
     }
