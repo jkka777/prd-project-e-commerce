@@ -31,7 +31,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer updateCustomer(Customer customer) throws CustomerException {
+    public Customer updateCustomer(Customer customer, String email) throws CustomerException {
 
         Customer rc = customerRepository.findByEmail(customer.getEmail());
 
@@ -65,7 +65,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> getAllCustmerDetails() throws CustomerException {
+    public List<Customer> getAllCustomerDetails() throws CustomerException {
         return customerRepository.findAll();
     }
 

@@ -12,6 +12,6 @@ public interface OrderDetailsService {
 
     public OrderDetails removeOrderDetails(OrderDetails orderDetails, String email) throws OrderDetailsException, CustomerException;
 
-    public Double getPriceOfOrderDetails(OrderDetails orderDetails, String email) throws OrderDetailsException, CustomerException;
+    public Double getPriceOfOrderDetails(Integer orderDetailsId, String email) throws OrderDetailsException, CustomerException;
 
 }

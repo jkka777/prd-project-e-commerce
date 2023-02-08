@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CategoryService {
 
-    public Category addCategory(Category category);
+    public Category addCategory(Category category, String email) throws CustomerException;
 
     public Category updateCategory(Category category, String email) throws CategoryException, CustomerException;
 

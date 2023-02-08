@@ -12,7 +12,7 @@ public interface CustomerService {
     public Customer saveCustomer(Customer customer);
 
     /*customer specific method*/
-    public Customer updateCustomer(Customer customer) throws CustomerException;
+    public Customer updateCustomer(Customer customer, String email) throws CustomerException;
 
     /*admin specific method*/
     public Customer deleteCustomer(String email) throws CustomerException;
@@ -21,7 +21,7 @@ public interface CustomerService {
     public Customer getCustomerDetails(String email) throws CustomerException;
 
     /*admin specific method*/
-    public List<Customer> getAllCustmerDetails() throws CustomerException;
+    public List<Customer> getAllCustomerDetails() throws CustomerException;
 
     public Set<Address> addAddress(Address address, String email) throws CustomerException;
 }

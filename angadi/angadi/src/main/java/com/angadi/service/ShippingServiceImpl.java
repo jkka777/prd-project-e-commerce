@@ -26,7 +26,7 @@ public class ShippingServiceImpl implements ShippingService {
     private OrderRepository orderRepository;
 
     @Override
-    public Shipping addShippingDetails(Shipping shipping, String email) {
+    public Shipping addShippingDetails(Shipping shipping, String email) throws CustomerException {
 
         Customer customer = customerRepository.findByEmail(email);
 
@@ -67,21 +67,21 @@ public class ShippingServiceImpl implements ShippingService {
     }
 
     @Override
-    public Shipping cancelShippingDetails(Shipping shipping, String email) throws CustomerException, ShippingException {
+    public Shipping cancelShippingDetails(Integer shippingId, String email) throws CustomerException, ShippingException {
 
         Customer customer = customerRepository.findByEmail(email);
 
         if (customer != null) {
 
-            Optional<Shipping> optional = shippingRepository.findById(shipping.getShippingId());
+            Optional<Shipping> optional = shippingRepository.findById(shippingId);
 
             if (optional.isPresent()) {
 
                 Shipping s = optional.get();
                 shippingRepository.delete(s);
-                return shipping;
+                return s;
             }
-            throw new ShippingException("No shipping details found with given details!");
+            throw new ShippingException("No shipping details found with given shipping id! " + shippingId);
         }
         throw new CustomerException("No customer found with given email -> " + email);
     }
