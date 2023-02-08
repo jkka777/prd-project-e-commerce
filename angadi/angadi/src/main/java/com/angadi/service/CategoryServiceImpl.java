@@ -21,7 +21,7 @@ public class CategoryServiceImpl implements CategoryService {
     CategoryRepository categoryRepository;
 
     @Override
-    public Category addCategory(Category category) {
+    public Category addCategory(Category category, String email) throws CustomerException {
         return categoryRepository.save(category);
     }
 

@@ -59,21 +59,21 @@ public class OrderServiceImpl implements OrderService {
     /* Cancel/Delete particular order by giving order id  */
 
     @Override
-    public Orders cancelOrder(Orders orders, String email) throws OrderException, CustomerException {
+    public Orders cancelOrder(Integer orderId, String email) throws OrderException, CustomerException {
 
         Customer customer = customerRepository.findByEmail(email);
 
         if (customer != null) {
 
-            Optional<Orders> optional = orderRepository.findById(orders.getOrderId());
+            Optional<Orders> optional = orderRepository.findById(orderId);
 
             if (optional.isPresent()) {
 
                 Orders o = optional.get();
                 orderRepository.delete(o);
-                return orders;
+                return o;
             }
-            throw new OrderException("No order details found with given order id -> " + orders.getOrderId());
+            throw new OrderException("No order details found with given order id -> " + orderId);
         }
         throw new CustomerException("No customer found with given email -> " + email);
     }

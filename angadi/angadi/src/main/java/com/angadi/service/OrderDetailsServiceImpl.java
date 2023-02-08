@@ -96,13 +96,13 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
     }
 
     @Override
-    public Double getPriceOfOrderDetails(OrderDetails orderDetails, String email) throws OrderDetailsException, CustomerException {
+    public Double getPriceOfOrderDetails(Integer orderDetailsId, String email) throws OrderDetailsException, CustomerException {
 
         Customer customer = customerRepository.findByEmail(email);
 
         if (customer != null) {
 
-            Optional<OrderDetails> optional = orderDetailsRepository.findById(orderDetails.getOrderDetailsId());
+            Optional<OrderDetails> optional = orderDetailsRepository.findById(orderDetailsId);
 
             if (optional.isPresent()) {
 

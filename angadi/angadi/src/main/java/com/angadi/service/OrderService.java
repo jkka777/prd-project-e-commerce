@@ -10,7 +10,7 @@ public interface OrderService {
 
     public Orders updateOrder(Orders orders, String email) throws OrderException, CustomerException;
 
-    public Orders cancelOrder(Orders orders, String email) throws OrderException, CustomerException;
+    public Orders cancelOrder(Integer orderId, String email) throws OrderException, CustomerException;
 
     public Orders getOrderById(Integer orderId, String email) throws OrderException, CustomerException;
 
