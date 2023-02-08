@@ -2,7 +2,6 @@ package com.angadi.service;
 
 import com.angadi.exception.CustomerException;
 import com.angadi.exception.WalletException;
-import com.angadi.model.Customer;
 import com.angadi.model.Wallet;
 
 public interface WalletService {
@@ -13,7 +12,5 @@ public interface WalletService {
 
     public Double showBalance(Integer walletId, String email) throws WalletException, CustomerException;
 
-    public Customer transferAmount(Integer walletId, String description, Double amount, String email) throws WalletException, CustomerException;
-
-
+    public Wallet transferAmount(Integer walletId, String description, Double amount, String email) throws WalletException, CustomerException;
 }

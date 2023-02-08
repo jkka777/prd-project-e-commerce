@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface SupplierService {
 
-    public Suppliers addSupplier(Suppliers suppliers);
+    public Suppliers addSupplier(Suppliers suppliers, String email) throws CustomerException;
 
     public Suppliers updateSupplier(Suppliers suppliers, String email) throws SupplierException, CustomerException;
 

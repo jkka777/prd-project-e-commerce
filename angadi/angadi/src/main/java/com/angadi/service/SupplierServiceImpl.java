@@ -22,8 +22,12 @@ public class SupplierServiceImpl implements SupplierService {
     private CustomerRepository customerRepository;
 
     @Override
-    public Suppliers addSupplier(Suppliers suppliers) {
-        return supplierRepository.save(suppliers);
+    public Suppliers addSupplier(Suppliers suppliers, String email) throws CustomerException {
+
+        Customer customer = customerRepository.findByEmail(email);
+
+        if (customer != null) return supplierRepository.save(suppliers);
+        throw new CustomerException("No customer found with given email -> " + email);
     }
 
     @Override

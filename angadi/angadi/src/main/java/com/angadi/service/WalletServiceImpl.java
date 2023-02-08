@@ -89,7 +89,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public Customer transferAmount(Integer walletId, String description, Double transferAmount, String email) throws WalletException, CustomerException {
+    public Wallet transferAmount(Integer walletId, String description, Double transferAmount, String email) throws WalletException, CustomerException {
 
         Customer sourceCustomer = customerRepository.findByEmail(email);
 
@@ -175,6 +175,8 @@ public class WalletServiceImpl implements WalletService {
 
                         customerRepository.save(destinationCustomer);
                         walletRepository.save(destinationWallet);
+
+                        return sourceWallet;
                     }
                     throw new CustomerException("No Customer found with the given wallet id -> " + walletId);
                 }
