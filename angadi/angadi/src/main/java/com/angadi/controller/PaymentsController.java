@@ -3,6 +3,7 @@ package com.angadi.controller;
 import com.angadi.exception.CustomerException;
 import com.angadi.model.Payments;
 import com.angadi.service.PaymentsService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ public class PaymentsController {
     private PaymentsService paymentsService;
 
     @PostMapping("/addPayment/{email}")
-    public ResponseEntity<Payments> makePaymentHandler(@RequestBody Payments payments, @PathVariable String email) throws CustomerException {
+    public ResponseEntity<Payments> makePaymentHandler(@Valid @RequestBody Payments payments, @PathVariable String email) throws CustomerException {
         return new ResponseEntity<>(paymentsService.addPaymentToOrder(payments, email), HttpStatus.CREATED);
     }
 }
