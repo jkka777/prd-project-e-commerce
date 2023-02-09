@@ -38,4 +38,6 @@ public class WalletTransactions {
     @JoinColumn(name = "walletId")
     private Wallet wallet;
 
+    private Integer orderId;
+
 }
