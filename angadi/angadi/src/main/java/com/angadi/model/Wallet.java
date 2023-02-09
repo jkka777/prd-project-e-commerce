@@ -29,7 +29,8 @@ public class Wallet {
     @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
     private Set<WalletTransactions> walletTransactions = new HashSet<>();
 
-    @OneToOne(mappedBy = "wallet", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customerId")
     private Customer customer;
 
 }

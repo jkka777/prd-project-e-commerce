@@ -16,7 +16,7 @@ import java.util.Set;
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer categoryId;
 
     @NotBlank(message = "Category name cannot be blank")

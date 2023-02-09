@@ -1,5 +1,6 @@
 package com.angadi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -59,4 +60,8 @@ public class Address {
     @ManyToOne
     @JoinColumn(name = "customerId")
     private Customer customer;
+
+    /* uni-directional */
+    @JsonIgnore
+    private Integer orderId;
 }

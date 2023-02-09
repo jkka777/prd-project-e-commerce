@@ -50,8 +50,8 @@ public class Product {
     @JoinColumn(name = "categoryId")
     private Category category;
 
-    @OneToOne
-    @PrimaryKeyJoinColumn
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+    @JoinColumn(name = "productId")
     private OrderDetails orderDetails;
 
 }

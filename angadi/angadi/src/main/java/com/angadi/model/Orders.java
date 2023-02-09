@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -33,19 +33,27 @@ public class Orders {
     private Customer customer;
 
     /* one to one uni-directional */
-    @OneToOne(mappedBy = "orders", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "orderId")
-    private Payments payments;
+    private WalletTransactions walletTransactions;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "addressId")
+    private Address deliveryAddress;
+
+    @JsonIgnore
     @OneToOne(mappedBy = "orders", cascade = CascadeType.ALL)
     @JoinColumn(name = "orderId")
     private Shipping shipping;
+
+    private Boolean deliveryStatus = false;
 
     @NotBlank(message = "Date cannot be blank")
     @NotEmpty(message = "Date cannot be empty")
     @NotNull(message = "Date cannot be null")
     private LocalDate deliveryDate;
 
+    @JsonIgnore
     @NotBlank(message = "Total Price cannot be blank")
     @NotEmpty(message = "Total Price cannot be empty")
     @NotNull(message = "Total Price cannot be null")
