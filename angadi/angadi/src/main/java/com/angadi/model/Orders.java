@@ -38,7 +38,7 @@ public class Orders {
     private WalletTransactions walletTransactions;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "orderId")
+    @JoinColumn(name = "addressId")
     private Address deliveryAddress;
 
     @JsonIgnore

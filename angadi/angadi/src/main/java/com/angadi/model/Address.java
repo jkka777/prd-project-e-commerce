@@ -61,6 +61,7 @@ public class Address {
     @JoinColumn(name = "customerId")
     private Customer customer;
 
+    /* uni-directional */
     @JsonIgnore
     private Integer orderId;
 }
