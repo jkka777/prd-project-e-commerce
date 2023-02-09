@@ -19,8 +19,7 @@ public class OrderDetails {
     @JoinColumn(name = "orderId")
     private Orders orders;
 
-    @OneToOne(mappedBy = "orderDetails", cascade = CascadeType.ALL)
-    @JoinColumn(name = "orderDetailsId")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "")
     private Product product;
 
     @NotBlank(message = "Quantity cannot be blank")
@@ -30,7 +29,7 @@ public class OrderDetails {
     @Max(value = 10, message = "Maximum quantity cannot be greater than 10")
     private Integer quantity;
 
-    @OneToOne(mappedBy = "orderDetails", cascade = CascadeType.ALL)
-    @JoinColumn(name = "supplierId")
+    @OneToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
     private Suppliers suppliers;
 }
