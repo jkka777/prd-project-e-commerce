@@ -30,6 +30,9 @@ public class CustomerUserDetails implements UserDetailsService {
 
             List<GrantedAuthority> authorities = new ArrayList<>();
 
+            SimpleGrantedAuthority sga = new SimpleGrantedAuthority(String.valueOf(customer.getCustomerType()));
+            authorities.add(sga);
+
             return new User(customer.getEmail(), customer.getPassword(), authorities);
         }
         throw new BadCredentialsException("User details not found with given user name -> " + username);
