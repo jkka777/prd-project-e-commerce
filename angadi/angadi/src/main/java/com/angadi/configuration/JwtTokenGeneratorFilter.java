@@ -20,6 +20,7 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null) {
@@ -30,7 +31,7 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
                     .setIssuer("admin@angadi")
                     .setSubject("jwt token")
                     .claim("email", authentication.getName())
-                    .claim("authorities", authentication.getAuthorities())
+                    .claim("customerType", getRole(authentication.getAuthorities()))
                     .setIssuedAt(new Date())
                     .setExpiration(new Date(new Date().getTime() + 3600))
                     .signWith(secretKey).compact();
@@ -41,8 +42,18 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    @Override
+    private String getRole(Collection<? extends GrantedAuthority> collection) {
+
+        String role = "";
+        for (GrantedAuthority ga : collection) {
+            role = ga.getAuthority();
+        }
+
+        return role;
+    }
+
+    /*@Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         return !request.getServletPath().equals("/signIn");
-    }
+    }*/
 }

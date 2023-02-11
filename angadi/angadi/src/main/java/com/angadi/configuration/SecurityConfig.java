@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,21 +44,18 @@ public class SecurityConfig {
                 .addFilterAfter(new JwtTokenGeneratorFilter(), BasicAuthenticationFilter.class)
                 .addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests()
+                .requestMatchers("/customer/**").authenticated()
                 .requestMatchers("/customer/addCustomer").permitAll()
-                .requestMatchers("/customer/addCustomerAddress/").authenticated()
-                .requestMatchers("/customer/updateCustomer/").authenticated()
-                .requestMatchers("/customer/deleteCustomer/").authenticated()
-                .requestMatchers("/customer/getCustomerDetails/").authenticated()
-                .requestMatchers("/customer/getAllCustomerDetails/").hasRole("ADMIN")
-                .requestMatchers("/address/**").authenticated()
-                .requestMatchers("/orders/**").authenticated()
-                .requestMatchers("/orderDetails/**").authenticated()
-                .requestMatchers("/payments/**").authenticated()
-                .requestMatchers("/product/**").authenticated()
-                .requestMatchers("/shipping/**").authenticated()
-                .requestMatchers("/supplier/**").authenticated()
-                .requestMatchers("/wallet/**").authenticated()
-                .requestMatchers("/walletTransaction/**").authenticated()
+                .requestMatchers("/customer/getAllCustomerDetails/").hasRole("ROLE_ADMIN")
+                .requestMatchers("/address/**",
+                        "/orders/**",
+                        "/orderDetails/**",
+                        "/payments/**",
+                        "/product/**",
+                        "/shipping/**",
+                        "/supplier/**",
+                        "/wallet/**",
+                        "/walletTransaction/**").authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

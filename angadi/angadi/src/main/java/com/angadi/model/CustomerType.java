@@ -1,5 +1,5 @@
 package com.angadi.model;
 
 public enum CustomerType {
-    ADMIN, USER, SUPPLIER
+    ROLE_ADMIN, ROLE_USER, ROLE_SUPPLIER
 }
