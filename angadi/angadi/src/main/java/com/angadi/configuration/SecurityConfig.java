@@ -48,9 +48,9 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/customer/addCustomer").permitAll()
                 .requestMatchers(HttpMethod.POST, "/customer/addCustomerAddress").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/customer/updateCustomer").authenticated()
-                .requestMatchers(HttpMethod.DELETE, "/customer/deleteCustomer").hasRole("ROLE_ADMIN")
-                .requestMatchers(HttpMethod.GET, "/customer/getCustomerDetails").hasAnyRole("ROLE_USER", "ROLE_SUPPLIER")
-                .requestMatchers(HttpMethod.GET, "/customer/getAllCustomerDetails").hasRole("ROLE_ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/customer/deleteCustomer").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/customer/getCustomerDetails").hasAnyRole("USER", "SUPPLIER")
+                .requestMatchers(HttpMethod.GET, "/customer/getAllCustomerDetails").hasRole("ADMIN")
                 .requestMatchers("/address/**",
                         "/orders/**",
                         "/orderDetails/**",
@@ -60,7 +60,7 @@ public class SecurityConfig {
                         "/supplier/**",
                         "/wallet/**",
                         "/walletTransaction/**").authenticated()
-                /*.anyRequest().authenticated()*/
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .and()
