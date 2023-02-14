@@ -15,6 +15,8 @@ import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
     @Override
@@ -44,16 +46,17 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
 
     private String getRole(Collection<? extends GrantedAuthority> collection) {
 
-        String role = "";
+        Set<String> authorities = new HashSet<>();
+
         for (GrantedAuthority ga : collection) {
-            role = ga.getAuthority();
+            authorities.add(ga.getAuthority());
         }
 
-        return role;
+        return String.join(",", authorities);
     }
 
-    /*@Override
+    @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         return !request.getServletPath().equals("/signIn");
-    }*/
+    }
 }
