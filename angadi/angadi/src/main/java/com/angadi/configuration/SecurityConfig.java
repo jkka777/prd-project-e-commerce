@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.List;
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
@@ -42,12 +41,17 @@ public class SecurityConfig {
                     return cfg;
                 })
                 .and()
+                .addFilterAfter(new JwtTokenGeneratorFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests()
-                .requestMatchers("/customer").authenticated()
+                .requestMatchers(HttpMethod.GET, "/hello").permitAll()
                 .requestMatchers(HttpMethod.POST, "/customer/addCustomer").permitAll()
-                .requestMatchers(HttpMethod.POST, "/customer/addCustomerAddress").permitAll()
-                .requestMatchers("/customer/**",
-                        "/address/**",
+                .requestMatchers(HttpMethod.POST, "/customer/addCustomerAddress").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/customer/updateCustomer").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/customer/deleteCustomer").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/customer/getCustomerDetails").hasAnyRole("USER", "SUPPLIER")
+                .requestMatchers(HttpMethod.GET, "/customer/getAllCustomerDetails").hasRole("ADMIN")
+                .requestMatchers("/address/**",
                         "/orders/**",
                         "/orderDetails/**",
                         "/payments/**",
@@ -58,8 +62,6 @@ public class SecurityConfig {
                         "/walletTransaction/**").authenticated()
                 .anyRequest().authenticated()
                 .and()
-                .addFilterAfter(new JwtTokenGeneratorFilter(), BasicAuthenticationFilter.class)
-                .addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class)
                 .formLogin()
                 .and()
                 .httpBasic();

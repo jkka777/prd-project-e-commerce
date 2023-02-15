@@ -29,6 +29,11 @@ public class CustomerController {
         return new ResponseEntity<>("welcome", HttpStatus.OK);
     }
 
+    @GetMapping("/welcome")
+    public String welcome() {
+        return "welcome to spring boot";
+    }
+
     @PostMapping("/addCustomer")
     public ResponseEntity<Customer> saveCustomerHandler(@Valid @RequestBody Customer customer) {
 

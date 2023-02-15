@@ -27,10 +27,14 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 
         String jwt = request.getHeader(SecurityConstants.JWT_HEADER);
 
+        System.out.println("inside validator internal filter method");
+
 
         if (jwt != null) {
 
             try {
+
+                System.out.println("inside validator try block");
 
                 jwt = jwt.substring(7);
 
@@ -50,6 +54,7 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(auth);
 
             } catch (Exception e) {
+                System.out.println("inside validator catch block");
                 throw new BadCredentialsException("Invalid Token received..");
             }
 
@@ -59,7 +64,6 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-
-        return request.getServletPath().equals("/signIn");
+        return request.getServletPath().equals("/logIn");
     }
 }
