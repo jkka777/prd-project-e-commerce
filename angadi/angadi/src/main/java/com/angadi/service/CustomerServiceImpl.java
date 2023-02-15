@@ -88,7 +88,7 @@ public class CustomerServiceImpl implements CustomerService {
             address.setCustomer(customer);
 
             customerRepository.save(customer);
-            addressRepository.save(address);
+            /*addressRepository.save(address);*/
 
             return addressList;
         }

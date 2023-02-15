@@ -41,12 +41,12 @@ public class ProductController {
     }
 
     @GetMapping("/productByCategory/{email}/{category}/{maxPrice}/{minPrice}")
-    public ResponseEntity<Set<Product>> getAllProductsByCategoryAndByPriceHighToLowHandler(@Valid @PathVariable String email, @PathVariable String category, @PathVariable Long maxPrice, @PathVariable Long minPrice) throws ProductException, CustomerException {
+    public ResponseEntity<Set<Product>> getAllProductsByCategoryAndByPriceHighToLowHandler(@Valid @PathVariable String email, @PathVariable String category, @PathVariable Integer maxPrice, @PathVariable Integer minPrice) throws ProductException, CustomerException {
         return new ResponseEntity<>(productService.getAllProductsByCategoryAndByPriceHighToLow(category, minPrice, maxPrice, email), HttpStatus.OK);
     }
 
     @GetMapping("/productByCategory/{email}/{category}/{minPrice}/{maxPrice}")
-    public ResponseEntity<Set<Product>> getAllProductsByCategoryAndByPriceLowToHighHandler(@Valid @PathVariable String email, @PathVariable String category, @PathVariable Long minPrice, @PathVariable Long maxPrice) throws ProductException, CustomerException {
+    public ResponseEntity<Set<Product>> getAllProductsByCategoryAndByPriceLowToHighHandler(@Valid @PathVariable String email, @PathVariable String category, @PathVariable Integer minPrice, @PathVariable Integer maxPrice) throws ProductException, CustomerException {
         return new ResponseEntity<>(productService.getAllProductsByCategoryAndByPriceLowToHigh(category, minPrice, maxPrice, email), HttpStatus.OK);
     }
 
@@ -66,7 +66,7 @@ public class ProductController {
     }
 
     @GetMapping("/productStock/{email}/{product}")
-    public ResponseEntity<Double> getProductStockNumberHandler(@Valid @PathVariable String email, @PathVariable String product) throws CustomerException, ProductException {
+    public ResponseEntity<Integer> getProductStockNumberHandler(@Valid @PathVariable String email, @PathVariable String product) throws CustomerException, ProductException {
         return new ResponseEntity<>(productService.getStockNumberForProduct(product, email), HttpStatus.OK);
     }
 }
