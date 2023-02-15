@@ -48,9 +48,6 @@ public class Orders {
 
     private Boolean deliveryStatus = false;
 
-    @NotBlank(message = "Date cannot be blank")
-    @NotEmpty(message = "Date cannot be empty")
-    @NotNull(message = "Date cannot be null")
     private LocalDate deliveryDate;
 
     @JsonIgnore

@@ -18,14 +18,8 @@ public class Payments {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer paymentsId;
 
-    @NotBlank(message = "Payment type cannot be blank")
-    @NotEmpty(message = "Payment type cannot be empty")
-    @NotNull(message = "Payment type cannot be null")
     private PaymentType paymentType;
 
-    @NotBlank(message = "Payment date cannot be blank")
-    @NotEmpty(message = "Payment date cannot be empty")
-    @NotNull(message = "Payment date cannot be null")
     private LocalDate paymentDate;
 
     @JsonIgnore

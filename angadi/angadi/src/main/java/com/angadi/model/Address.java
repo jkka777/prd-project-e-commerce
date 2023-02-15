@@ -52,9 +52,6 @@ public class Address {
             "should have length of minimum 4 and maximum of 20 characters")
     private String country;
 
-    @NotNull
-    @NotBlank
-    @NotEmpty
     private AddressType addressType;
 
     @ManyToOne

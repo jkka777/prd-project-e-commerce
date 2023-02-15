@@ -41,10 +41,8 @@ public class SecurityConfig {
                     return cfg;
                 })
                 .and()
-                .addFilterAfter(new JwtTokenGeneratorFilter(), BasicAuthenticationFilter.class)
-                .addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.GET, "/hello").permitAll()
+                .requestMatchers(HttpMethod.GET, "/customer/hello", "/customer/welcome").permitAll()
                 .requestMatchers(HttpMethod.POST, "/customer/addCustomer").permitAll()
                 .requestMatchers(HttpMethod.POST, "/customer/addCustomerAddress").authenticated()
                 .requestMatchers(HttpMethod.PUT, "/customer/updateCustomer").authenticated()
@@ -62,6 +60,8 @@ public class SecurityConfig {
                         "/walletTransaction/**").authenticated()
                 .anyRequest().authenticated()
                 .and()
+                .addFilterAfter(new JwtTokenGeneratorFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class)
                 .formLogin()
                 .and()
                 .httpBasic();

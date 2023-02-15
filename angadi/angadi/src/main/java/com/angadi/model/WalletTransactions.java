@@ -18,9 +18,6 @@ public class WalletTransactions {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer walletTransactionId;
 
-    @NotNull
-    @NotBlank
-    @NotEmpty
     private LocalDateTime transactionTime;
 
     @NotNull(message = "Amount cannot be null")
