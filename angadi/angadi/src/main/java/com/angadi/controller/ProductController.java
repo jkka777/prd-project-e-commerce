@@ -20,9 +20,9 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @PostMapping("/addProduct/{email}")
-    public ResponseEntity<Product> saveProductHandler(@Valid @RequestBody Product product, @PathVariable String email) throws CustomerException {
-        return new ResponseEntity<>(productService.addProduct(product, email), HttpStatus.CREATED);
+    @PostMapping("/addProduct/{categoryName}/{email}")
+    public ResponseEntity<Product> saveProductHandler(@Valid @RequestBody Product product, @PathVariable String categoryName, @PathVariable String email) throws CustomerException {
+        return new ResponseEntity<>(productService.addProduct(product, categoryName, email), HttpStatus.CREATED);
     }
 
     @PutMapping("/updateProduct/{email}")
@@ -35,32 +35,32 @@ public class ProductController {
         return new ResponseEntity<>(productService.deleteProduct(product, email), HttpStatus.OK);
     }
 
-    @GetMapping("/productByCategory/{email}/{category}")
+    @GetMapping("/productsByCategory/{email}/{category}")
     public ResponseEntity<Set<Product>> getAllProductsByCategoryHandler(@Valid @PathVariable String email, @PathVariable String category) throws ProductException, CustomerException {
         return new ResponseEntity<>(productService.getAllProductsByCategory(category, email), HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/productByCategory/{email}/{category}/{maxPrice}/{minPrice}")
+    @GetMapping("/productsByPriceHighToLow/{email}/{category}/{maxPrice}/{minPrice}")
     public ResponseEntity<Set<Product>> getAllProductsByCategoryAndByPriceHighToLowHandler(@Valid @PathVariable String email, @PathVariable String category, @PathVariable Integer maxPrice, @PathVariable Integer minPrice) throws ProductException, CustomerException {
         return new ResponseEntity<>(productService.getAllProductsByCategoryAndByPriceHighToLow(category, minPrice, maxPrice, email), HttpStatus.OK);
     }
 
-    @GetMapping("/productByCategory/{email}/{category}/{minPrice}/{maxPrice}")
+    @GetMapping("/productsByPriceLowToHigh/{email}/{category}/{minPrice}/{maxPrice}")
     public ResponseEntity<Set<Product>> getAllProductsByCategoryAndByPriceLowToHighHandler(@Valid @PathVariable String email, @PathVariable String category, @PathVariable Integer minPrice, @PathVariable Integer maxPrice) throws ProductException, CustomerException {
         return new ResponseEntity<>(productService.getAllProductsByCategoryAndByPriceLowToHigh(category, minPrice, maxPrice, email), HttpStatus.OK);
     }
 
-    @GetMapping("/productByCategory/{email}/{category}/{maxRating}/{minRating}")
+    @GetMapping("/productsByRatingsHighToLow/{email}/{category}/{maxRating}/{minRating}")
     public ResponseEntity<Set<Product>> getAllProductsByCategoryAndByRatingsHighToLowHandler(@Valid @PathVariable String email, @PathVariable String category, @PathVariable Double maxRating, @PathVariable Double minRating) throws ProductException, CustomerException {
         return new ResponseEntity<>(productService.getAllProductsByCategoryAndByRatingsHighToLow(category, minRating, maxRating, email), HttpStatus.OK);
     }
 
-    @GetMapping("/productByCategory/{email}/{category}/{minRating}/{maxRating}")
+    @GetMapping("/productsByRatingsLowToHigh/{email}/{category}/{minRating}/{maxRating}")
     public ResponseEntity<Set<Product>> getAllProductsByCategoryAndByRatingsLowToHighHandler(@Valid @PathVariable String email, @PathVariable String category, @PathVariable Double minRating, @PathVariable Double maxRating) throws ProductException, CustomerException {
         return new ResponseEntity<>(productService.getAllProductsByCategoryAndByRatingsLowToHigh(category, minRating, maxRating, email), HttpStatus.OK);
     }
 
-    @GetMapping("/productByCategory/{email}/{category}/{minRating}")
+    @GetMapping("/productsByMinRating/{email}/{category}/{minRating}")
     public ResponseEntity<Set<Product>> getAllProductsByCategoryAndByRatingHandler(@Valid @PathVariable String email, @PathVariable String category, @PathVariable Double minRating) throws ProductException, CustomerException {
         return new ResponseEntity<>(productService.getAllProductsByCategoryAndByRatings(category, minRating, email), HttpStatus.OK);
     }

@@ -31,14 +31,28 @@ public class ProductServiceImpl implements ProductService {
     private CategoryRepository categoryRepository;
 
     @Override
-    public Product addProduct(Product product, String email) throws CustomerException {
+    public Product addProduct(Product product, String categoryName, String email) throws CustomerException {
 
         Customer customer = customerRepository.findByEmail(email);
 
         if (customer != null) {
 
-            return productRepository.save(product);
+            Optional<Category> optional = categoryRepository.findByCategoryName(categoryName.toUpperCase());
 
+            if (optional.isPresent()) {
+
+                Category category = optional.get();
+
+                Set<Product> set = new HashSet<>();
+                set.add(product);
+
+                category.setProducts(set);
+
+                product.setCategory(category);
+
+                return productRepository.save(product);
+            }
+            throw new CategoryException("No Category found with given category name.. please add one before you save the product");
         }
         throw new CustomerException("No user found with given email -> " + email);
     }
@@ -55,18 +69,6 @@ public class ProductServiceImpl implements ProductService {
             if (optional.isPresent()) {
 
                 Product p = optional.get();
-
-                /*
-                Category category = product.getCategory();
-
-                List<Category> list = categoryRepository.findAll();
-                for (Category c : list) {
-                    if (c.equals(category)) product.setCategory(c);
-                }
-
-                Set<Product> products = new HashSet<>();
-                products.add(product);
-                category.setProducts(products);*/
 
                 return productRepository.save(product);
             }
@@ -102,10 +104,10 @@ public class ProductServiceImpl implements ProductService {
 
         if (customer != null) {
 
-            Category c = categoryRepository.findByCategoryName(category);
+            Optional<Category> optional = categoryRepository.findByCategoryName(category.toUpperCase());
 
-            if (c != null) {
-                return c.getProducts();
+            if (optional.isPresent()) {
+                return optional.get().getProducts();
             }
             throw new CategoryException("No Products found with given Category!");
         }
@@ -123,9 +125,11 @@ public class ProductServiceImpl implements ProductService {
 
         if (customer != null) {
 
-            Category c = categoryRepository.findByCategoryName(category);
+            Optional<Category> optional = categoryRepository.findByCategoryName(category.toUpperCase());
 
-            if (c != null) {
+            if (optional.isPresent()) {
+
+                Category c = optional.get();
 
                 Set<Product> products = c.getProducts();
 
@@ -155,9 +159,11 @@ public class ProductServiceImpl implements ProductService {
 
         if (customer != null) {
 
-            Category c = categoryRepository.findByCategoryName(category);
+            Optional<Category> optional = categoryRepository.findByCategoryName(category.toUpperCase());
 
-            if (c != null) {
+            if (optional.isPresent()) {
+
+                Category c = optional.get();
 
                 Set<Product> products = c.getProducts();
 
@@ -189,9 +195,11 @@ public class ProductServiceImpl implements ProductService {
 
         if (customer != null) {
 
-            Category c = categoryRepository.findByCategoryName(category);
+            Optional<Category> optional = categoryRepository.findByCategoryName(category.toUpperCase());
 
-            if (c != null) {
+            if (optional.isPresent()) {
+
+                Category c = optional.get();
 
                 Set<Product> products = c.getProducts();
 
@@ -224,9 +232,11 @@ public class ProductServiceImpl implements ProductService {
 
         if (customer != null) {
 
-            Category c = categoryRepository.findByCategoryName(category);
+            Optional<Category> optional = categoryRepository.findByCategoryName(category.toUpperCase());
 
-            if (c != null) {
+            if (optional.isPresent()) {
+
+                Category c = optional.get();
 
                 Set<Product> products = c.getProducts();
 
@@ -258,15 +268,25 @@ public class ProductServiceImpl implements ProductService {
 
         if (customer != null) {
 
-            Category c = categoryRepository.findByCategoryName(category);
+            Optional<Category> optional = categoryRepository.findByCategoryName(category.toUpperCase());
 
-            if (c != null) {
+            if (optional.isPresent()) {
+
+                Category c = optional.get();
 
                 Set<Product> products = c.getProducts();
 
                 List<Product> list = new ArrayList<>(products);
 
-                List<Product> resultList = (List<Product>) list.stream().filter(product -> product.getProductRatings() >= minRating);
+                /*List<Product> resultList = (List<Product>) list.stream().filter(product -> product.getProductRatings() >= minRating);
+                resultList.sort(new SortByRatingHighToLow());*/
+
+                List<Product> resultList = new ArrayList<>();
+
+                for (Product p : list) {
+                    if (p.getProductRatings() >= minRating) resultList.add(p);
+                }
+
                 resultList.sort(new SortByRatingHighToLow());
 
                 return new HashSet<>(resultList);

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -22,6 +23,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category addCategory(Category category, String email) throws CustomerException {
+        category.setCategoryName(category.getCategoryName().toUpperCase());
         return categoryRepository.save(category);
     }
 
@@ -32,9 +34,11 @@ public class CategoryServiceImpl implements CategoryService {
 
         if (customer != null) {
 
-            Category c = categoryRepository.findByCategoryName(category.getCategoryName());
+            Optional<Category> optional = categoryRepository.findByCategoryName(category.getCategoryName());
 
-            if (c != null) {
+            if (optional.isPresent()) {
+
+                Category c = optional.get();
                 categoryRepository.save(category);
                 return category;
             }
@@ -50,9 +54,11 @@ public class CategoryServiceImpl implements CategoryService {
 
         if (customer != null) {
 
-            Category c = categoryRepository.findByCategoryName(category.getCategoryName());
+            Optional<Category> optional = categoryRepository.findByCategoryName(category.getCategoryName());
 
-            if (c != null) {
+            if (optional.isPresent()) {
+
+                Category c = optional.get();
                 categoryRepository.delete(c);
                 return c;
             }
