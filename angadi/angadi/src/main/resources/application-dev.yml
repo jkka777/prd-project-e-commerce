@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/angadi
+    username: root
+    password: 1234
+
+  sql:
+    init:
+      mode: always

@@ -46,14 +46,13 @@ public class Product {
     @Digits(integer = 6, fraction = 2)
     private Integer productStock;
 
-/*
-    @NotBlank(message = "Quantity cannot be blank")
+
+    /*@NotBlank(message = "Quantity cannot be blank")
     @NotEmpty(message = "Quantity cannot be empty")
     @NotNull(message = "Quantity cannot be null")
-    private Double productQuantity;
-*/
+    private Double productQuantity;*/
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "categoryId")
     private Category category;
 

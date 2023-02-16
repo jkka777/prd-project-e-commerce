@@ -8,7 +8,7 @@ import java.util.Set;
 
 public interface ProductService {
 
-    public Product addProduct(Product product, String email) throws CustomerException;
+    public Product addProduct(Product product, String categoryName, String email) throws CustomerException;
 
     public Product updateProduct(Product product, String email) throws ProductException, CustomerException;
 
@@ -24,7 +24,7 @@ public interface ProductService {
 
     public Set<Product> getAllProductsByCategoryAndByRatingsLowToHigh(String category, Double minRating, Double maxRating, String email) throws ProductException, CustomerException;
 
-    public Set<Product> getAllProductsByCategoryAndByRatings(String category, Double minRating,String email) throws ProductException, CustomerException;
+    public Set<Product> getAllProductsByCategoryAndByRatings(String category, Double minRating, String email) throws ProductException, CustomerException;
 
     public Integer getStockNumberForProduct(String product, String email) throws CustomerException, ProductException;
 }

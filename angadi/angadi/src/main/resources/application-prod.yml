@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:mysql://${{ MYSQLUSER }}:${{ MYSQLPASSWORD }}@${{ MYSQLHOST }}:${{ MYSQLPORT }}/${{ MYSQLDATABASE }}
+    username: ${MYSQLUSER}
+    password: ${MYSQLPASSWORD}
+    name: angadi
+
+  sql:
+    init:
+      mode: always # you won't do this in prod, I'm just doing this for demo purposes
