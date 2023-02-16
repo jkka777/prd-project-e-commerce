@@ -2,10 +2,16 @@ package com.angadi.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.Data;
+import lombok.*;
+
+import java.math.BigInteger;
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class Product {
 
     @Id
@@ -21,30 +27,31 @@ public class Product {
 
     private String productImage;
 
-    @NotBlank(message = "Price cannot be blank")
+    /*@NotBlank(message = "Price cannot be blank")
     @NotEmpty(message = "Price cannot be empty")
-    @NotNull(message = "Price cannot be null")
-    @Min(0)
-    private Long productPrice;
+    @NotNull(message = "Price cannot be null")*/
+    @Digits(integer = 7, fraction = 2)
+    private Integer productPrice;
 
-    @NotBlank(message = "Price cannot be blank")
-    @NotEmpty(message = "Price cannot be empty")
-    @NotNull(message = "Price cannot be null")
+    /*@NotBlank(message = "Ratings cannot be blank")
+    @NotEmpty(message = "Ratings cannot be empty")
+    @NotNull(message = "Ratings cannot be null")*/
     @DecimalMin(value = "0.0")
     @DecimalMax(value = "5.0")
     private Double productRatings;
 
-    @NotBlank(message = "Stock cannot be blank")
+    /*@NotBlank(message = "Stock cannot be blank")
     @NotEmpty(message = "Stock cannot be empty")
-    @NotNull(message = "Stock cannot be null")
-    @DecimalMin(value = "0.0")
-    private Double productStock;
+    @NotNull(message = "Stock cannot be null")*/
+    @Digits(integer = 6, fraction = 2)
+    private Integer productStock;
 
+/*
     @NotBlank(message = "Quantity cannot be blank")
     @NotEmpty(message = "Quantity cannot be empty")
     @NotNull(message = "Quantity cannot be null")
-    @DecimalMin(value = "0.0")
     private Double productQuantity;
+*/
 
     @ManyToOne
     @JoinColumn(name = "categoryId")

@@ -13,10 +13,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.crypto.SecretKey;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
     @Override
@@ -25,7 +22,14 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        System.out.println("inside generator filter");
+
         if (authentication != null) {
+
+            System.out.println(authentication);
+
+            /*String encoded = (String) authentication.getCredentials();
+            String encodedString = Base64.getEncoder().encodeToString(encoded.getBytes());*/
 
             SecretKey secretKey = Keys.hmacShaKeyFor(SecurityConstants.JWT_KEY.getBytes());
 
@@ -35,7 +39,7 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
                     .claim("username", authentication.getName())
                     .claim("authorities", getRole(authentication.getAuthorities()))
                     .setIssuedAt(new Date())
-                    .setExpiration(new Date(new Date().getTime() + 3600))
+                    .setExpiration(new Date(new Date().getTime() + 30000000))
                     .signWith(secretKey).compact();
 
             response.setHeader(SecurityConstants.JWT_HEADER, jwt);

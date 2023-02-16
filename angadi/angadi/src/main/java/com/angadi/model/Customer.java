@@ -3,14 +3,17 @@ package com.angadi.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Customer {
 
     @Id
@@ -36,26 +39,20 @@ public class Customer {
     @Column(unique = true)
     private String email;
 
-    @NotBlank(message = "Email cannot be blank")
-    @NotEmpty(message = "Email cannot be empty")
-    @NotNull(message = "Email cannot be null")
-    @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,15}$", message = "Password length " +
-            "should be greater than 8 and should contain one small case, one upper case, one number and one special" +
-            "character")
+    @NotBlank(message = "Password cannot be blank")
+    @NotEmpty(message = "Password cannot be empty")
+    @NotNull(message = "Password cannot be null")
+    @Pattern(regexp = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{8,}", message = "Password length " +
+            "should be greater than 8 and should contain one small case, one upper case, one digit and one special" +
+            " character")
     private String password;
 
     @JsonIgnore
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<Address> addresses = new HashSet<>();
 
-    @NotNull
-    @NotBlank
-    @NotEmpty
     private CustomerType customerType;
 
-    @NotNull
-    @NotBlank
-    @NotEmpty
     private LocalDateTime registeredTime;
 
     @JsonIgnore

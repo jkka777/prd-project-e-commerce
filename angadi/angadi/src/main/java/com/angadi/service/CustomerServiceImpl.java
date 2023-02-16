@@ -10,6 +10,7 @@ import com.angadi.repository.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -26,6 +27,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer saveCustomer(Customer customer) {
+
+        customer.setRegisteredTime(LocalDateTime.now());
 
         return customerRepository.save(customer);
     }
@@ -85,7 +88,7 @@ public class CustomerServiceImpl implements CustomerService {
             address.setCustomer(customer);
 
             customerRepository.save(customer);
-            addressRepository.save(address);
+            /*addressRepository.save(address);*/
 
             return addressList;
         }

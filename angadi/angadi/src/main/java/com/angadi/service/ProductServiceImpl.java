@@ -37,16 +37,8 @@ public class ProductServiceImpl implements ProductService {
 
         if (customer != null) {
 
-            Category category = categoryRepository.findByCategoryName(product.getCategory().getCategoryName());
-
-            Set<Product> categoryProducts = category.getProducts();
-            categoryProducts.add(product);
-
-            category.setProducts(categoryProducts);
-            categoryRepository.save(category);
-
-            product.setCategory(category);
             return productRepository.save(product);
+
         }
         throw new CustomerException("No user found with given email -> " + email);
     }
@@ -64,15 +56,17 @@ public class ProductServiceImpl implements ProductService {
 
                 Product p = optional.get();
 
-                p.setCategory(product.getCategory());
-                String cat = product.getCategory().getCategoryName();
+                /*
+                Category category = product.getCategory();
 
-                Category category = categoryRepository.findByCategoryName(cat);
+                List<Category> list = categoryRepository.findAll();
+                for (Category c : list) {
+                    if (c.equals(category)) product.setCategory(c);
+                }
 
-                Set<Product> categoryProducts = category.getProducts();
-                categoryProducts.add(product);
-
-                categoryRepository.save(category);
+                Set<Product> products = new HashSet<>();
+                products.add(product);
+                category.setProducts(products);*/
 
                 return productRepository.save(product);
             }
@@ -119,7 +113,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Set<Product> getAllProductsByCategoryAndByPriceHighToLow(String category, Long minPrice, Long maxPrice, String email) throws ProductException, CustomerException {
+    public Set<Product> getAllProductsByCategoryAndByPriceHighToLow(String category, Integer minPrice, Integer maxPrice, String email) throws ProductException, CustomerException {
 
         /*
         getting a product by price of high to low from category
@@ -139,7 +133,7 @@ public class ProductServiceImpl implements ProductService {
 
                 List<Product> resultList = new ArrayList<>();
 
-                for (Long i = minPrice; i <= maxPrice; i++) {
+                for (Integer i = minPrice; i <= maxPrice; i++) {
                     for (Product p : list) {
                         if (p.getProductPrice().equals(i)) {
                             resultList.add(p);
@@ -155,7 +149,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Set<Product> getAllProductsByCategoryAndByPriceLowToHigh(String category, Long minPrice, Long maxPrice, String email) throws ProductException, CustomerException {
+    public Set<Product> getAllProductsByCategoryAndByPriceLowToHigh(String category, Integer minPrice, Integer maxPrice, String email) throws ProductException, CustomerException {
 
         Customer customer = customerRepository.findByEmail(email);
 
@@ -171,7 +165,7 @@ public class ProductServiceImpl implements ProductService {
 
                 List<Product> resultList = new ArrayList<>();
 
-                for (Long i = minPrice; i <= maxPrice; i++) {
+                for (Integer i = minPrice; i <= maxPrice; i++) {
 
                     for (Product p : list) {
 
@@ -282,7 +276,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Double getStockNumberForProduct(String product, String email) throws CustomerException, ProductException {
+    public Integer getStockNumberForProduct(String product, String email) throws CustomerException, ProductException {
 
         Customer customer = customerRepository.findByEmail(email);
 

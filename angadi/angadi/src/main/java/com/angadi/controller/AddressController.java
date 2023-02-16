@@ -34,7 +34,7 @@ public class AddressController {
         return new ResponseEntity<>(addressService.deleteAddress(addressId, email), HttpStatus.CREATED);
     }
 
-    @GetMapping("/addAddress/{email}")
+    @GetMapping("/getAddressList/{email}")
     public ResponseEntity<Set<Address>> getAllAddressHandler(@Valid @PathVariable String email) throws CustomerException {
         return new ResponseEntity<>(addressService.getAllAddressOfaUser(email), HttpStatus.CREATED);
     }

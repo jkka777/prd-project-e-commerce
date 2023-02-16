@@ -12,7 +12,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Orders {
 
     @Id
@@ -48,9 +51,6 @@ public class Orders {
 
     private Boolean deliveryStatus = false;
 
-    @NotBlank(message = "Date cannot be blank")
-    @NotEmpty(message = "Date cannot be empty")
-    @NotNull(message = "Date cannot be null")
     private LocalDate deliveryDate;
 
     @JsonIgnore

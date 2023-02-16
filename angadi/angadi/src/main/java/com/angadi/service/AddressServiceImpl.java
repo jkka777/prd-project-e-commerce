@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+
 @Service
 public class AddressServiceImpl implements AddressService {
 
@@ -35,7 +36,7 @@ public class AddressServiceImpl implements AddressService {
             address.setCustomer(customer);
 
             customerRepository.save(customer);
-            addressRepository.save(address);
+            /*addressRepository.save(address);*/
 
             return addressList;
         }

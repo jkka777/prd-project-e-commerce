@@ -2,19 +2,20 @@ package com.angadi.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class Shipping {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer shippingId;
 
-    @NotBlank(message = "Shipping Type cannot be blank")
-    @NotEmpty(message = "Shipping Type cannot be empty")
-    @NotNull(message = "Shipping Type cannot be null")
     private ShippingType shippingType;
 
     @NotBlank(message = "Company name cannot be blank")
