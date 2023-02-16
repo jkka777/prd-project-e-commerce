@@ -54,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
             if (orderDetails.isEmpty()) {
                 throw new OrderDetailsException("First add products in order details!");
             }
-            Double productPrices = 0.0;
+            Integer productPrices = 0;
             for (OrderDetails p : orderDetails) {
                 productPrices += p.getProduct().getProductPrice() * p.getQuantity();
             }

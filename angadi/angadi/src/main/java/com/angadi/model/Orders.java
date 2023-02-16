@@ -2,6 +2,7 @@ package com.angadi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -22,9 +23,9 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer orderId;
 
-    @NotBlank(message = "Date cannot be blank")
+    /*@NotBlank(message = "Date cannot be blank")
     @NotEmpty(message = "Date cannot be empty")
-    @NotNull(message = "Date cannot be null")
+    @NotNull(message = "Date cannot be null")*/
     private LocalDate orderDate;
 
     @JsonIgnore
@@ -54,8 +55,8 @@ public class Orders {
     private LocalDate deliveryDate;
 
     @JsonIgnore
-    @NotBlank(message = "Total Price cannot be blank")
+    /*@NotBlank(message = "Total Price cannot be blank")
     @NotEmpty(message = "Total Price cannot be empty")
-    @NotNull(message = "Total Price cannot be null")
-    private Double totalOrderPrice;
+    @NotNull(message = "Total Price cannot be null")*/
+    private Integer totalOrderPrice;
 }
