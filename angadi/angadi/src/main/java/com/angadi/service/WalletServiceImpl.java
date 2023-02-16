@@ -2,7 +2,6 @@ package com.angadi.service;
 
 import com.angadi.exception.CustomerException;
 import com.angadi.exception.WalletException;
-import com.angadi.exception.WalletTransactionException;
 import com.angadi.model.Customer;
 import com.angadi.model.Wallet;
 import com.angadi.model.WalletTransactions;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -36,11 +34,10 @@ public class WalletServiceImpl implements WalletService {
 
         if (customer != null) {
 
-            wallet.setWalletBalance(wallet.getWalletBalance());
             wallet.setCustomer(customer);
 
             customer.setWallet(wallet);
-            customerRepository.save(customer);
+            /*customerRepository.save(customer);*/
 
             return walletRepository.save(wallet);
         }
@@ -48,7 +45,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public Wallet addBalanceToWallet(Double amount, String email) throws CustomerException, WalletException {
+    public Wallet addBalanceToWallet(Integer amount, String email) throws CustomerException, WalletException {
 
         Customer customer = customerRepository.findByEmail(email);
 
@@ -62,7 +59,7 @@ public class WalletServiceImpl implements WalletService {
                 w.setWalletBalance(w.getWalletBalance() + amount);
 
                 customer.setWallet(w);
-                customerRepository.save(customer);
+                /*customerRepository.save(customer);*/
 
                 return walletRepository.save(w);
             }
@@ -72,7 +69,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public Double showBalance(Integer walletId, String email) throws WalletException, CustomerException {
+    public Integer showBalance(Integer walletId, String email) throws WalletException, CustomerException {
 
         Customer customer = customerRepository.findByEmail(email);
 
@@ -89,7 +86,16 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public Wallet transferAmount(Integer walletId, String description, Double transferAmount, String email) throws WalletException, CustomerException {
+    public Wallet transferAmount(Integer walletId, String description, Integer transferAmount, String email) throws WalletException, CustomerException {
+
+        /*
+        1. First get the Destination customer by email/wallet Id in our db
+        2. Get his wallet
+        3. Check whether the source customer wallet has enough amount to transfer
+        4. Record the wallet transaction for source customer and set details for the amount for transferring
+        5. Set the wallet transaction for source customer wallet
+        6. Repeat the above steps for Destination customer
+        */
 
         Customer sourceCustomer = customerRepository.findByEmail(email);
 
@@ -101,7 +107,7 @@ public class WalletServiceImpl implements WalletService {
 
                 Wallet sourceWallet = optional.get();
 
-                Double sourceBalance = sourceWallet.getWalletBalance();
+                Integer sourceBalance = sourceWallet.getWalletBalance();
 
                 if (transferAmount > sourceBalance) {
                     throw new WalletException("Insufficient amount in wallet! Please add balance to proceed fund transfer.");
@@ -132,7 +138,7 @@ public class WalletServiceImpl implements WalletService {
                 sourceCustomer.setWallet(sourceWallet);
                 sourceWallet.setCustomer(sourceCustomer);
 
-                customerRepository.save(sourceCustomer);
+                /*customerRepository.save(sourceCustomer);*/
                 walletRepository.save(sourceWallet);
 
                 Optional<Wallet> desOpt = walletRepository.findById(walletId);
@@ -166,14 +172,14 @@ public class WalletServiceImpl implements WalletService {
 
                         destinationWallet.setWalletTransactions(destWalletTransactionSet);
 
-                        Double destBalance = destinationWallet.getWalletBalance();
+                        Integer destBalance = destinationWallet.getWalletBalance();
 
                         destinationWallet.setWalletBalance(destBalance + transferAmount);
 
                         destinationCustomer.setWallet(destinationWallet);
                         destinationWallet.setCustomer(destinationCustomer);
 
-                        customerRepository.save(destinationCustomer);
+                        /*customerRepository.save(destinationCustomer);*/
                         walletRepository.save(destinationWallet);
 
                         return sourceWallet;

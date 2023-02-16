@@ -24,17 +24,17 @@ public class WalletController {
     }
 
     @PutMapping("/addBalance/{email}/{amount}")
-    public ResponseEntity<Wallet> addBalanceToWalletHandler(@Valid @PathVariable Double amount, @PathVariable String email) throws CustomerException, WalletException {
+    public ResponseEntity<Wallet> addBalanceToWalletHandler(@Valid @PathVariable Integer amount, @PathVariable String email) throws CustomerException, WalletException {
         return new ResponseEntity<>(walletService.addBalanceToWallet(amount, email), HttpStatus.OK);
     }
 
     @GetMapping("/getBalance/{email}/{walletId}")
-    public ResponseEntity<Double> showBalanceHandler(@Valid @PathVariable Integer walletId, @PathVariable String email) throws CustomerException, WalletException {
+    public ResponseEntity<Integer> showBalanceHandler(@Valid @PathVariable Integer walletId, @PathVariable String email) throws CustomerException, WalletException {
         return new ResponseEntity<>(walletService.showBalance(walletId, email), HttpStatus.OK);
     }
 
     @PutMapping("/fundTransfer/{email}/{walletId}/{amount}/{description}")
-    public ResponseEntity<Wallet> fundTransferHandler(@Valid @PathVariable Integer walletId, @PathVariable Double amount, @PathVariable String description, @PathVariable String email) throws CustomerException, WalletException {
+    public ResponseEntity<Wallet> fundTransferHandler(@Valid @PathVariable Integer walletId, @PathVariable Integer amount, @PathVariable String description, @PathVariable String email) throws CustomerException, WalletException {
         return new ResponseEntity<>(walletService.transferAmount(walletId, description, amount, email), HttpStatus.OK);
     }
 }
