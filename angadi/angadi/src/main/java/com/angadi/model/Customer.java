@@ -62,4 +62,8 @@ public class Customer {
     @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     private Wallet wallet;
+
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL)
+    private Cart cart;
 }

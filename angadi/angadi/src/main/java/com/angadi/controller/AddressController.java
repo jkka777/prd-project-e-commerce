@@ -19,24 +19,30 @@ public class AddressController {
     @Autowired
     private AddressService addressService;
 
-    @PostMapping("/addAddress/{email}")
-    public ResponseEntity<Set<Address>> saveAddressHandler(@Valid @RequestBody Address address, @PathVariable String email) throws CustomerException {
-        return new ResponseEntity<>(addressService.addAddress(address, email), HttpStatus.CREATED);
+    @PostMapping("/addAddress")
+    public ResponseEntity<Set<Address>> saveAddressHandler(@Valid @RequestBody Address address) throws CustomerException {
+        return new ResponseEntity<>(addressService.addAddress(address), HttpStatus.CREATED);
     }
 
-    @PutMapping("/updateAddress/{email}")
-    public ResponseEntity<Address> updateAddressHandler(@Valid @RequestBody Address address, @PathVariable String email) throws CustomerException, AddressException {
-        return new ResponseEntity<>(addressService.updateAddress(address, email), HttpStatus.CREATED);
+    @PutMapping("/updateAddress")
+    public ResponseEntity<Address> updateAddressHandler(@Valid @RequestBody Address address) throws CustomerException, AddressException {
+        return new ResponseEntity<>(addressService.updateAddress(address), HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteAddress/{email}/{addressId}")
-    public ResponseEntity<Address> deleteAddressHandler(@Valid @PathVariable Integer addressId, @PathVariable String email) throws CustomerException {
-        return new ResponseEntity<>(addressService.deleteAddress(addressId, email), HttpStatus.CREATED);
+    @DeleteMapping("/deleteAddress/{addressId}")
+    public ResponseEntity<Address> deleteAddressHandler(@Valid @PathVariable Integer addressId) throws CustomerException {
+        return new ResponseEntity<>(addressService.deleteAddress(addressId), HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/getAddressList/{email}")
-    public ResponseEntity<Set<Address>> getAllAddressHandler(@Valid @PathVariable String email) throws CustomerException {
-        return new ResponseEntity<>(addressService.getAllAddressOfaUser(email), HttpStatus.CREATED);
+    @GetMapping("/getUserAddressList")
+    public ResponseEntity<Set<Address>> getUserAddressListHandler() throws CustomerException {
+        return new ResponseEntity<>(addressService.getAllAddressOfaUser(), HttpStatus.OK);
+    }
+
+    /* admin specific functionality */
+    @GetMapping("/getAllAddressList")
+    public ResponseEntity<Set<Address>> getAllUserAddressListHandler() throws CustomerException {
+        return new ResponseEntity<>(addressService.getAllAddress(), HttpStatus.OK);
     }
 
 }

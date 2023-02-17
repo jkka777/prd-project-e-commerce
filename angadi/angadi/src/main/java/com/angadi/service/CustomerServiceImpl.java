@@ -25,6 +25,9 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private WalletRepository walletRepository;
 
+    @Autowired
+    private CurrentUser currentUser;
+
     @Override
     public Customer saveCustomer(Customer customer) {
 
@@ -34,12 +37,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer updateCustomer(Customer customer, String email) throws CustomerException {
+    public Customer updateCustomer(Customer customer) throws CustomerException {
 
         Customer rc = customerRepository.findByEmail(customer.getEmail());
 
         if (rc == null) {
-            throw new CustomerException("No customer found with given Email -> " + customer.getEmail());
+            throw new CustomerException("No customer found with given Email or Invalid user name entered, Please login...");
         }
         return customerRepository.save(customer);
     }
@@ -53,44 +56,23 @@ public class CustomerServiceImpl implements CustomerService {
             customerRepository.delete(customer);
             return customer;
         }
-        throw new CustomerException("No customer found with given Email -> " + email);
+        throw new CustomerException("No customer found with given Email or Invalid user name entered, Please login...");
     }
 
     @Override
-    public Customer getCustomerDetails(String email) throws CustomerException {
+    public Customer getCustomerDetails() throws CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
             return customer;
         }
-        throw new CustomerException("No customer found with given Email -> " + email);
+        throw new CustomerException("No customer found with given Email or Invalid user name entered, Please login...");
     }
 
+    /*admin specific method*/
     @Override
     public List<Customer> getAllCustomerDetails() throws CustomerException {
         return customerRepository.findAll();
-    }
-
-    @Override
-    public Set<Address> addAddress(Address address, String email) throws CustomerException {
-
-        Customer customer = customerRepository.findByEmail(email);
-
-        if (customer == null) {
-            throw new CustomerException("No customer found with given Email -> " + email);
-        } else {
-            Set<Address> addressList = customer.getAddresses();
-
-            addressList.add(address);
-            customer.setAddresses(addressList);
-
-            address.setCustomer(customer);
-
-            customerRepository.save(customer);
-            /*addressRepository.save(address);*/
-
-            return addressList;
-        }
     }
 }
