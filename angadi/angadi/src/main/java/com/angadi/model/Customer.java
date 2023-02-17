@@ -59,6 +59,7 @@ public class Customer {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<Orders> orders = new HashSet<>();
 
-    @OneToOne
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL)
     private Wallet wallet;
 }

@@ -33,7 +33,6 @@ public class Wallet {
     private Set<WalletTransactions> walletTransactions = new HashSet<>();
 
     @OneToOne(mappedBy = "wallet", cascade = CascadeType.ALL)
-    @JoinColumn(name = "customerId")
     private Customer customer;
 
 }
