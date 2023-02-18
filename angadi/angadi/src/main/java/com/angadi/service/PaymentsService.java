@@ -5,5 +5,5 @@ import com.angadi.model.Payments;
 
 public interface PaymentsService {
 
-    public Payments addPaymentToOrder(Payments payments, String email) throws CustomerException;
+    public Payments addPaymentToOrder(Payments payments) throws CustomerException;
 }

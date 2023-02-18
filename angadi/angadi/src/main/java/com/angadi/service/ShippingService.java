@@ -6,9 +6,9 @@ import com.angadi.model.Shipping;
 
 public interface ShippingService {
 
-    public Shipping addShippingDetails(Shipping shipping, String email) throws CustomerException;
+    public Shipping addShippingDetails(Shipping shipping) throws CustomerException;
 
-    public Shipping updateShippingDetails(Shipping shipping, String email) throws CustomerException, ShippingException;
+    public Shipping updateShippingDetails(Shipping shipping) throws CustomerException, ShippingException;
 
-    public Shipping cancelShippingDetails(Integer shippingId, String email) throws CustomerException, ShippingException;
+    public Shipping cancelShippingDetails(Integer shippingId) throws CustomerException, ShippingException;
 }

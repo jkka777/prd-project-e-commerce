@@ -34,9 +34,9 @@ public class WalletTransactionServiceImpl implements WalletTransactionService {
     private CurrentUser currentUser;
 
     @Override
-    public WalletTransactions addTransaction(WalletTransactions walletTransactions, String email) throws CustomerException, WalletException {
+    public WalletTransactions addTransaction(WalletTransactions walletTransactions) throws CustomerException, WalletException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -56,9 +56,9 @@ public class WalletTransactionServiceImpl implements WalletTransactionService {
                 walletRepository.save(wallet);
                 walletTransactionRepository.save(walletTransactions);
             }
-            throw new WalletException("No Wallet found with given email! Please add wallet to your profile  -> " + email);
+            throw new WalletException("No wallet found! Add wallet to your profile!");
         }
-        throw new CustomerException("No Customer found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     /* user specific method for getting list of transactions */
@@ -68,9 +68,15 @@ public class WalletTransactionServiceImpl implements WalletTransactionService {
         Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
-            return customer.getWallet().getWalletTransactions();
+
+            Wallet wallet = customer.getWallet();
+
+            if (wallet != null) {
+                return wallet.getWalletTransactions();
+            }
+            throw new WalletException("No wallet found! Add wallet to your profile!");
         }
-        throw new CustomerException("Please log in first or Invalid user details provided!");
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
 
@@ -89,6 +95,6 @@ public class WalletTransactionServiceImpl implements WalletTransactionService {
                 throw new WalletTransactionException("No transactions found for your profile, " +
                         "Please add balance to wallet and view some time after!");
         }
-        throw new CustomerException("No Customer found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 }

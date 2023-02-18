@@ -21,10 +21,6 @@ public class WalletTransactions {
 
     private LocalDateTime transactionTime;
 
-    /*@NotNull(message = "Amount cannot be null")
-    @NotBlank(message = "Amount cannot be blank")
-    @NotEmpty(message = "Amount cannot be empty")
-    @DecimalMin(value = "0.0", message = "Please enter valid amount, It should be greater than 0!")*/
     @Digits(integer = 5, fraction = 2, message = "Amount cannot be more than 10000 and less than 100")
     private Integer amount;
 

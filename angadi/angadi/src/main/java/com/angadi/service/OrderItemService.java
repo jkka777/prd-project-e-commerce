@@ -6,12 +6,12 @@ import com.angadi.model.OrderItem;
 
 public interface OrderItemService {
 
-    public OrderItem addOrderDetails(OrderItem orderItem, String email) throws CustomerException;
+    public OrderItem addOrderItems(OrderItem orderItem) throws CustomerException;
 
-    public OrderItem updateOrderDetails(OrderItem orderItem, String email) throws OrderItemException, CustomerException;
+    public OrderItem updateOrderItems(OrderItem orderItem) throws OrderItemException, CustomerException;
 
-    public OrderItem removeOrderDetails(OrderItem orderItem, String email) throws OrderItemException, CustomerException;
+    public OrderItem removeOrderItems(OrderItem orderItem) throws OrderItemException, CustomerException;
 
-    public Double getPriceOfOrderDetails(Integer orderDetailsId, String email) throws OrderItemException, CustomerException;
+    public Double getPriceOfOrderItems(Integer orderDetailsId) throws OrderItemException, CustomerException;
 
 }

@@ -25,51 +25,37 @@ public class ShippingServiceImpl implements ShippingService {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private CurrentUser currentUser;
+
     @Override
-    public Shipping addShippingDetails(Shipping shipping, String email) throws CustomerException {
+    public Shipping addShippingDetails(Shipping shipping) throws CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
-        if (customer != null) {
-
-            Orders orders = shipping.getOrders();
-            orders.setShipping(shipping);
-
-            orderRepository.save(orders);
-            return shippingRepository.save(shipping);
-        }
-        throw new CustomerException("No customer found with given email -> " + email);
+        if (customer != null) return shippingRepository.save(shipping);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     @Override
-    public Shipping updateShippingDetails(Shipping shipping, String email) throws CustomerException, ShippingException {
+    public Shipping updateShippingDetails(Shipping shipping) throws CustomerException, ShippingException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
             Optional<Shipping> optional = shippingRepository.findById(shipping.getShippingId());
 
-            if (optional.isPresent()) {
-
-                Shipping s = optional.get();
-
-                Orders orders = shipping.getOrders();
-                orders.setShipping(shipping);
-
-                orderRepository.save(orders);
-
-                return shippingRepository.save(shipping);
-            }
+            if (optional.isPresent()) return shippingRepository.save(shipping);
             throw new ShippingException("No shipping details found with given details!");
         }
-        throw new CustomerException("No customer found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     @Override
-    public Shipping cancelShippingDetails(Integer shippingId, String email) throws CustomerException, ShippingException {
+    public Shipping cancelShippingDetails(Integer shippingId) throws CustomerException, ShippingException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -83,6 +69,6 @@ public class ShippingServiceImpl implements ShippingService {
             }
             throw new ShippingException("No shipping details found with given shipping id! " + shippingId);
         }
-        throw new CustomerException("No customer found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 }

@@ -17,18 +17,18 @@ public class ShippingController {
     @Autowired
     private ShippingService shippingService;
 
-    @PostMapping("/addShippingDetails/{email}")
-    public ResponseEntity<Shipping> addShippingHandler(@Valid @RequestBody Shipping shipping, @PathVariable String email) throws CustomerException {
-        return new ResponseEntity<>(shippingService.addShippingDetails(shipping, email), HttpStatus.CREATED);
+    @PostMapping("/addShippingDetails")
+    public ResponseEntity<Shipping> addShippingHandler(@Valid @RequestBody Shipping shipping) throws CustomerException {
+        return new ResponseEntity<>(shippingService.addShippingDetails(shipping), HttpStatus.CREATED);
     }
 
-    @PutMapping("/updateShippingDetails/{email}")
-    public ResponseEntity<Shipping> updateShippingHandler(@Valid @RequestBody Shipping shipping, @PathVariable String email) throws CustomerException, ShippingException {
-        return new ResponseEntity<>(shippingService.updateShippingDetails(shipping, email), HttpStatus.OK);
+    @PutMapping("/updateShippingDetails")
+    public ResponseEntity<Shipping> updateShippingHandler(@Valid @RequestBody Shipping shipping) throws CustomerException, ShippingException {
+        return new ResponseEntity<>(shippingService.updateShippingDetails(shipping), HttpStatus.OK);
     }
 
-    @DeleteMapping("/deleteShippingDetails/{email}/{shippingId}")
-    public ResponseEntity<Shipping> cancelShippingHandler(@Valid @PathVariable Integer shippingId, @PathVariable String email) throws CustomerException, ShippingException {
-        return new ResponseEntity<>(shippingService.cancelShippingDetails(shippingId, email), HttpStatus.OK);
+    @DeleteMapping("/deleteShippingDetails/{shippingId}")
+    public ResponseEntity<Shipping> cancelShippingHandler(@Valid @PathVariable Integer shippingId) throws CustomerException, ShippingException {
+        return new ResponseEntity<>(shippingService.cancelShippingDetails(shippingId), HttpStatus.OK);
     }
 }

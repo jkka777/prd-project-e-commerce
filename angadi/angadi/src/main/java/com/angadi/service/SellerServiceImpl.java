@@ -16,22 +16,26 @@ public class SellerServiceImpl implements SellerService {
 
     @Autowired
     SellerRepository sellerRepository;
+
     @Autowired
     private CustomerRepository customerRepository;
 
-    @Override
-    public Seller addSellerDetails(Seller seller, String email) throws CustomerException {
+    @Autowired
+    private CurrentUser currentUser;
 
-        Customer customer = customerRepository.findByEmail(email);
+    @Override
+    public Seller addSellerDetails(Seller seller) throws CustomerException {
+
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) return sellerRepository.save(seller);
-        throw new CustomerException("No customer found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     @Override
-    public Seller updateSellerDetails(Seller seller, String email) throws SellerException, CustomerException {
+    public Seller updateSellerDetails(Seller seller) throws SellerException, CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -43,13 +47,13 @@ public class SellerServiceImpl implements SellerService {
             }
             throw new SellerException("No Supplier found with given details!");
         }
-        throw new CustomerException("No customer found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     @Override
-    public Seller deleteSellerDetails(Seller seller, String email) throws SellerException, CustomerException {
+    public Seller deleteSellerDetails(Seller seller) throws SellerException, CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -61,7 +65,7 @@ public class SellerServiceImpl implements SellerService {
             }
             throw new SellerException("No Supplier found with given details!");
         }
-        throw new CustomerException("No customer found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     @Override

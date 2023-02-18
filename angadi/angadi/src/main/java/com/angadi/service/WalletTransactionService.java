@@ -9,7 +9,7 @@ import java.util.Set;
 
 public interface WalletTransactionService {
 
-    public WalletTransactions addTransaction(WalletTransactions walletTransactions, String email) throws CustomerException, WalletException;
+    public WalletTransactions addTransaction(WalletTransactions walletTransactions) throws CustomerException, WalletException;
 
     public Set<WalletTransactions> viewTransaction() throws CustomerException, WalletException, WalletTransactionException;
 

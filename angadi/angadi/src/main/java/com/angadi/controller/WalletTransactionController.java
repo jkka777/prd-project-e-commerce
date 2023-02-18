@@ -20,18 +20,18 @@ public class WalletTransactionController {
     @Autowired
     private WalletTransactionService walletTransactionService;
 
-    @PostMapping("/addWalletTransaction/{email}")
-    public ResponseEntity<WalletTransactions> saveWalletTransactionHandler(@Valid @RequestBody WalletTransactions walletTransactions, @PathVariable String email) throws CustomerException, WalletException {
-        return new ResponseEntity<>(walletTransactionService.addTransaction(walletTransactions, email), HttpStatus.CREATED);
+    @PostMapping("/addWalletTransaction")
+    public ResponseEntity<WalletTransactions> saveWalletTransactionHandler(@Valid @RequestBody WalletTransactions walletTransactions) throws CustomerException, WalletException {
+        return new ResponseEntity<>(walletTransactionService.addTransaction(walletTransactions), HttpStatus.CREATED);
     }
 
     @GetMapping("/viewTransactions")
     public ResponseEntity<Set<WalletTransactions>> viewWalletTransactionHandler() throws CustomerException, WalletTransactionException {
-        return new ResponseEntity<>(walletTransactionService.viewTransaction(), HttpStatus.CREATED);
+        return new ResponseEntity<>(walletTransactionService.viewTransaction(), HttpStatus.OK);
     }
 
     @GetMapping("/viewTransactions/{email}")
     public ResponseEntity<Set<WalletTransactions>> viewAllWalletTransactionHandler(@Valid @PathVariable String email) throws CustomerException, WalletTransactionException {
-        return new ResponseEntity<>(walletTransactionService.viewAllTransactions(email), HttpStatus.CREATED);
+        return new ResponseEntity<>(walletTransactionService.viewAllTransactions(email), HttpStatus.OK);
     }
 }

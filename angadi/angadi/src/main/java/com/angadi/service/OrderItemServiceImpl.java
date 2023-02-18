@@ -1,6 +1,7 @@
 package com.angadi.service;
 
 import com.angadi.exception.CustomerException;
+import com.angadi.exception.OrderException;
 import com.angadi.exception.OrderItemException;
 import com.angadi.model.*;
 import com.angadi.repository.CustomerRepository;
@@ -21,33 +22,41 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
-    @Override
-    public OrderItem addOrderDetails(OrderItem orderItem, String email) throws CustomerException {
+    @Autowired
+    private CurrentUser currentUser;
 
-        Customer customer = customerRepository.findByEmail(email);
+    @Override
+    public OrderItem addOrderItems(OrderItem orderItem) throws CustomerException {
+
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
             Orders orders = orderItem.getOrders();
+
+            if (orders == null) {
+                throw new OrderException("Please create order instance so that you can add items in it.");
+            }
+
             Set<OrderItem> od = new HashSet<>();
             od.add(orderItem);
             orders.setOrderItems(od);
 
-            Product product = orderItem.getProduct();
-            product.setOrderItem(orderItem);
+            orderItem.setOrders(orders);
 
-            Seller seller = orderItem.getSeller();
-            seller.setOrderItem(orderItem);
+            orderItem.setProduct(orderItem.getProduct());
+
+            orderItem.setSeller(orderItem.getSeller());
 
             return orderItemRepository.save(orderItem);
         }
-        throw new CustomerException("No customer found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     @Override
-    public OrderItem updateOrderDetails(OrderItem orderItem, String email) throws OrderItemException, CustomerException {
+    public OrderItem updateOrderItems(OrderItem orderItem) throws OrderItemException, CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -72,13 +81,13 @@ public class OrderItemServiceImpl implements OrderItemService {
             }
             throw new OrderItemException("No details found with given order order details " + orderItem.getOrderItemId());
         }
-        throw new CustomerException("No customer found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     @Override
-    public OrderItem removeOrderDetails(OrderItem orderItem, String email) throws OrderItemException, CustomerException {
+    public OrderItem removeOrderItems(OrderItem orderItem) throws OrderItemException, CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -92,13 +101,13 @@ public class OrderItemServiceImpl implements OrderItemService {
             }
             throw new OrderItemException("No details found with given order order details " + orderItem.getOrderItemId());
         }
-        throw new CustomerException("No customer found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     @Override
-    public Double getPriceOfOrderDetails(Integer orderDetailsId, String email) throws OrderItemException, CustomerException {
+    public Double getPriceOfOrderItems(Integer orderDetailsId) throws OrderItemException, CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -115,6 +124,6 @@ public class OrderItemServiceImpl implements OrderItemService {
             }
             throw new OrderItemException("No data found with given order details!");
         }
-        throw new CustomerException("No Customer found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 }
