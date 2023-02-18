@@ -1,9 +1,9 @@
 package com.angadi.controller;
 
 import com.angadi.exception.CustomerException;
-import com.angadi.exception.OrderDetailsException;
-import com.angadi.model.OrderDetails;
-import com.angadi.service.OrderDetailsService;
+import com.angadi.exception.OrderItemException;
+import com.angadi.model.OrderItem;
+import com.angadi.service.OrderItemService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,26 +15,26 @@ import org.springframework.web.bind.annotation.*;
 public class OrderDetailsController {
 
     @Autowired
-    private OrderDetailsService orderDetailsService;
+    private OrderItemService orderItemService;
 
     @PostMapping("/addOrderDetails/{email}")
-    public ResponseEntity<OrderDetails> saveOrderDetailsHandler(@Valid @RequestBody OrderDetails orderDetails, @PathVariable String email) throws CustomerException {
-        return new ResponseEntity<>(orderDetailsService.addOrderDetails(orderDetails, email), HttpStatus.CREATED);
+    public ResponseEntity<OrderItem> saveOrderDetailsHandler(@Valid @RequestBody OrderItem orderItem, @PathVariable String email) throws CustomerException {
+        return new ResponseEntity<>(orderItemService.addOrderDetails(orderItem, email), HttpStatus.CREATED);
     }
 
     @PutMapping("/updateOrderDetails/{email}")
-    public ResponseEntity<OrderDetails> updateOrderDetailsHandler(@Valid @RequestBody OrderDetails orderDetails, @PathVariable String email) throws CustomerException, OrderDetailsException {
-        return new ResponseEntity<>(orderDetailsService.updateOrderDetails(orderDetails, email), HttpStatus.OK);
+    public ResponseEntity<OrderItem> updateOrderDetailsHandler(@Valid @RequestBody OrderItem orderItem, @PathVariable String email) throws CustomerException, OrderItemException {
+        return new ResponseEntity<>(orderItemService.updateOrderDetails(orderItem, email), HttpStatus.OK);
     }
 
     @DeleteMapping("/removeOrderDetails/{email}")
-    public ResponseEntity<OrderDetails> removeOrderDetailsHandler(@Valid @RequestBody OrderDetails orderDetails, @PathVariable String email) throws CustomerException, OrderDetailsException {
-        return new ResponseEntity<>(orderDetailsService.removeOrderDetails(orderDetails, email), HttpStatus.OK);
+    public ResponseEntity<OrderItem> removeOrderDetailsHandler(@Valid @RequestBody OrderItem orderItem, @PathVariable String email) throws CustomerException, OrderItemException {
+        return new ResponseEntity<>(orderItemService.removeOrderDetails(orderItem, email), HttpStatus.OK);
     }
 
     @GetMapping("/priceOfAnOrderDetails/{email}")
-    public ResponseEntity<Double> getPriceOfAnOrderDetailHandler(@Valid @RequestBody Integer orderDetailsId, @PathVariable String email) throws CustomerException, OrderDetailsException {
-        return new ResponseEntity<>(orderDetailsService.getPriceOfOrderDetails(orderDetailsId, email), HttpStatus.OK);
+    public ResponseEntity<Double> getPriceOfAnOrderDetailHandler(@Valid @RequestBody Integer orderDetailsId, @PathVariable String email) throws CustomerException, OrderItemException {
+        return new ResponseEntity<>(orderItemService.getPriceOfOrderDetails(orderDetailsId, email), HttpStatus.OK);
     }
 
 

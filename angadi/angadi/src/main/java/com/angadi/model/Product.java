@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -46,9 +45,8 @@ public class Product {
     private Category category;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-    @JoinColumn(name = "productId")
-    private OrderDetails orderDetails;
+    @OneToOne(cascade = CascadeType.ALL)
+    private OrderItem orderItem;
 
     @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)

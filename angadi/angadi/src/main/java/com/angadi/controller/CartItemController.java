@@ -21,14 +21,6 @@ public class CartItemController {
     @Autowired
     private CartItemService cartItemService;
 
-    /*
-    public CartItem addToCart(Product product, Integer quantity) throws CustomerException, CartException;
-    public CartItem updateCartItem(CartItem cartItem, Integer quantity) throws CustomerException, CartItemException;
-    public CartItem removeCartItem(CartItem cartItem) throws CustomerException, CartItemException;
-    public Set<CartItem> getCartItems() throws CustomerException, CartException, CartItemException;
-    public String clearCartItems() throws CustomerException, CartException, CartItemException;
-    */
-
     @PostMapping("/addItem")
     public ResponseEntity<CartItem> addProductToCartItemHandler(@Valid @RequestBody Product product, @PathVariable Integer quantity) throws CustomerException, CartException {
         return new ResponseEntity<>(cartItemService.addToCart(product, quantity), HttpStatus.CREATED);

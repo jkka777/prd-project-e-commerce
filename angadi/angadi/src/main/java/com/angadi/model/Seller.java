@@ -1,5 +1,6 @@
 package com.angadi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -10,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Suppliers {
+public class Seller {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,8 +72,9 @@ public class Suppliers {
             "should have length of minimum 4 and maximum of 20 characters")
     private String country;
 
+    @JsonIgnore
     @OneToOne
     @PrimaryKeyJoinColumn
-    private OrderDetails orderDetails;
+    private OrderItem orderItem;
 
 }

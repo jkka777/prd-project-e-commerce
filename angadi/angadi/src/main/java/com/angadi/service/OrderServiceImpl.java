@@ -1,9 +1,6 @@
 package com.angadi.service;
 
-import com.angadi.exception.CustomerException;
-import com.angadi.exception.OrderDetailsException;
-import com.angadi.exception.OrderException;
-import com.angadi.exception.ShippingException;
+import com.angadi.exception.*;
 import com.angadi.model.*;
 import com.angadi.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,54 +18,66 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+
     @Autowired
     private ShippingRepository shippingRepository;
+
     @Autowired
     private PaymentsRepository paymentsRepository;
+
     @Autowired
     private WalletTransactionRepository walletTransactionRepository;
 
-    @Override
-    public Orders saveOrder(Orders orders, String email) throws CustomerException {
+    @Autowired
+    private CurrentUser currentUser;
 
-        /* finding the customer */
-        Customer customer = customerRepository.findByEmail(email);
+    @Override
+    public Orders saveOrder(Orders orders) throws CustomerException {
+
+        /* 1. find the customer get the wallet of customer
+           2. set the wallet transactions so that order gets payment via wallet (right now app only works with wallet)
+           3. save and set the wallet transaction for the order
+           4. set the delivery address for the order
+           5. set the shipping company to our order if available
+           6. set delivery status as false because order is not been shipped and delivered
+           7. set delivery date for standard 2 days
+           8. set the total order price of all the order details that are in one single order */
+
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
             orders.setOrderDate(LocalDate.now());
             orders.setCustomer(customer);
 
-            /* getting the wallet of customer */
             Wallet wallet = customer.getWallet();
 
-            /* setting the wallet transactions so that order gets payment via wallet */
-            WalletTransactionService wts = new WalletTransactionServiceImpl();
+            if (wallet != null) {
 
-            WalletTransactions owts = orders.getWalletTransactions();
-            owts.setTransactionTime(LocalDateTime.now());
-            owts.setDescription(owts.getDescription());
-            owts.setWallet(wallet);
+                WalletTransactions owts = new WalletTransactions();
+                owts.setTransactionTime(LocalDateTime.now());
+                owts.setDescription(owts.getDescription());
+                owts.setWallet(wallet);
+            }
+            throw new WalletException("Please add wallet First!");
 
-            Set<OrderDetails> orderDetails = orders.getOrderDetails();
-            if (orderDetails.isEmpty()) {
-                throw new OrderDetailsException("First add products in order details!");
+
+            Set<OrderItem> orderItems = orders.getOrderItems();
+            if (orderItems.isEmpty()) {
+                throw new OrderItemException("First add products in order details!");
             }
             Integer productPrices = 0;
-            for (OrderDetails p : orderDetails) {
+            for (OrderItem p : orderItems) {
                 productPrices += p.getProduct().getProductPrice() * p.getQuantity();
             }
 
             owts.setAmount(productPrices);
 
-            /* saving and setting the wallet transaction for the order */
             WalletTransactions walletTransactions = wts.addTransaction(owts, email);
             orders.setWalletTransactions(walletTransactions);
 
-            /* setting the delivery address for the order */
             orders.setDeliveryAddress(orders.getDeliveryAddress());
 
-            /* setting the shipping company to our order if available */
             List<Shipping> shippingList = shippingRepository.findAll();
 
             if (shippingList.isEmpty()) {
@@ -76,18 +85,15 @@ public class OrderServiceImpl implements OrderService {
             }
             orders.setShipping(shippingList.get(0));
 
-            /* setting delivery status as false because order is not been shipped and delivered */
             orders.setDeliveryStatus(false);
 
-            /* setting delivery date for standard 2 days */
             orders.setDeliveryDate(LocalDate.now().plusDays(2));
 
-            /* setting the total order price of all the order details that are in one single order */
             orders.setTotalOrderPrice(productPrices);
 
             return orderRepository.save(orders);
         }
-        throw new CustomerException("No Customer found with given email!");
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
 
@@ -167,7 +173,7 @@ public class OrderServiceImpl implements OrderService {
     /* Get list of all order details for a customer by providing customer email */
 
     @Override
-    public List<Orders> getOrdersByCustomerEmail(String email) throws OrderException, CustomerException {
+    public List<Orders> getAllOrdersOfCustomer(String email) throws OrderException, CustomerException {
 
         Customer customer = customerRepository.findByEmail(email);
 

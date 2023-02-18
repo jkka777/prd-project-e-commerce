@@ -1,6 +1,5 @@
 package com.angadi.exception;
 
-import com.angadi.model.WalletTransactions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -50,8 +49,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(OrderDetailsException.class)
-    ResponseEntity<ErrorDetails> orderDetailsExceptionHandler(OrderDetailsException ode, WebRequest webRequest) {
+    @ExceptionHandler(OrderItemException.class)
+    ResponseEntity<ErrorDetails> orderDetailsExceptionHandler(OrderItemException ode, WebRequest webRequest) {
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ode.getMessage(), webRequest.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
@@ -80,8 +79,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(SupplierException.class)
-    ResponseEntity<ErrorDetails> supplierExceptionHandler(SupplierException se, WebRequest webRequest) {
+    @ExceptionHandler(SellerException.class)
+    ResponseEntity<ErrorDetails> supplierExceptionHandler(SellerException se, WebRequest webRequest) {
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), se.getMessage(), webRequest.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }

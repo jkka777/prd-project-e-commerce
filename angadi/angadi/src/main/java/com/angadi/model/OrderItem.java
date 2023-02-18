@@ -4,26 +4,23 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class OrderDetails {
+public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer orderDetailsId;
+    private Integer orderItemId;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "orderId")
     private Orders orders;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "orderItem")
     private Product product;
 
     @NotBlank(message = "Quantity cannot be blank")
@@ -35,5 +32,5 @@ public class OrderDetails {
 
     @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
-    private Suppliers suppliers;
+    private Seller seller;
 }

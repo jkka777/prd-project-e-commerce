@@ -36,7 +36,7 @@ public class OrderController {
 
     @GetMapping("/getOrdersOfCustomer/{email}/")
     public ResponseEntity<List<Orders>> getCustomerOrdersHandler(@Valid @PathVariable String email) throws OrderException, CustomerException {
-        return new ResponseEntity<>(orderService.getOrdersByCustomerEmail(email), HttpStatus.OK);
+        return new ResponseEntity<>(orderService.getAllOrdersOfCustomer(email), HttpStatus.OK);
     }
 
 

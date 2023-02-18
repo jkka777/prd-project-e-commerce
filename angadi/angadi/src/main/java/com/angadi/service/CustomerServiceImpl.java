@@ -39,12 +39,18 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer updateCustomer(Customer customer) throws CustomerException {
 
-        Customer rc = customerRepository.findByEmail(customer.getEmail());
+        Customer c = currentUser.getLoggedInCustomer();
 
-        if (rc == null) {
-            throw new CustomerException("No customer found with given Email or Invalid user name entered, Please login...");
+        if (c != null) {
+            Customer rc = customerRepository.findByEmail(customer.getEmail());
+
+            if (rc == null) {
+                throw new CustomerException("No customer found with given Email");
+            }
+            return customerRepository.save(customer);
         }
-        return customerRepository.save(customer);
+        throw new CustomerException("No customer found with given Email or Invalid user name entered, Please login...");
+
     }
 
     @Override

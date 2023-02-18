@@ -2,10 +2,6 @@ package com.angadi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -23,14 +19,11 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer orderId;
 
-    /*@NotBlank(message = "Date cannot be blank")
-    @NotEmpty(message = "Date cannot be empty")
-    @NotNull(message = "Date cannot be null")*/
     private LocalDate orderDate;
 
     @JsonIgnore
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
-    private Set<OrderDetails> orderDetails = new HashSet<>();
+    private Set<OrderItem> orderItems = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customerId")
@@ -54,9 +47,5 @@ public class Orders {
 
     private LocalDate deliveryDate;
 
-    @JsonIgnore
-    /*@NotBlank(message = "Total Price cannot be blank")
-    @NotEmpty(message = "Total Price cannot be empty")
-    @NotNull(message = "Total Price cannot be null")*/
     private Integer totalOrderPrice;
 }

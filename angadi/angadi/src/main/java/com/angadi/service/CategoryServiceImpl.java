@@ -21,16 +21,25 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Autowired
+    private CurrentUser currentUser;
+
     @Override
-    public Category addCategory(Category category, String email) throws CustomerException {
-        category.setCategoryName(category.getCategoryName().toUpperCase());
-        return categoryRepository.save(category);
+    public Category addCategory(Category category) throws CustomerException {
+
+        Customer customer = currentUser.getLoggedInCustomer();
+
+        if (customer != null) {
+            category.setCategoryName(category.getCategoryName().toUpperCase());
+            return categoryRepository.save(category);
+        }
+        throw new CustomerException("Invalid user name or password or Please login first!");
     }
 
     @Override
-    public Category updateCategory(Category category, String email) throws CategoryException, CustomerException {
+    public Category updateCategory(Category category) throws CategoryException, CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -44,13 +53,13 @@ public class CategoryServiceImpl implements CategoryService {
             }
             throw new CategoryException("No category found with given details!");
         }
-        throw new CustomerException("No customer found with given email -> " + email);
+        throw new CustomerException("Invalid user name or password or Please login first!");
     }
 
     @Override
-    public Category deleteCategory(Category category, String email) throws CategoryException, CustomerException {
+    public Category deleteCategory(Category category) throws CategoryException, CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -64,7 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
             }
             throw new CategoryException("No category found with given details!");
         }
-        throw new CustomerException("No customer found with given email -> " + email);
+        throw new CustomerException("Invalid user name or password or Please login first!");
     }
 
     @Override
