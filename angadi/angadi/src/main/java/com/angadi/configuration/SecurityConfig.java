@@ -1,20 +1,15 @@
 package com.angadi.configuration;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,20 +37,45 @@ public class SecurityConfig {
                 })
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.GET, "/customer/hello", "/customer/welcome").permitAll()
-                .requestMatchers(HttpMethod.POST, "/customer/addCustomer").permitAll()
-                .requestMatchers(HttpMethod.POST, "/customer/addCustomerAddress").authenticated()
-                .requestMatchers(HttpMethod.PUT, "/customer/updateCustomer").authenticated()
-                .requestMatchers(HttpMethod.DELETE, "/customer/deleteCustomer").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/customer/getCustomerDetails").hasAnyRole("USER", "SUPPLIER")
-                .requestMatchers(HttpMethod.GET, "/customer/getAllCustomerDetails").hasRole("ADMIN")
-                .requestMatchers("/address/**",
-                        "/orders/**",
-                        "/orderDetails/**",
-                        "/payments/**",
-                        "/product/**",
-                        "/shipping/**",
-                        "/supplier/**",
+                .requestMatchers("/customer/hello", "/customer/welcome").permitAll()
+                .requestMatchers("/customer/addCustomer").permitAll()
+                .requestMatchers(
+                        "/customer/updateCustomer",
+                        "/address/addAddress",
+                        "/address/updateAddress",
+                        "/address/deleteAddress/*",
+                        "/address/getUserAddressList").authenticated()
+                .requestMatchers("/customer/getCustomerDetails").hasAnyRole("USER", "SELLER")
+                .requestMatchers(
+                        "/address/getAllAddressList",
+                        "/customer/deleteCustomer",
+                        "/customer/getAllCustomerDetails",
+                        "/orders/getAllOrders").hasRole("ADMIN")
+                .requestMatchers(
+                        "/category/**",
+                        "/product/addProduct/**",
+                        "/product/updateProduct",
+                        "/product/deleteProduct",
+                        "/seller/**",
+                        "/shipping").hasAnyRole("ADMIN", "SELLER")
+                .requestMatchers(
+                        "/cart/**",
+                        "/cartItem/**",
+                        "/orders/saveOrder",
+                        "/orders/updateOrder",
+                        "/orders/cancelOrder",
+                        "/orders/getOrder/**",
+                        "/orders/getOrdersOfCustomer",
+                        "/orderItems/**",
+                        "/payments/**").hasRole("USER")
+                .requestMatchers(
+                        "/product/allProductsByCategory/*",
+                        "/product/productsByPriceHighToLow/**",
+                        "/product/productsByPriceLowToHigh/**",
+                        "/product/productsByRatingsHighToLow/**",
+                        "/product/productsByRatingsLowToHigh/**",
+                        "/product/productsByMinRating/**",
+                        "/product/getProductStock/*",
                         "/wallet/**",
                         "/walletTransaction/**").authenticated()
                 .anyRequest().authenticated()

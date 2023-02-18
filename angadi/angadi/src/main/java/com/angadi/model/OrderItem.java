@@ -1,5 +1,6 @@
 package com.angadi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -20,14 +21,14 @@ public class OrderItem {
     @JoinColumn(name = "orderId")
     private Orders orders;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "orderItem")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "productId")
     private Product product;
 
     @NotBlank(message = "Quantity cannot be blank")
     @NotEmpty(message = "Quantity cannot be empty")
     @NotNull(message = "Quantity cannot be null")
-    @Min(value = 0, message = "Minimum quantity cannot be less than 0")
-    @Max(value = 10, message = "Maximum quantity cannot be greater than 10")
+    @Digits(integer = 1, fraction = 2, message = "Quantity cannot be more than 9 and less than 0")
     private Integer quantity;
 
     @OneToOne(cascade = CascadeType.ALL)

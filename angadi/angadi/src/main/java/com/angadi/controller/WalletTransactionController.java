@@ -30,6 +30,7 @@ public class WalletTransactionController {
         return new ResponseEntity<>(walletTransactionService.viewTransaction(), HttpStatus.OK);
     }
 
+    /* admin specific functionality */
     @GetMapping("/viewTransactions/{email}")
     public ResponseEntity<Set<WalletTransactions>> viewAllWalletTransactionHandler(@Valid @PathVariable String email) throws CustomerException, WalletTransactionException {
         return new ResponseEntity<>(walletTransactionService.viewAllTransactions(email), HttpStatus.OK);

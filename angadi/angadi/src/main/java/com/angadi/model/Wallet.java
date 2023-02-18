@@ -28,7 +28,8 @@ public class Wallet {
     @ToString.Exclude
     private Set<WalletTransactions> walletTransactions = new HashSet<>();
 
-    @OneToOne(mappedBy = "wallet", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customerId")
     private Customer customer;
 
 }

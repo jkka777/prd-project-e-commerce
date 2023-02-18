@@ -39,7 +39,7 @@ public class SellerServiceImpl implements SellerService {
 
         if (customer != null) {
 
-            Seller s = sellerRepository.findBySellerName(seller.getSupplierName());
+            Seller s = sellerRepository.findBySellerName(seller.getSellerName());
 
             if (s != null) {
                 sellerRepository.save(seller);
@@ -57,7 +57,7 @@ public class SellerServiceImpl implements SellerService {
 
         if (customer != null) {
 
-            Seller s = sellerRepository.findBySellerName(seller.getSupplierName());
+            Seller s = sellerRepository.findBySellerName(seller.getSellerName());
 
             if (s != null) {
                 sellerRepository.delete(seller);
