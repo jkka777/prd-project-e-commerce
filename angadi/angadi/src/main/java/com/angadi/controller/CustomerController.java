@@ -39,29 +39,25 @@ public class CustomerController {
 
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
 
-        return new ResponseEntity<>(customerService.saveCustomer(customer), HttpStatus.CREATED);
+        return new ResponseEntity<>(customerService.saveCustomer(customer), HttpStatus.OK);
     }
 
-    @PostMapping("/addCustomerAddress/{email}")
-    public ResponseEntity<Set<Address>> saveCustomerAddressHandler(@Valid @RequestBody Address address, @PathVariable String email) throws CustomerException {
-        return new ResponseEntity<>(customerService.addAddress(address, email), HttpStatus.CREATED);
-    }
-
-    @PutMapping("/updateCustomer/{email}")
-    public ResponseEntity<Customer> updateCustomerHandler(@Valid @RequestBody Customer customer, String email) throws CustomerException {
-        return new ResponseEntity<>(customerService.updateCustomer(customer, email), HttpStatus.CREATED);
+    @PutMapping("/updateCustomer")
+    public ResponseEntity<Customer> updateCustomerHandler(@Valid @RequestBody Customer customer) throws CustomerException {
+        return new ResponseEntity<>(customerService.updateCustomer(customer), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/deleteCustomer/{email}")
-    public ResponseEntity<Customer> deleteCustomerHandler(@Valid String email) throws CustomerException {
-        return new ResponseEntity<>(customerService.deleteCustomer(email), HttpStatus.CREATED);
+    public ResponseEntity<Customer> deleteCustomerHandler(@Valid @PathVariable String email) throws CustomerException {
+        return new ResponseEntity<>(customerService.deleteCustomer(email), HttpStatus.OK);
     }
 
-    @GetMapping("/getCustomerDetails/{email}")
-    public ResponseEntity<Customer> getCustomerHandler(@Valid String email) throws CustomerException {
-        return new ResponseEntity<>(customerService.getCustomerDetails(email), HttpStatus.CREATED);
+    @GetMapping("/getCustomerDetails")
+    public ResponseEntity<Customer> getCustomerHandler() throws CustomerException {
+        return new ResponseEntity<>(customerService.getCustomerDetails(), HttpStatus.OK);
     }
 
+    /* admin specific functionality */
     @GetMapping("/getAllCustomerDetails/")
     public ResponseEntity<List<Customer>> getAllCustomersHandler() throws CustomerException {
         return new ResponseEntity<>(customerService.getAllCustomerDetails(), HttpStatus.CREATED);

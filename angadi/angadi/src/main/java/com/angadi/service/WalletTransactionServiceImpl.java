@@ -10,6 +10,8 @@ import com.angadi.repository.CustomerRepository;
 import com.angadi.repository.WalletRepository;
 import com.angadi.repository.WalletTransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -27,6 +29,9 @@ public class WalletTransactionServiceImpl implements WalletTransactionService {
     private WalletRepository walletRepository;
     @Autowired
     private WalletTransactionRepository walletTransactionRepository;
+
+    @Autowired
+    private CurrentUser currentUser;
 
     @Override
     public WalletTransactions addTransaction(WalletTransactions walletTransactions, String email) throws CustomerException, WalletException {
@@ -56,6 +61,20 @@ public class WalletTransactionServiceImpl implements WalletTransactionService {
         throw new CustomerException("No Customer found with given email -> " + email);
     }
 
+    /* user specific method for getting list of transactions */
+    @Override
+    public Set<WalletTransactions> viewTransaction() throws CustomerException, WalletException, WalletTransactionException {
+
+        Customer customer = currentUser.getLoggedInCustomer();
+
+        if (customer != null) {
+            return customer.getWallet().getWalletTransactions();
+        }
+        throw new CustomerException("Please log in first or Invalid user details provided!");
+    }
+
+
+    /* admin specific method where you get all transaction details */
     @Override
     public Set<WalletTransactions> viewAllTransactions(String email) throws CustomerException, WalletTransactionException {
 

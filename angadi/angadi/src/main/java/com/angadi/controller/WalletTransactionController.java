@@ -25,8 +25,13 @@ public class WalletTransactionController {
         return new ResponseEntity<>(walletTransactionService.addTransaction(walletTransactions, email), HttpStatus.CREATED);
     }
 
+    @GetMapping("/viewTransactions")
+    public ResponseEntity<Set<WalletTransactions>> viewWalletTransactionHandler() throws CustomerException, WalletTransactionException {
+        return new ResponseEntity<>(walletTransactionService.viewTransaction(), HttpStatus.CREATED);
+    }
+
     @GetMapping("/viewTransactions/{email}")
-    public ResponseEntity<Set<WalletTransactions>> viewWalletTransactionHandler(@Valid @PathVariable String email) throws CustomerException, WalletTransactionException {
+    public ResponseEntity<Set<WalletTransactions>> viewAllWalletTransactionHandler(@Valid @PathVariable String email) throws CustomerException, WalletTransactionException {
         return new ResponseEntity<>(walletTransactionService.viewAllTransactions(email), HttpStatus.CREATED);
     }
 }

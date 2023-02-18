@@ -39,7 +39,7 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
                     .claim("username", authentication.getName())
                     .claim("authorities", getRole(authentication.getAuthorities()))
                     .setIssuedAt(new Date())
-                    .setExpiration(new Date(new Date().getTime() + 30000000))
+                    .setExpiration(new Date(new Date().getTime() + 600000)) // Token expiration time is 10min.
                     .signWith(secretKey).compact();
 
             response.setHeader(SecurityConstants.JWT_HEADER, jwt);

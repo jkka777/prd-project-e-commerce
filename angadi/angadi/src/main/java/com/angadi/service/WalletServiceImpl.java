@@ -34,10 +34,8 @@ public class WalletServiceImpl implements WalletService {
 
         if (customer != null) {
 
-            wallet.setCustomer(customer);
-
             customer.setWallet(wallet);
-            /*customerRepository.save(customer);*/
+            wallet.setCustomer(customer);
 
             return walletRepository.save(wallet);
         }
@@ -86,7 +84,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public Wallet transferAmount(Integer walletId, String description, Integer transferAmount, String email) throws WalletException, CustomerException {
+    public Wallet transferAmount(Integer destWalletId, String description, Integer transferAmount, String email) throws WalletException, CustomerException {
 
         /*
         1. First get the Destination customer by email/wallet Id in our db
@@ -117,58 +115,41 @@ public class WalletServiceImpl implements WalletService {
                 /* For recording new wallet transaction, create object */
 
                 WalletTransactions walletTransactions = new WalletTransactions();
-                WalletTransactionService swts = new WalletTransactionServiceImpl();
 
                 walletTransactions.setTransactionTime(LocalDateTime.now());
                 walletTransactions.setAmount(transferAmount);
                 walletTransactions.setWallet(sourceWallet);
                 walletTransactions.setDescription(description);
 
-                /* Saving the new wallet transaction from above object by calling add function of Wallet transaction services */
-
-                WalletTransactions sourceWalletTransaction = swts.addTransaction(walletTransactions, email);
-
-                /* set the above saved transaction to customer wallet */
-
                 Set<WalletTransactions> transactions = sourceWallet.getWalletTransactions();
-                transactions.add(sourceWalletTransaction);
+                transactions.add(walletTransactions);
 
                 sourceWallet.setWalletTransactions(transactions);
 
                 sourceCustomer.setWallet(sourceWallet);
                 sourceWallet.setCustomer(sourceCustomer);
 
-                /*customerRepository.save(sourceCustomer);*/
                 walletRepository.save(sourceWallet);
 
-                Optional<Wallet> desOpt = walletRepository.findById(walletId);
+                Optional<Wallet> desOpt = walletRepository.findById(destWalletId);
 
                 if (desOpt.isPresent()) {
 
                     Wallet destinationWallet = desOpt.get();
 
-                    Customer destinationCustomer = customerRepository.findByEmail(destinationWallet.getCustomer().getEmail());
+                    Customer destinationCustomer = destinationWallet.getCustomer();
 
                     if (destinationCustomer != null) {
 
-                        /* For recording new wallet transaction, create object */
-
                         WalletTransactions wt = new WalletTransactions();
-                        WalletTransactionService dwts = new WalletTransactionServiceImpl();
 
                         wt.setTransactionTime(LocalDateTime.now());
                         wt.setAmount(transferAmount);
                         wt.setWallet(destinationWallet);
                         wt.setDescription(description);
 
-                        /* Saving the new wallet transaction from above object by calling add function of Wallet transaction services */
-
-                        WalletTransactions destinationWalletTransaction = dwts.addTransaction(wt, destinationCustomer.getEmail());
-
-                        /* set the above saved transaction to customer wallet */
-
                         Set<WalletTransactions> destWalletTransactionSet = destinationWallet.getWalletTransactions();
-                        destWalletTransactionSet.add(destinationWalletTransaction);
+                        destWalletTransactionSet.add(wt);
 
                         destinationWallet.setWalletTransactions(destWalletTransactionSet);
 
@@ -179,14 +160,13 @@ public class WalletServiceImpl implements WalletService {
                         destinationCustomer.setWallet(destinationWallet);
                         destinationWallet.setCustomer(destinationCustomer);
 
-                        /*customerRepository.save(destinationCustomer);*/
                         walletRepository.save(destinationWallet);
 
                         return sourceWallet;
                     }
-                    throw new CustomerException("No Customer found with the given wallet id -> " + walletId);
+                    throw new CustomerException("No Customer found with the given wallet id -> " + destWalletId);
                 }
-                throw new WalletException("No wallet found with given wallet id -> " + walletId);
+                throw new WalletException("No wallet found with given wallet id -> " + destWalletId);
             }
             throw new WalletException("Invalid wallet details provided! Please enter valid email to get wallet -> " + email);
         }

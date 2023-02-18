@@ -11,6 +11,8 @@ public interface WalletTransactionService {
 
     public WalletTransactions addTransaction(WalletTransactions walletTransactions, String email) throws CustomerException, WalletException;
 
+    public Set<WalletTransactions> viewTransaction() throws CustomerException, WalletException, WalletTransactionException;
+
     public Set<WalletTransactions> viewAllTransactions(String email) throws CustomerException, WalletTransactionException;
 
 

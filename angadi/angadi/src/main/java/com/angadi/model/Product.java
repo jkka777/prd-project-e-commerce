@@ -1,10 +1,13 @@
 package com.angadi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.math.BigInteger;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -27,37 +30,28 @@ public class Product {
 
     private String productImage;
 
-    /*@NotBlank(message = "Price cannot be blank")
-    @NotEmpty(message = "Price cannot be empty")
-    @NotNull(message = "Price cannot be null")*/
-    @Digits(integer = 7, fraction = 2)
+    @Digits(integer = 7, fraction = 2, message = "Product price cannot be more than 7 digit")
     private Integer productPrice;
 
-    /*@NotBlank(message = "Ratings cannot be blank")
-    @NotEmpty(message = "Ratings cannot be empty")
-    @NotNull(message = "Ratings cannot be null")*/
     @DecimalMin(value = "0.0")
     @DecimalMax(value = "5.0")
     private Double productRatings;
 
-    /*@NotBlank(message = "Stock cannot be blank")
-    @NotEmpty(message = "Stock cannot be empty")
-    @NotNull(message = "Stock cannot be null")*/
-    @Digits(integer = 6, fraction = 2)
+    @Digits(integer = 6, fraction = 2, message = "Product stock cannot be more than 6 digit")
     private Integer productStock;
 
-
-    /*@NotBlank(message = "Quantity cannot be blank")
-    @NotEmpty(message = "Quantity cannot be empty")
-    @NotNull(message = "Quantity cannot be null")
-    private Double productQuantity;*/
-
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "categoryId")
     private Category category;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     @JoinColumn(name = "productId")
     private OrderDetails orderDetails;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private Set<CartItem> cartItems = new HashSet<>();
 }
