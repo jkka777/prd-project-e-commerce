@@ -21,6 +21,10 @@ public class Orders {
 
     private LocalDate orderDate;
 
+    private String orderStatus = "NOT_SHIPPED";
+
+    private Integer totalOrderPrice;
+
     @JsonIgnore
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
     private Set<OrderItem> orderItems = new HashSet<>();
@@ -29,23 +33,19 @@ public class Orders {
     @JoinColumn(name = "customerId")
     private Customer customer;
 
-    /* one to one uni-directional */
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "orderId")
-    private WalletTransactions walletTransactions;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "addressId")
     private Address deliveryAddress;
+
+    /* one to one uni-directional */
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "paymentsId")
+    private Payments payments;
 
     @JsonIgnore
     @OneToOne(mappedBy = "orders", cascade = CascadeType.ALL)
     @JoinColumn(name = "orderId")
     private Shipping shipping;
 
-    private Boolean deliveryStatus = false;
-
     private LocalDate deliveryDate;
-
-    private Integer totalOrderPrice;
 }

@@ -22,8 +22,8 @@ public class CartItemController {
     private CartItemService cartItemService;
 
     @PostMapping("/addItem")
-    public ResponseEntity<CartItem> addProductToCartItemHandler(@Valid @RequestBody Product product, @PathVariable Integer quantity) throws CustomerException, CartException {
-        return new ResponseEntity<>(cartItemService.addToCart(product, quantity), HttpStatus.CREATED);
+    public ResponseEntity<CartItem> addProductToCartItemHandler(@Valid @RequestParam Integer productId, @RequestParam Integer quantity) throws CustomerException, CartException {
+        return new ResponseEntity<>(cartItemService.addToCart(productId, quantity), HttpStatus.CREATED);
     }
 
     @PutMapping("/updateItem")

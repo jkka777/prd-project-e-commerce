@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/customer/hello", "/customer/welcome").permitAll()
-                .requestMatchers("/customer/addCustomer").permitAll()
+                .requestMatchers("/customer/addCustomer", "/logIn").permitAll()
                 .requestMatchers(
                         "/customer/updateCustomer",
                         "/address/addAddress",

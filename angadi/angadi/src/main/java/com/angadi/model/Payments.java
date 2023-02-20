@@ -26,11 +26,12 @@ public class Payments {
 
     private LocalDate paymentDate;
 
+    private PaymentStatus paymentStatus;
+
     @NotBlank(message = "Order cannot be blank")
     @NotEmpty(message = "Order cannot be empty")
     @NotNull(message = "Order cannot be null")
-    @OneToOne
-    @PrimaryKeyJoinColumn
+    @OneToOne(mappedBy = "payments", cascade = CascadeType.ALL)
     private Orders orders;
 
 }

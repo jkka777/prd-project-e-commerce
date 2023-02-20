@@ -4,6 +4,7 @@ import com.angadi.exception.CustomerException;
 import com.angadi.exception.WalletException;
 import com.angadi.exception.WalletTransactionException;
 import com.angadi.model.Customer;
+import com.angadi.model.TransactionStatus;
 import com.angadi.model.Wallet;
 import com.angadi.model.WalletTransactions;
 import com.angadi.repository.CustomerRepository;
@@ -50,6 +51,8 @@ public class WalletTransactionServiceImpl implements WalletTransactionService {
                 walletTransactions.setTransactionTime(LocalDateTime.now());
                 walletTransactions.setAmount(walletTransactions.getAmount());
                 walletTransactions.setDescription(walletTransactions.getDescription());
+                walletTransactions.setTransactionStatus(TransactionStatus.PAID);
+                walletTransactions.setOrderId(walletTransactions.getOrderId());
 
                 transactions.add(walletTransactions);
 

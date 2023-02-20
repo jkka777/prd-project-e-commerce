@@ -10,6 +10,7 @@ import com.angadi.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -30,7 +31,7 @@ public class CartServiceImpl implements CartService {
             customer.setCart(cart);
             cart.setCustomer(customer);
 
-            cartRepository.save(cart);
+            return cartRepository.save(cart);
         }
         throw new CustomerException("No customer found or Invalid user name provided Please login..");
     }
@@ -79,6 +80,21 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart clearCart() throws CustomerException {
-        return null;
+
+        Customer customer = currentUser.getLoggedInCustomer();
+
+        if (customer != null) {
+
+            Optional<Cart> optional = cartRepository.findById(customer.getCart().getCartId());
+
+            if (optional.isPresent()) {
+
+                Cart c = optional.get();
+                cartRepository.delete(c);
+                return c;
+            }
+            throw new CartException("Please create cart and add products in it");
+        }
+        throw new CustomerException("No customer found or Invalid user name provided Please login..");
     }
 }

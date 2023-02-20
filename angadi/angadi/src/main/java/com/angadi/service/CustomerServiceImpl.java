@@ -41,14 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         Customer c = currentUser.getLoggedInCustomer();
 
-        if (c != null) {
-            Customer rc = customerRepository.findByEmail(customer.getEmail());
-
-            if (rc == null) {
-                throw new CustomerException("No customer found with given Email");
-            }
-            return customerRepository.save(customer);
-        }
+        if (c != null) return customerRepository.save(customer);
         throw new CustomerException("No customer found with given Email or Invalid user name entered, Please login...");
 
     }

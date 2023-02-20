@@ -10,7 +10,7 @@ import java.util.Set;
 
 public interface CartItemService {
 
-    public CartItem addToCart(Product product, Integer quantity) throws CustomerException, CartException;
+    public CartItem addToCart(Integer productId, Integer quantity) throws CustomerException, CartException;
 
     public CartItem updateCartItem(CartItem cartItem, Integer quantity) throws CustomerException, CartItemException;
 
