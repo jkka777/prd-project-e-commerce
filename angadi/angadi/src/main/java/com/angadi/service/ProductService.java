@@ -8,23 +8,23 @@ import java.util.Set;
 
 public interface ProductService {
 
-    public Product addProduct(Product product, String categoryName, String email) throws CustomerException;
+    public Product addProduct(Product product, String categoryName) throws CustomerException;
 
-    public Product updateProduct(Product product, String email) throws ProductException, CustomerException;
+    public Product updateProduct(Product product) throws ProductException, CustomerException;
 
-    public Product deleteProduct(Product product, String email) throws ProductException, CustomerException;
+    public Product deleteProduct(Product product) throws ProductException, CustomerException;
 
-    public Set<Product> getAllProductsByCategory(String category, String email) throws ProductException, CustomerException;
+    public Set<Product> getAllProductsByCategory(String category) throws ProductException, CustomerException;
 
-    public Set<Product> getAllProductsByCategoryAndByPriceHighToLow(String category, Integer minPrice, Integer maxPrice, String email) throws ProductException, CustomerException;
+    public Set<Product> getAllProductsByCategoryAndByPriceHighToLow(String category, Integer minPrice, Integer maxPrice) throws ProductException, CustomerException;
 
-    public Set<Product> getAllProductsByCategoryAndByPriceLowToHigh(String category, Integer minPrice, Integer maxPrice, String email) throws ProductException, CustomerException;
+    public Set<Product> getAllProductsByCategoryAndByPriceLowToHigh(String category, Integer minPrice, Integer maxPrice) throws ProductException, CustomerException;
 
-    public Set<Product> getAllProductsByCategoryAndByRatingsHighToLow(String category, Double minRating, Double maxRating, String email) throws ProductException, CustomerException;
+    public Set<Product> getAllProductsByCategoryAndByRatingsHighToLow(String category, Double minRating, Double maxRating) throws ProductException, CustomerException;
 
-    public Set<Product> getAllProductsByCategoryAndByRatingsLowToHigh(String category, Double minRating, Double maxRating, String email) throws ProductException, CustomerException;
+    public Set<Product> getAllProductsByCategoryAndByRatingsLowToHigh(String category, Double minRating, Double maxRating) throws ProductException, CustomerException;
 
-    public Set<Product> getAllProductsByCategoryAndByRatings(String category, Double minRating, String email) throws ProductException, CustomerException;
+    public Set<Product> getAllProductsByCategoryAndByRatings(String category, Double minRating) throws ProductException, CustomerException;
 
-    public Integer getStockNumberForProduct(String product, String email) throws CustomerException, ProductException;
+    public Integer getStockNumberForProduct(String product) throws CustomerException, ProductException;
 }

@@ -16,8 +16,8 @@ public class PaymentsController {
     @Autowired
     private PaymentsService paymentsService;
 
-    @PostMapping("/addPayment/{email}")
-    public ResponseEntity<Payments> makePaymentHandler(@Valid @RequestBody Payments payments, @PathVariable String email) throws CustomerException {
-        return new ResponseEntity<>(paymentsService.addPaymentToOrder(payments, email), HttpStatus.CREATED);
+    @PostMapping("/addPayment")
+    public ResponseEntity<Payments> makePaymentHandler(@Valid @RequestBody Payments payments) throws CustomerException {
+        return new ResponseEntity<>(paymentsService.addPaymentToOrder(payments), HttpStatus.CREATED);
     }
 }

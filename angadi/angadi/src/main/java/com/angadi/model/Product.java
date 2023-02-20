@@ -45,7 +45,7 @@ public class Product {
     private Category category;
 
     @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     private OrderItem orderItem;
 
     @JsonIgnore

@@ -19,26 +19,30 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @PutMapping("/updateOrder/{email}")
-    public ResponseEntity<Orders> updateOrderHandler(@Valid @RequestBody Orders orders, @PathVariable String email) throws OrderException, CustomerException {
-        return new ResponseEntity<>(orderService.updateOrder(orders, email), HttpStatus.OK);
+    @PostMapping("/saveOrder")
+    public ResponseEntity<Orders> saveOrderHandler(@Valid @RequestBody Orders orders) throws CustomerException {
+        return new ResponseEntity<>(orderService.saveOrder(orders), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/cancelOrder/{email}/{orderId}")
-    public ResponseEntity<Orders> cancelOrderHandler(@Valid @PathVariable Integer orderId, @PathVariable String email) throws OrderException, CustomerException {
-        return new ResponseEntity<>(orderService.cancelOrder(orderId, email), HttpStatus.OK);
+    @PutMapping("/updateOrder")
+    public ResponseEntity<Orders> updateOrderHandler(@Valid @RequestBody Orders orders) throws OrderException, CustomerException {
+        return new ResponseEntity<>(orderService.updateOrder(orders), HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/getOrder/{email}/{orderId}")
-    public ResponseEntity<Orders> getOrderByIdHandler(@Valid @PathVariable Integer orderId, @PathVariable String email) throws OrderException, CustomerException {
-        return new ResponseEntity<>(orderService.getOrderById(orderId, email), HttpStatus.OK);
+    @DeleteMapping("/cancelOrder")
+    public ResponseEntity<Orders> cancelOrderHandler(@Valid @PathVariable Integer orderId) throws OrderException, CustomerException {
+        return new ResponseEntity<>(orderService.cancelOrder(orderId), HttpStatus.OK);
     }
 
-    @GetMapping("/getOrdersOfCustomer/{email}/")
-    public ResponseEntity<List<Orders>> getCustomerOrdersHandler(@Valid @PathVariable String email) throws OrderException, CustomerException {
-        return new ResponseEntity<>(orderService.getAllOrdersOfCustomer(email), HttpStatus.OK);
+    @GetMapping("/getOrder/{orderId}")
+    public ResponseEntity<Orders> getOrderByIdHandler(@Valid @PathVariable Integer orderId) throws OrderException, CustomerException {
+        return new ResponseEntity<>(orderService.getOrderById(orderId), HttpStatus.OK);
     }
 
+    @GetMapping("/getOrdersOfCustomer")
+    public ResponseEntity<List<Orders>> getCustomerOrdersHandler() throws OrderException, CustomerException {
+        return new ResponseEntity<>(orderService.getAllOrdersOfCustomer(), HttpStatus.OK);
+    }
 
     /* admin specific functionality */
     @GetMapping("/getAllOrders")

@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface SellerService {
 
-    public Seller addSellerDetails(Seller seller, String email) throws CustomerException;
+    public Seller addSellerDetails(Seller seller) throws CustomerException;
 
-    public Seller updateSellerDetails(Seller seller, String email) throws SellerException, CustomerException;
+    public Seller updateSellerDetails(Seller seller) throws SellerException, CustomerException;
 
-    public Seller deleteSellerDetails(Seller seller, String email) throws SellerException, CustomerException;
+    public Seller deleteSellerDetails(Seller seller) throws SellerException, CustomerException;
 
     public List<Seller> getAllSellerDetails();
 

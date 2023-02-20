@@ -18,10 +18,13 @@ public class PaymentsServiceImpl implements PaymentsService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    @Override
-    public Payments addPaymentToOrder(Payments payments, String email) throws CustomerException {
+    @Autowired
+    private CurrentUser currentUser;
 
-        Customer customer = customerRepository.findByEmail(email);
+    @Override
+    public Payments addPaymentToOrder(Payments payments) throws CustomerException {
+
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -30,6 +33,6 @@ public class PaymentsServiceImpl implements PaymentsService {
 
             return paymentsRepository.save(payments);
         }
-        throw new CustomerException("No Customer found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 }

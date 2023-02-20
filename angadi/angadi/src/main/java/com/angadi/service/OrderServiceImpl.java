@@ -48,6 +48,12 @@ public class OrderServiceImpl implements OrderService {
         if (customer != null) {
 
             orders.setOrderDate(LocalDate.now());
+
+            Set<OrderItem> orderItems = orders.getOrderItems();
+            if (orderItems.isEmpty()) {
+                throw new OrderItemException("First add products in order details!");
+            }
+
             orders.setCustomer(customer);
 
             Wallet wallet = customer.getWallet();
@@ -56,53 +62,46 @@ public class OrderServiceImpl implements OrderService {
 
                 WalletTransactions owts = new WalletTransactions();
                 owts.setTransactionTime(LocalDateTime.now());
+
+                Integer productPrices = 0;
+                for (OrderItem p : orderItems) {
+                    productPrices += p.getProduct().getProductPrice() * p.getQuantity();
+                }
+                owts.setAmount(productPrices);
+
                 owts.setDescription(owts.getDescription());
                 owts.setWallet(wallet);
+
+                orders.setWalletTransactions(owts);
+
+                orders.setDeliveryAddress(orders.getDeliveryAddress());
+
+                List<Shipping> shippingList = shippingRepository.findAll();
+
+                if (shippingList.isEmpty()) {
+                    throw new ShippingException("No Shipping company is available right now please try again later!");
+                }
+                orders.setShipping(shippingList.get(0));
+
+                orders.setDeliveryStatus(false);
+
+                orders.setDeliveryDate(LocalDate.now().plusDays(2));
+
+                orders.setTotalOrderPrice(productPrices);
+
+                return orderRepository.save(orders);
+
             }
-            throw new WalletException("Please add wallet First!");
-
-
-            Set<OrderItem> orderItems = orders.getOrderItems();
-            if (orderItems.isEmpty()) {
-                throw new OrderItemException("First add products in order details!");
-            }
-            Integer productPrices = 0;
-            for (OrderItem p : orderItems) {
-                productPrices += p.getProduct().getProductPrice() * p.getQuantity();
-            }
-
-            owts.setAmount(productPrices);
-
-            WalletTransactions walletTransactions = wts.addTransaction(owts, email);
-            orders.setWalletTransactions(walletTransactions);
-
-            orders.setDeliveryAddress(orders.getDeliveryAddress());
-
-            List<Shipping> shippingList = shippingRepository.findAll();
-
-            if (shippingList.isEmpty()) {
-                throw new ShippingException("No Shipping company is available right now please try again later!");
-            }
-            orders.setShipping(shippingList.get(0));
-
-            orders.setDeliveryStatus(false);
-
-            orders.setDeliveryDate(LocalDate.now().plusDays(2));
-
-            orders.setTotalOrderPrice(productPrices);
-
-            return orderRepository.save(orders);
+            throw new WalletException("No wallet found! Please add wallet to your account!");
         }
         throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
-
     /* Update order details such as customer info, payments info, shipping info by providing order id  */
-
     @Override
-    public Orders updateOrder(Orders orders, String email) throws OrderException, CustomerException {
+    public Orders updateOrder(Orders orders) throws OrderException, CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -124,15 +123,14 @@ public class OrderServiceImpl implements OrderService {
             }
             throw new OrderException("No order details found with given order id -> " + orders.getOrderId());
         }
-        throw new CustomerException("No customer found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     /* Cancel/Delete particular order by giving order id  */
-
     @Override
-    public Orders cancelOrder(Integer orderId, String email) throws OrderException, CustomerException {
+    public Orders cancelOrder(Integer orderId) throws OrderException, CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -146,15 +144,14 @@ public class OrderServiceImpl implements OrderService {
             }
             throw new OrderException("No order details found with given order id -> " + orderId);
         }
-        throw new CustomerException("No customer found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     /* Get particular order details by id  */
-
     @Override
-    public Orders getOrderById(Integer orderId, String email) throws OrderException, CustomerException {
+    public Orders getOrderById(Integer orderId) throws OrderException, CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -166,16 +163,14 @@ public class OrderServiceImpl implements OrderService {
             }
             throw new OrderException("No order details found with given order id -> " + orderId);
         }
-        throw new CustomerException("No customer found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
-
-    /* Get list of all order details for a customer by providing customer email */
-
+    /* Get list of all order details of a customer*/
     @Override
-    public List<Orders> getAllOrdersOfCustomer(String email) throws OrderException, CustomerException {
+    public List<Orders> getAllOrdersOfCustomer() throws OrderException, CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -185,13 +180,12 @@ public class OrderServiceImpl implements OrderService {
 
                 return new ArrayList<>(ordersSet);
             }
-            throw new OrderException("No order details found with given customer email -> " + email);
+            throw new OrderException("No order details found, Please add orders first!");
         }
-        throw new CustomerException("No customer found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     /* Get all the set of order details in database (internal purpose) */
-
     @Override
     public List<Orders> getAllOrders() {
         return orderRepository.findAll();

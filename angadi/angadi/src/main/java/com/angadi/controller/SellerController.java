@@ -13,25 +13,25 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/supplier")
+@RequestMapping("/seller")
 public class SellerController {
 
     @Autowired
     private SellerService sellerService;
 
-    @PostMapping("/addSeller/{email}")
-    public ResponseEntity<Seller> saveSellerHandler(@Valid @RequestBody Seller seller, @PathVariable String email) throws CustomerException {
-        return new ResponseEntity<>(sellerService.addSellerDetails(seller, email), HttpStatus.CREATED);
+    @PostMapping("/addSeller")
+    public ResponseEntity<Seller> saveSellerHandler(@Valid @RequestBody Seller seller) throws CustomerException {
+        return new ResponseEntity<>(sellerService.addSellerDetails(seller), HttpStatus.CREATED);
     }
 
-    @PutMapping("/updateSeller/{email}")
-    public ResponseEntity<Seller> updateSellerHandler(@Valid @RequestBody Seller seller, @PathVariable String email) throws CustomerException, SellerException {
-        return new ResponseEntity<>(sellerService.updateSellerDetails(seller, email), HttpStatus.OK);
+    @PutMapping("/updateSeller")
+    public ResponseEntity<Seller> updateSellerHandler(@Valid @RequestBody Seller seller) throws CustomerException, SellerException {
+        return new ResponseEntity<>(sellerService.updateSellerDetails(seller), HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/deleteSeller/{email}")
-    public ResponseEntity<Seller> deleteSellerHandler(@Valid @RequestBody Seller seller, @PathVariable String email) throws CustomerException, SellerException {
-        return new ResponseEntity<>(sellerService.addSellerDetails(seller, email), HttpStatus.OK);
+    @DeleteMapping("/deleteSeller")
+    public ResponseEntity<Seller> deleteSellerHandler(@Valid @RequestBody Seller seller) throws CustomerException, SellerException {
+        return new ResponseEntity<>(sellerService.addSellerDetails(seller), HttpStatus.OK);
     }
 
     @GetMapping("/getAllSellersList")

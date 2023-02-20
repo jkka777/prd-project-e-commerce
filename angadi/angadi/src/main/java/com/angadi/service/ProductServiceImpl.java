@@ -30,10 +30,13 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @Override
-    public Product addProduct(Product product, String categoryName, String email) throws CustomerException {
+    @Autowired
+    private CurrentUser currentUser;
 
-        Customer customer = customerRepository.findByEmail(email);
+    @Override
+    public Product addProduct(Product product, String categoryName) throws CustomerException {
+
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -54,13 +57,13 @@ public class ProductServiceImpl implements ProductService {
             }
             throw new CategoryException("No Category found with given category name.. please add one before you save the product");
         }
-        throw new CustomerException("No user found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     @Override
-    public Product updateProduct(Product product, String email) throws ProductException, CustomerException {
+    public Product updateProduct(Product product) throws ProductException, CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -74,13 +77,13 @@ public class ProductServiceImpl implements ProductService {
             }
             throw new ProductException("No Product found with the given details!");
         }
-        throw new CustomerException("No user found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     @Override
-    public Product deleteProduct(Product product, String email) throws ProductException, CustomerException {
+    public Product deleteProduct(Product product) throws ProductException, CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -94,13 +97,13 @@ public class ProductServiceImpl implements ProductService {
             }
             throw new ProductException("No Product found with the given details!");
         }
-        throw new CustomerException("No user found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     @Override
-    public Set<Product> getAllProductsByCategory(String category, String email) throws ProductException, CustomerException {
+    public Set<Product> getAllProductsByCategory(String category) throws ProductException, CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -111,17 +114,15 @@ public class ProductServiceImpl implements ProductService {
             }
             throw new CategoryException("No Products found with given Category!");
         }
-        throw new CustomerException("No user found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     @Override
-    public Set<Product> getAllProductsByCategoryAndByPriceHighToLow(String category, Integer minPrice, Integer maxPrice, String email) throws ProductException, CustomerException {
+    public Set<Product> getAllProductsByCategoryAndByPriceHighToLow(String category, Integer minPrice, Integer maxPrice) throws ProductException, CustomerException {
 
-        /*
-        getting a product by price of high to low from category
-        */
+        /* Get product by price of high to low from category */
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -133,29 +134,32 @@ public class ProductServiceImpl implements ProductService {
 
                 Set<Product> products = c.getProducts();
 
+                /*List<Product> dList = productRepository.findByCategoryAndPriceBetween(category, minPrice, maxPrice);
+                if (dList.isEmpty()) {
+                    throw new ProductException("No products found right now, please try again some time!");
+                }
+                dList.sort(new SortByRatingHighToLow());
+                return new HashSet<>(dList);*/
+
                 List<Product> list = new ArrayList<>(products);
 
                 List<Product> resultList = new ArrayList<>();
 
                 for (Integer i = minPrice; i <= maxPrice; i++) {
-                    for (Product p : list) {
-                        if (p.getProductPrice().equals(i)) {
-                            resultList.add(p);
-                        }
-                    }
+                    for (Product p : list) if (p.getProductPrice().equals(i)) resultList.add(p);
                 }
 
                 resultList.sort(new SortByPriceHighToLow());
                 return new HashSet<>(resultList);
             }
         }
-        throw new CustomerException("No user found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     @Override
-    public Set<Product> getAllProductsByCategoryAndByPriceLowToHigh(String category, Integer minPrice, Integer maxPrice, String email) throws ProductException, CustomerException {
+    public Set<Product> getAllProductsByCategoryAndByPriceLowToHigh(String category, Integer minPrice, Integer maxPrice) throws ProductException, CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -166,32 +170,33 @@ public class ProductServiceImpl implements ProductService {
                 Category c = optional.get();
 
                 Set<Product> products = c.getProducts();
+
+                /*List<Product> dList = productRepository.findByCategoryAndPriceBetween(category, minPrice, maxPrice);
+                if (dList.isEmpty()) {
+                    throw new ProductException("No products found right now, please try again some time!");
+                }
+                dList.sort(new SortByRatingLowToHigh());
+                return new HashSet<>(dList);*/
 
                 List<Product> list = new ArrayList<>(products);
 
                 List<Product> resultList = new ArrayList<>();
 
                 for (Integer i = minPrice; i <= maxPrice; i++) {
-
-                    for (Product p : list) {
-
-                        if (p.getProductPrice() == i) {
-                            resultList.add(p);
-                        }
-                    }
+                    for (Product p : list) if (p.getProductPrice() == i) resultList.add(p);
                 }
 
                 resultList.sort(new SortByPriceLowToHigh());
                 return new HashSet<>(resultList);
             }
         }
-        throw new CustomerException("No user found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     @Override
-    public Set<Product> getAllProductsByCategoryAndByRatingsHighToLow(String category, Double minRating, Double maxRating, String email) throws ProductException, CustomerException {
+    public Set<Product> getAllProductsByCategoryAndByRatingsHighToLow(String category, Double minRating, Double maxRating) throws ProductException, CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -203,32 +208,32 @@ public class ProductServiceImpl implements ProductService {
 
                 Set<Product> products = c.getProducts();
 
+                /*List<Product> dList = productRepository.findByCategoryAndRatingBetween(category, minRating, maxRating);
+                if (dList.isEmpty()) {
+                    throw new ProductException("No products found for the provided criteria");
+                }
+                dList.sort(new SortByRatingHighToLow());
+                return new HashSet<>(dList);*/
+
                 List<Product> list = new ArrayList<>(products);
 
                 List<Product> resultList = new ArrayList<>();
 
                 for (Double i = minRating; i <= maxRating; i++) {
-
-                    for (Product p : list) {
-
-                        if (p.getProductRatings().equals(i)) {
-                            resultList.add(p);
-                        }
-                    }
+                    for (Product p : list) if (p.getProductRatings().equals(i)) resultList.add(p);
                 }
 
                 resultList.sort(new SortByRatingHighToLow());
                 return new HashSet<>(resultList);
             }
         }
-        throw new CustomerException("No user found with given email -> " + email);
-
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     @Override
-    public Set<Product> getAllProductsByCategoryAndByRatingsLowToHigh(String category, Double minRating, Double maxRating, String email) throws ProductException, CustomerException {
+    public Set<Product> getAllProductsByCategoryAndByRatingsLowToHigh(String category, Double minRating, Double maxRating) throws ProductException, CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -240,31 +245,32 @@ public class ProductServiceImpl implements ProductService {
 
                 Set<Product> products = c.getProducts();
 
+                /*List<Product> dList = productRepository.findByCategoryAndRatingBetween(category, minRating, maxRating);
+                if (dList.isEmpty()) {
+                    throw new ProductException("No products found for the provided criteria");
+                }
+                dList.sort(new SortByRatingLowToHigh());
+                return new HashSet<>(dList);*/
+
                 List<Product> list = new ArrayList<>(products);
 
                 List<Product> resultList = new ArrayList<>();
 
                 for (Double i = minRating; i <= maxRating; i++) {
-
-                    for (Product p : list) {
-
-                        if (p.getProductRatings().equals(i)) {
-                            resultList.add(p);
-                        }
-                    }
+                    for (Product p : list) if (p.getProductRatings().equals(i)) resultList.add(p);
                 }
 
                 resultList.sort(new SortByRatingsLowToHigh());
                 return new HashSet<>(resultList);
             }
         }
-        throw new CustomerException("No user found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     @Override
-    public Set<Product> getAllProductsByCategoryAndByRatings(String category, Double minRating, String email) throws ProductException, CustomerException {
+    public Set<Product> getAllProductsByCategoryAndByRatings(String category, Double minRating) throws ProductException, CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -278,37 +284,33 @@ public class ProductServiceImpl implements ProductService {
 
                 List<Product> list = new ArrayList<>(products);
 
-                /*List<Product> resultList = (List<Product>) list.stream().filter(product -> product.getProductRatings() >= minRating);
-                resultList.sort(new SortByRatingHighToLow());*/
-
                 List<Product> resultList = new ArrayList<>();
 
-                for (Product p : list) {
-                    if (p.getProductRatings() >= minRating) resultList.add(p);
-                }
+                for (Product p : list) if (p.getProductRatings() >= minRating) resultList.add(p);
 
                 resultList.sort(new SortByRatingHighToLow());
 
                 return new HashSet<>(resultList);
             }
+            throw new ProductException("No products available right now, Please try again later!");
         }
-        throw new CustomerException("No user found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     @Override
-    public Integer getStockNumberForProduct(String product, String email) throws CustomerException, ProductException {
+    public Integer getStockNumberForProduct(String product) throws CustomerException, ProductException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
-            Product p = productRepository.findByProductName(product);
+            Product p = productRepository.findByProductName(product.toUpperCase());
 
             if (p != null) {
                 return p.getProductStock();
             }
             throw new ProductException("No Product available with given product name!");
         }
-        throw new CustomerException("No user found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 }

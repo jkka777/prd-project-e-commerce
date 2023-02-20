@@ -26,7 +26,6 @@ public class Payments {
 
     private LocalDate paymentDate;
 
-    @JsonIgnore
     @NotBlank(message = "Order cannot be blank")
     @NotEmpty(message = "Order cannot be empty")
     @NotNull(message = "Order cannot be null")

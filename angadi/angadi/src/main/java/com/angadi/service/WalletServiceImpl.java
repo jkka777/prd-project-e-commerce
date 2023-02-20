@@ -27,10 +27,13 @@ public class WalletServiceImpl implements WalletService {
     @Autowired
     private WalletTransactionRepository walletTransactionRepository;
 
-    @Override
-    public Wallet addWallet(Wallet wallet, String email) throws CustomerException {
+    @Autowired
+    private CurrentUser currentUser;
 
-        Customer customer = customerRepository.findByEmail(email);
+    @Override
+    public Wallet addWallet(Wallet wallet) throws CustomerException {
+
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -39,13 +42,13 @@ public class WalletServiceImpl implements WalletService {
 
             return walletRepository.save(wallet);
         }
-        throw new CustomerException("No customer found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     @Override
-    public Wallet addBalanceToWallet(Integer amount, String email) throws CustomerException, WalletException {
+    public Wallet addBalanceToWallet(Integer amount) throws CustomerException, WalletException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
@@ -57,34 +60,33 @@ public class WalletServiceImpl implements WalletService {
                 w.setWalletBalance(w.getWalletBalance() + amount);
 
                 customer.setWallet(w);
-                /*customerRepository.save(customer);*/
 
                 return walletRepository.save(w);
             }
-            throw new WalletException("No wallet found with given email > " + email);
+            throw new WalletException("No wallet found! Add wallet to your profile!");
         }
-        throw new CustomerException("No Customer found with given email > " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     @Override
-    public Integer showBalance(Integer walletId, String email) throws WalletException, CustomerException {
+    public Integer showBalance() throws WalletException, CustomerException {
 
-        Customer customer = customerRepository.findByEmail(email);
+        Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
-            Optional<Wallet> optional = walletRepository.findById(walletId);
+            Optional<Wallet> optional = walletRepository.findById(customer.getWallet().getWalletId());
 
             if (optional.isPresent()) {
                 return optional.get().getWalletBalance();
             }
-            throw new WalletException("No wallet found with given wallet id > " + walletId);
+            throw new WalletException("No wallet found! Add wallet to your profile!");
         }
-        throw new CustomerException("No customer found with given email -> " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     @Override
-    public Wallet transferAmount(Integer destWalletId, String description, Integer transferAmount, String email) throws WalletException, CustomerException {
+    public Wallet transferAmount(Integer destWalletId, String description, Integer transferAmount) throws WalletException, CustomerException {
 
         /*
         1. First get the Destination customer by email/wallet Id in our db
@@ -95,7 +97,7 @@ public class WalletServiceImpl implements WalletService {
         6. Repeat the above steps for Destination customer
         */
 
-        Customer sourceCustomer = customerRepository.findByEmail(email);
+        Customer sourceCustomer = currentUser.getLoggedInCustomer();
 
         if (sourceCustomer != null) {
 
@@ -166,10 +168,10 @@ public class WalletServiceImpl implements WalletService {
                     }
                     throw new CustomerException("No Customer found with the given wallet id -> " + destWalletId);
                 }
-                throw new WalletException("No wallet found with given wallet id -> " + destWalletId);
+                throw new WalletException("No destination wallet found. Please enter proper wallet id you want to transfer");
             }
-            throw new WalletException("Invalid wallet details provided! Please enter valid email to get wallet -> " + email);
+            throw new WalletException("No wallet found! Please add a wallet to your profile..");
         }
-        throw new CustomerException("Email that you provided is not registered! " + email);
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 }
