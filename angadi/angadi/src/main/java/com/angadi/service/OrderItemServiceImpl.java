@@ -1,15 +1,17 @@
 package com.angadi.service;
 
+import com.angadi.exception.CartItemException;
 import com.angadi.exception.CustomerException;
 import com.angadi.exception.OrderException;
 import com.angadi.exception.OrderItemException;
 import com.angadi.model.*;
-import com.angadi.repository.CustomerRepository;
-import com.angadi.repository.OrderItemRepository;
+import com.angadi.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -23,30 +25,28 @@ public class OrderItemServiceImpl implements OrderItemService {
     private OrderItemRepository orderItemRepository;
 
     @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private CartItemRepository cartItemRepository;
+
+    @Autowired
     private CurrentUser currentUser;
 
     @Override
-    public OrderItem addOrderItems(OrderItem orderItem) throws CustomerException {
+    public OrderItem addOrderItems(OrderItem orderItem, Integer cartItemId) throws CustomerException {
 
         Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
-            Orders orders = orderItem.getOrders();
+            Optional<CartItem> optional = cartItemRepository.findById(cartItemId);
+            if (optional.isEmpty()) throw new CartItemException("Cart is empty! please add items to your cart");
+            CartItem cartItem = optional.get();
+            orderItem.setCartItem(cartItem);
+            cartItem.setOrderItem(orderItem);
 
-            if (orders == null) {
-                throw new OrderException("Please create order instance so that you can add items in it.");
-            }
-
-            Set<OrderItem> od = new HashSet<>();
-            od.add(orderItem);
-            orders.setOrderItems(od);
-
-            orderItem.setOrders(orders);
-
-            orderItem.setProduct(orderItem.getProduct());
-
-            orderItem.setSeller(orderItem.getSeller());
+            orderItem.setQuantity(cartItem.getQuantity());
 
             return orderItemRepository.save(orderItem);
         }
@@ -54,7 +54,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
-    public OrderItem updateOrderItems(OrderItem orderItem) throws OrderItemException, CustomerException {
+    public OrderItem updateOrderItems(OrderItem orderItem, Integer quantity) throws OrderItemException, CustomerException {
 
         Customer customer = currentUser.getLoggedInCustomer();
 
@@ -66,16 +66,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
                 OrderItem od = optional.get();
 
-                Orders orders = orderItem.getOrders();
-                Set<OrderItem> odSet = new HashSet<>();
-                odSet.add(orderItem);
-                orders.setOrderItems(odSet);
-
-                Product product = orderItem.getProduct();
-                product.setOrderItem(orderItem);
-
-                Seller seller = orderItem.getSeller();
-                seller.setOrderItem(orderItem);
+                od.setQuantity(quantity);
 
                 return orderItemRepository.save(orderItem);
             }
@@ -105,7 +96,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
-    public Double getPriceOfOrderItems(Integer orderDetailsId) throws OrderItemException, CustomerException {
+    public Integer getPriceOfOrderItems(Integer orderDetailsId) throws OrderItemException, CustomerException {
 
         Customer customer = currentUser.getLoggedInCustomer();
 
@@ -117,8 +108,7 @@ public class OrderItemServiceImpl implements OrderItemService {
 
                 OrderItem od = optional.get();
 
-                Product product = od.getProduct();
-                Double productPrice = (double) product.getProductPrice();
+                Integer productPrice = od.getCartItem().getProduct().getProductPrice();
 
                 return productPrice * od.getQuantity();
             }

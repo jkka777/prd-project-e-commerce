@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface OrderService {
 
-    public Orders saveOrder(Orders orders) throws CustomerException;
+    public Orders saveOrder(Orders orders, Integer orderItemId, Integer addressId) throws CustomerException;
 
-    public Orders updateOrder(Orders orders) throws OrderException, CustomerException;
+    public Orders updateOrder(Integer orderId, Integer addressId) throws OrderException, CustomerException;
 
     public Orders cancelOrder(Integer orderId) throws OrderException, CustomerException;
 

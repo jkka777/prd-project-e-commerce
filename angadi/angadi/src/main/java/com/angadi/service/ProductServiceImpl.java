@@ -50,8 +50,10 @@ public class ProductServiceImpl implements ProductService {
                 set.add(product);
 
                 category.setProducts(set);
-
                 product.setCategory(category);
+
+                customer.setProduct(product);
+                product.setCustomer(customer);
 
                 return productRepository.save(product);
             }

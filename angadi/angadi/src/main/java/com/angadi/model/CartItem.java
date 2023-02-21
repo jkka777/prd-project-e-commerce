@@ -1,5 +1,6 @@
 package com.angadi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Digits;
 import lombok.*;
@@ -26,5 +27,9 @@ public class CartItem {
 
     @Digits(integer = 1, fraction = 1, message = "Quantity cannot be more than 9")
     private Integer quantity;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "cartItem", cascade = CascadeType.ALL)
+    private OrderItem orderItem;
 
 }

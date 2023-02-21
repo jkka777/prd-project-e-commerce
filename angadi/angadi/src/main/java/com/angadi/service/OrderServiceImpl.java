@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -20,6 +19,9 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
 
     @Autowired
+    private OrderItemRepository orderItemRepository;
+
+    @Autowired
     private ShippingRepository shippingRepository;
 
     @Autowired
@@ -29,110 +31,167 @@ public class OrderServiceImpl implements OrderService {
     private WalletTransactionRepository walletTransactionRepository;
 
     @Autowired
+    private AddressRepository addressRepository;
+
+    @Autowired
     private CurrentUser currentUser;
 
     @Override
-    public Orders saveOrder(Orders orders) throws CustomerException {
-
-        /* 1. find the customer get the wallet of customer
-           2. set the wallet transactions so that order gets payment via wallet (right now app only works with wallet)
-           3. save and set the wallet transaction for the order
-           4. set the delivery address for the order
-           5. set the shipping company to our order if available
-           6. set delivery status as false because order is not been shipped and delivered
-           7. set delivery date for standard 2 days
-           8. set the total order price of all the order details that are in one single order */
+    public Orders saveOrder(Orders orders, Integer orderItemId, Integer addressId) throws CustomerException {
 
         Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
-            orders.setOrderDate(LocalDate.now());
+            Optional<OrderItem> optional = orderItemRepository.findById(orderItemId);
+            if (optional.isEmpty())
+                throw new OrderItemException("No Item found with given id please add item in your cart");
+            OrderItem orderItem = optional.get();
 
+            orders.setOrderDate(LocalDate.now());
             orders.setOrderStatus("SHIPPED");
 
             Set<OrderItem> orderItems = new HashSet<>();
+            orderItems.add(orderItem);
+            orderItem.setOrders(orders);
             orders.setOrderItems(orderItems);
+
+            int orderPrice = 0;
+            for (OrderItem oi : orderItems) {
+                orderPrice += oi.getCartItem().getProduct().getProductPrice() * oi.getCartItem().getQuantity();
+            }
+
+            orders.setTotalOrderPrice(orderPrice);
 
             orders.setCustomer(customer);
 
-            orders.setDeliveryAddress(orders.getDeliveryAddress());
+            Set<Orders> customerOrders = new HashSet<>();
+            customerOrders.add(orders);
+            customer.setOrders(customerOrders);
 
-            Payments payments = new Payments();
+            Optional<Address> addressOptional = addressRepository.findById(addressId);
+            if (addressOptional.isEmpty())
+                throw new AddressException("No address found! please add address before you proceed to order");
+            orders.setDeliveryAddress(addressOptional.get());
+
+            Payments payments = orders.getPayments();
             PaymentType pt = payments.getPaymentType();
-            payments.setPaymentType(pt);
-            payments.setPaymentStatus(payments.getPaymentStatus());
-            payments.setPaymentDate(LocalDate.now());
 
             List<Shipping> shippingList = shippingRepository.findAll();
 
-            int productPrices = 0;
-
             if (pt == PaymentType.WALLET) {
 
-                Wallet wallet = customer.getWallet();
-                if (wallet != null) {
+                payments.setPaymentType(PaymentType.WALLET);
+                payments.setPaymentDate(LocalDate.now());
+                payments.setPaymentStatus(orders.getPayments().getPaymentStatus());
+                payments.setOrders(orders);
+                orders.setPayments(payments);
 
-                    if (!orderItems.isEmpty()) {
-                        for (OrderItem p : orderItems) {
-                            productPrices += p.getProduct().getProductPrice() * p.getQuantity();
-                            orders.setTotalOrderPrice(productPrices);
-                        }
-                    }
-                    orders.setTotalOrderPrice(0);
-
-                    if (shippingList.isEmpty()) {
-                        throw new ShippingException("No Shipping company is available right now please try again later!");
-                    }
-                    orders.setShipping(shippingList.get(0));
-
-                    orders.setDeliveryDate(LocalDate.now().plusDays(2));
-
-                    return orderRepository.save(orders);
-
-                }
-                throw new WalletException("No wallet found! Please add wallet to your account!");
+                LocalDate today = LocalDate.now();
+                orders.setDeliveryDate(today.plusDays(2));
 
             } else if (pt == PaymentType.COD) {
 
-                if (shippingList.isEmpty()) {
-                    throw new ShippingException("No Shipping company is available right now please try again later!");
-                }
-                orders.setShipping(shippingList.get(0));
+                payments.setPaymentType(PaymentType.COD);
+                payments.setPaymentDate(LocalDate.now());
+                payments.setPaymentStatus(orders.getPayments().getPaymentStatus());
+                payments.setOrders(orders);
+                orders.setPayments(payments);
 
-                orders.setDeliveryDate(LocalDate.now().plusDays(3));
-
-                orders.setTotalOrderPrice(productPrices + 49);  /* 49 extra charge for cod + handling charges included*/
+                LocalDate today = LocalDate.now();
+                orders.setDeliveryDate(today.plusDays(3));
             }
+
+            orders.setTotalOrderPrice(orderPrice);
+
+            paymentsRepository.save(payments);
+
+            if (shippingList.isEmpty()) {
+                throw new ShippingException("No Shipping company is available right now please try again later!");
+            }
+            orders.setShipping(shippingList.get(0));
+
+            return orderRepository.save(orders);
         }
         throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
     /* Update order details such as customer info, payments info, shipping info by providing order id  */
     @Override
-    public Orders updateOrder(Orders orders) throws OrderException, CustomerException {
+    public Orders updateOrder(Integer orderId, Integer addressId) throws OrderException, CustomerException {
+
+        /*
+        1. get the order by its id
+        2. set date, status, orderItems, total order price from the orderItems
+        3. assign address to order by customers saved address
+        4. add payments method, shipping details, and estimated delivery date
+        */
 
         Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
-            Optional<Orders> optional = orderRepository.findById(orders.getOrderId());
+            /*Optional<Orders> optional = orderRepository.findById(orderId);*/
 
-            if (optional.isPresent()) {
+            Set<Orders> orders = customer.getOrders();
 
-                Orders o = optional.get();
+            Orders o = null;
 
-                o.setCustomer(customer);
-
-                Shipping shipping = orders.getShipping();
-                shipping.setOrders(orders);
-                o.setShipping(shipping);
-
-                orderRepository.save(orders);
-                shippingRepository.save(shipping);
-                return orders;
+            for (Orders or : orders) {
+                if (or.getOrderId().equals(orderId)) o = or;
             }
-            throw new OrderException("No order details found with given order id -> " + orders.getOrderId());
+
+            if (o != null) {
+
+                o.setOrderDate(LocalDate.now());
+                o.setOrderStatus("SHIPPED");
+
+                Set<OrderItem> orderItemSet = o.getOrderItems();
+                int orderPrice = 0;
+                for (OrderItem orderItem : orderItemSet) {
+                    orderPrice += orderItem.getCartItem().getProduct().getProductPrice() * orderItem.getQuantity();
+                }
+
+                o.setTotalOrderPrice(orderPrice);
+                o.setOrderItems(orderItemSet);
+                o.setCustomer(customer);
+                Optional<Address> addressOptional = addressRepository.findById(addressId);
+                if (addressOptional.isEmpty())
+                    throw new AddressException("No address found with given id, please add address");
+                o.setDeliveryAddress(addressOptional.get());
+
+                Payments payments = new Payments();
+                PaymentType pt = payments.getPaymentType();
+                payments.setPaymentType(pt);
+                payments.setPaymentStatus(payments.getPaymentStatus());
+                payments.setPaymentDate(LocalDate.now());
+
+                List<Shipping> shippingList = shippingRepository.findAll();
+
+                if (pt == PaymentType.WALLET) {
+
+                    if (shippingList.isEmpty()) {
+                        throw new ShippingException("No Shipping company is available right now please try again later!");
+                    }
+                    o.setShipping(shippingList.get(0));
+
+                    o.setDeliveryDate(LocalDate.now().plusDays(2));
+                    return orderRepository.save(o);
+
+                } else if (pt == PaymentType.COD) {
+
+                    if (shippingList.isEmpty()) {
+                        throw new ShippingException("No Shipping company is available right now please try again later!");
+                    }
+                    o.setShipping(shippingList.get(0));
+
+                    o.setDeliveryDate(LocalDate.now().plusDays(3));
+
+                    o.setTotalOrderPrice(orderPrice + 49);  /* 49 extra charge for cod + handling charges included*/
+                    return orderRepository.save(o);
+                }
+            }
+            throw new OrderException("No order details found with given order id -> " + orderId);
         }
         throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
@@ -168,11 +227,9 @@ public class OrderServiceImpl implements OrderService {
 
             Optional<Orders> optional = orderRepository.findById(orderId);
 
-            if (optional.isPresent()) {
-
-                return optional.get();
-            }
-            throw new OrderException("No order details found with given order id -> " + orderId);
+            if (optional.isEmpty())
+                throw new OrderException("No order details found with given order id -> " + orderId);
+            return optional.get();
         }
         throw new CustomerException("Invalid user name/password provided or Please login first!");
     }

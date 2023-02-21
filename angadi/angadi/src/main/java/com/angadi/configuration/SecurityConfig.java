@@ -61,10 +61,10 @@ public class SecurityConfig {
                 .requestMatchers(
                         "/cart/**",
                         "/cartItem/**",
-                        "/orders/saveOrder",
-                        "/orders/updateOrder",
-                        "/orders/cancelOrder",
-                        "/orders/getOrder/**",
+                        "/orders/saveOrder/",
+                        "/orders/updateOrder/*",
+                        "/orders/cancelOrder/*",
+                        "/orders/getOrder/*",
                         "/orders/getOrdersOfCustomer",
                         "/orderItems/**",
                         "/payments/**").hasRole("USER")
