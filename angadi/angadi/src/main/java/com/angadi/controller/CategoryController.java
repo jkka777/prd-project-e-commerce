@@ -29,9 +29,9 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.updateCategory(category), HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/deleteCategory")
-    public ResponseEntity<Category> deleteCategoryHandler(@Valid @RequestBody Category category) throws CustomerException, CategoryException {
-        return new ResponseEntity<>(categoryService.deleteCategory(category), HttpStatus.OK);
+    @DeleteMapping("/deleteCategory/{categoryId}")
+    public ResponseEntity<Category> deleteCategoryHandler(@Valid @PathVariable Integer categoryId) throws CustomerException, CategoryException {
+        return new ResponseEntity<>(categoryService.deleteCategory(categoryId), HttpStatus.OK);
     }
 
     @GetMapping("/getAllCategory")

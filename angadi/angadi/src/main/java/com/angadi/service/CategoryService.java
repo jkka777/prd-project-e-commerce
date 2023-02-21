@@ -12,7 +12,7 @@ public interface CategoryService {
 
     public Category updateCategory(Category category) throws CategoryException, CustomerException;
 
-    public Category deleteCategory(Category category) throws CategoryException, CustomerException;
+    public Category deleteCategory(Integer categoryId) throws CategoryException, CustomerException;
 
     public List<Category> getAllCategory();
 }

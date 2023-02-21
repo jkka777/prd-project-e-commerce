@@ -3,12 +3,14 @@ package com.angadi.service;
 import com.angadi.exception.CartException;
 import com.angadi.exception.CartItemException;
 import com.angadi.exception.CustomerException;
+import com.angadi.exception.ProductException;
 import com.angadi.model.Cart;
 import com.angadi.model.CartItem;
 import com.angadi.model.Customer;
 import com.angadi.model.Product;
 import com.angadi.repository.CartItemRepository;
 import com.angadi.repository.CartRepository;
+import com.angadi.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +28,11 @@ public class CartItemServiceImpl implements CartItemService {
     private CurrentUser currentUser;
     @Autowired
     private CartRepository cartRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     @Override
-    public CartItem addToCart(Product product, Integer quantity) throws CustomerException, CartException {
+    public CartItem addToCart(Integer productId, Integer quantity) throws CustomerException, CartException {
 
         Customer customer = currentUser.getLoggedInCustomer();
 
@@ -46,10 +50,18 @@ public class CartItemServiceImpl implements CartItemService {
 
                 cart.setCartItems(cartItems);
 
-                cartItem.setProduct(product);
-                cartItem.setQuantity(quantity);
+                Optional<Product> optional = productRepository.findById(productId);
 
-                return cartItemRepository.save(cartItem);
+                if (optional.isPresent()) {
+                    Product p = optional.get();
+
+                    cartItem.setProduct(p);
+
+                    cartItem.setQuantity(quantity);
+
+                    return cartItemRepository.save(cartItem);
+                }
+                throw new ProductException("No product found with given id! Please enter proper product id");
             }
             throw new CartException("Please create cart first!");
         }

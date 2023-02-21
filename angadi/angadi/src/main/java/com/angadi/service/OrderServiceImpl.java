@@ -49,50 +49,61 @@ public class OrderServiceImpl implements OrderService {
 
             orders.setOrderDate(LocalDate.now());
 
-            Set<OrderItem> orderItems = orders.getOrderItems();
-            if (orderItems.isEmpty()) {
-                throw new OrderItemException("First add products in order details!");
-            }
+            orders.setOrderStatus("SHIPPED");
+
+            Set<OrderItem> orderItems = new HashSet<>();
+            orders.setOrderItems(orderItems);
 
             orders.setCustomer(customer);
 
-            Wallet wallet = customer.getWallet();
+            orders.setDeliveryAddress(orders.getDeliveryAddress());
 
-            if (wallet != null) {
+            Payments payments = new Payments();
+            PaymentType pt = payments.getPaymentType();
+            payments.setPaymentType(pt);
+            payments.setPaymentStatus(payments.getPaymentStatus());
+            payments.setPaymentDate(LocalDate.now());
 
-                WalletTransactions owts = new WalletTransactions();
-                owts.setTransactionTime(LocalDateTime.now());
+            List<Shipping> shippingList = shippingRepository.findAll();
 
-                Integer productPrices = 0;
-                for (OrderItem p : orderItems) {
-                    productPrices += p.getProduct().getProductPrice() * p.getQuantity();
+            int productPrices = 0;
+
+            if (pt == PaymentType.WALLET) {
+
+                Wallet wallet = customer.getWallet();
+                if (wallet != null) {
+
+                    if (!orderItems.isEmpty()) {
+                        for (OrderItem p : orderItems) {
+                            productPrices += p.getProduct().getProductPrice() * p.getQuantity();
+                            orders.setTotalOrderPrice(productPrices);
+                        }
+                    }
+                    orders.setTotalOrderPrice(0);
+
+                    if (shippingList.isEmpty()) {
+                        throw new ShippingException("No Shipping company is available right now please try again later!");
+                    }
+                    orders.setShipping(shippingList.get(0));
+
+                    orders.setDeliveryDate(LocalDate.now().plusDays(2));
+
+                    return orderRepository.save(orders);
+
                 }
-                owts.setAmount(productPrices);
+                throw new WalletException("No wallet found! Please add wallet to your account!");
 
-                owts.setDescription(owts.getDescription());
-                owts.setWallet(wallet);
-
-                orders.setWalletTransactions(owts);
-
-                orders.setDeliveryAddress(orders.getDeliveryAddress());
-
-                List<Shipping> shippingList = shippingRepository.findAll();
+            } else if (pt == PaymentType.COD) {
 
                 if (shippingList.isEmpty()) {
                     throw new ShippingException("No Shipping company is available right now please try again later!");
                 }
                 orders.setShipping(shippingList.get(0));
 
-                orders.setDeliveryStatus(false);
+                orders.setDeliveryDate(LocalDate.now().plusDays(3));
 
-                orders.setDeliveryDate(LocalDate.now().plusDays(2));
-
-                orders.setTotalOrderPrice(productPrices);
-
-                return orderRepository.save(orders);
-
+                orders.setTotalOrderPrice(productPrices + 49);  /* 49 extra charge for cod + handling charges included*/
             }
-            throw new WalletException("No wallet found! Please add wallet to your account!");
         }
         throw new CustomerException("Invalid user name/password provided or Please login first!");
     }

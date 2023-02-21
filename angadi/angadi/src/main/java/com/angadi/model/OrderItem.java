@@ -25,9 +25,9 @@ public class OrderItem {
     @JoinColumn(name = "productId")
     private Product product;
 
-    @NotBlank(message = "Quantity cannot be blank")
+    /*@NotBlank(message = "Quantity cannot be blank")
     @NotEmpty(message = "Quantity cannot be empty")
-    @NotNull(message = "Quantity cannot be null")
+    @NotNull(message = "Quantity cannot be null")*/
     @Digits(integer = 1, fraction = 2, message = "Quantity cannot be more than 9 and less than 0")
     private Integer quantity;
 

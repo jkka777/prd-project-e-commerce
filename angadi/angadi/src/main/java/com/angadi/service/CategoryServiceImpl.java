@@ -43,7 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         if (customer != null) {
 
-            Optional<Category> optional = categoryRepository.findByCategoryName(category.getCategoryName());
+            Optional<Category> optional = categoryRepository.findById(category.getCategoryId());
 
             if (optional.isPresent()) {
 
@@ -57,13 +57,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category deleteCategory(Category category) throws CategoryException, CustomerException {
+    public Category deleteCategory(Integer categoryId) throws CategoryException, CustomerException {
 
         Customer customer = currentUser.getLoggedInCustomer();
 
         if (customer != null) {
 
-            Optional<Category> optional = categoryRepository.findByCategoryName(category.getCategoryName());
+            Optional<Category> optional = categoryRepository.findById(categoryId);
 
             if (optional.isPresent()) {
 
