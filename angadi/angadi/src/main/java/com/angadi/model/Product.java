@@ -1,6 +1,7 @@
 package com.angadi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -44,9 +45,10 @@ public class Product {
     @JoinColumn(name = "categoryId")
     private Category category;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-    private OrderItem orderItem;
+    @JsonProperty(value = "seller")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customerId")
+    private Customer customer;
 
     @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)

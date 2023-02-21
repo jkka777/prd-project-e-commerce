@@ -18,13 +18,13 @@ public class OrderItemController {
     private OrderItemService orderItemService;
 
     @PostMapping("/addOrderItem")
-    public ResponseEntity<OrderItem> saveOrderItemHandler(@Valid @RequestBody OrderItem orderItem) throws CustomerException {
-        return new ResponseEntity<>(orderItemService.addOrderItems(orderItem), HttpStatus.CREATED);
+    public ResponseEntity<OrderItem> saveOrderItemHandler(@Valid @RequestBody OrderItem orderItem, @RequestParam Integer cartItemId) throws CustomerException {
+        return new ResponseEntity<>(orderItemService.addOrderItems(orderItem, cartItemId), HttpStatus.CREATED);
     }
 
     @PutMapping("/updateOrderItem")
-    public ResponseEntity<OrderItem> updateOrderItemHandler(@Valid @RequestBody OrderItem orderItem) throws CustomerException, OrderItemException {
-        return new ResponseEntity<>(orderItemService.updateOrderItems(orderItem), HttpStatus.OK);
+    public ResponseEntity<OrderItem> updateOrderItemHandler(@Valid @RequestBody OrderItem orderItem, @RequestParam Integer quantity) throws CustomerException, OrderItemException {
+        return new ResponseEntity<>(orderItemService.updateOrderItems(orderItem, quantity), HttpStatus.OK);
     }
 
     @DeleteMapping("/removeOrderItem")
@@ -33,7 +33,7 @@ public class OrderItemController {
     }
 
     @GetMapping("/priceOfAnOrderItem")
-    public ResponseEntity<Double> getPriceOfAnOrderItemHandler(@Valid @RequestBody Integer orderDetailsId) throws CustomerException, OrderItemException {
+    public ResponseEntity<Integer> getPriceOfAnOrderItemHandler(@Valid @RequestBody Integer orderDetailsId) throws CustomerException, OrderItemException {
         return new ResponseEntity<>(orderItemService.getPriceOfOrderItems(orderDetailsId), HttpStatus.OK);
     }
 

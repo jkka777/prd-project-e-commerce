@@ -28,9 +28,7 @@ public class Payments {
 
     private PaymentStatus paymentStatus;
 
-    @NotBlank(message = "Order cannot be blank")
-    @NotEmpty(message = "Order cannot be empty")
-    @NotNull(message = "Order cannot be null")
+    @JsonIgnore
     @OneToOne(mappedBy = "payments", cascade = CascadeType.ALL)
     private Orders orders;
 

@@ -1,6 +1,5 @@
 package com.angadi.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -22,16 +21,9 @@ public class OrderItem {
     private Orders orders;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "productId")
-    private Product product;
+    @JoinColumn(name = "cartItemId")
+    private CartItem cartItem;
 
-    /*@NotBlank(message = "Quantity cannot be blank")
-    @NotEmpty(message = "Quantity cannot be empty")
-    @NotNull(message = "Quantity cannot be null")*/
-    @Digits(integer = 1, fraction = 2, message = "Quantity cannot be more than 9 and less than 0")
+    @Digits(integer = 1, fraction = 1, message = "Quantity cannot be more than 9 and less than 0")
     private Integer quantity;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private Seller seller;
 }

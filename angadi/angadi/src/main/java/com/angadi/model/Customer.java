@@ -66,4 +66,8 @@ public class Customer {
     @JsonIgnore
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     private Cart cart;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
+    private Product product;
 }

@@ -20,16 +20,16 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/saveOrder")
-    public ResponseEntity<Orders> saveOrderHandler(@Valid @RequestBody Orders orders) throws CustomerException {
-        return new ResponseEntity<>(orderService.saveOrder(orders), HttpStatus.CREATED);
+    public ResponseEntity<Orders> saveOrderHandler(@Valid @RequestBody Orders orders, @RequestParam Integer orderItemId, @RequestParam Integer addressId) throws CustomerException {
+        return new ResponseEntity<>(orderService.saveOrder(orders, orderItemId, addressId), HttpStatus.CREATED);
     }
 
-    @PutMapping("/updateOrder")
-    public ResponseEntity<Orders> updateOrderHandler(@Valid @RequestBody Orders orders) throws OrderException, CustomerException {
-        return new ResponseEntity<>(orderService.updateOrder(orders), HttpStatus.ACCEPTED);
+    @PutMapping("/updateOrder/{orderId}")
+    public ResponseEntity<Orders> updateOrderHandler(@Valid @PathVariable Integer orderId, @RequestParam Integer addressId) throws OrderException, CustomerException {
+        return new ResponseEntity<>(orderService.updateOrder(orderId, addressId), HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping("/cancelOrder")
+    @DeleteMapping("/cancelOrder/{orderId}")
     public ResponseEntity<Orders> cancelOrderHandler(@Valid @PathVariable Integer orderId) throws OrderException, CustomerException {
         return new ResponseEntity<>(orderService.cancelOrder(orderId), HttpStatus.OK);
     }

@@ -42,7 +42,6 @@ public class Orders {
     @JoinColumn(name = "paymentsId")
     private Payments payments;
 
-    @JsonIgnore
     @OneToOne(mappedBy = "orders", cascade = CascadeType.ALL)
     @JoinColumn(name = "orderId")
     private Shipping shipping;

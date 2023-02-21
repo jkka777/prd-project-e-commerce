@@ -58,6 +58,7 @@ public class Address {
 
     private AddressType addressType;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "customerId")
     private Customer customer;
