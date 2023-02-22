@@ -148,8 +148,14 @@ public class ProductServiceImpl implements ProductService {
 
                 List<Product> resultList = new ArrayList<>();
 
-                for (Integer i = minPrice; i <= maxPrice; i++) {
+                /*for (Integer i = minPrice; i <= maxPrice; i++) {
                     for (Product p : list) if (p.getProductPrice().equals(i)) resultList.add(p);
+                }*/
+
+                for (Product p : list) {
+                    if (p.getProductPrice() >= minPrice && p.getProductPrice() <= maxPrice) {
+                        resultList.add(p);
+                    }
                 }
 
                 resultList.sort(new SortByPriceHighToLow());
@@ -187,8 +193,10 @@ public class ProductServiceImpl implements ProductService {
 
                 List<Product> resultList = new ArrayList<>();
 
-                for (Integer i = minPrice; i <= maxPrice; i++) {
-                    for (Product p : list) if (p.getProductPrice() == i) resultList.add(p);
+                for (Product p : list) {
+                    if (p.getProductPrice() >= minPrice && p.getProductPrice() <= maxPrice) {
+                        resultList.add(p);
+                    }
                 }
 
                 resultList.sort(new SortByPriceLowToHigh());
@@ -226,8 +234,14 @@ public class ProductServiceImpl implements ProductService {
 
                 List<Product> resultList = new ArrayList<>();
 
-                for (Double i = minRating; i <= maxRating; i++) {
+                /*for (Double i = minRating; i <= maxRating; i++) {
                     for (Product p : list) if (p.getProductRatings().equals(i)) resultList.add(p);
+                }*/
+
+                for (Product p : list) {
+                    if (p.getProductRatings() >= minRating && p.getProductRatings() <= maxRating) {
+                        resultList.add(p);
+                    }
                 }
 
                 resultList.sort(new SortByRatingHighToLow());
@@ -264,8 +278,10 @@ public class ProductServiceImpl implements ProductService {
 
                 List<Product> resultList = new ArrayList<>();
 
-                for (Double i = minRating; i <= maxRating; i++) {
-                    for (Product p : list) if (p.getProductRatings().equals(i)) resultList.add(p);
+                for (Product p : list) {
+                    if (p.getProductRatings() >= minRating && p.getProductRatings() <= maxRating) {
+                        resultList.add(p);
+                    }
                 }
 
                 resultList.sort(new SortByRatingsLowToHigh());
