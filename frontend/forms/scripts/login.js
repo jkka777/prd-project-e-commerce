@@ -11,15 +11,3 @@ let createElement = (val) => {
 };
 
 catchElement('.navbar').innerHTML = navbar();
-
-let getHello = async () => {
-
-    try {
-        let res = await fetch("http://localhost:8880/customer/hello");
-        let data = await res.json();
-        console.log(data);
-    } catch (error) {
-        console.log(error);
-    }
-}
-getHello();
