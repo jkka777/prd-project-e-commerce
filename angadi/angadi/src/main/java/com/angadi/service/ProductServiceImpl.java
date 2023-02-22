@@ -74,7 +74,7 @@ public class ProductServiceImpl implements ProductService {
             if (optional.isPresent()) {
 
                 Product p = optional.get();
-
+                product.setCategory(p.getCategory());
                 return productRepository.save(product);
             }
             throw new ProductException("No Product found with the given details!");
