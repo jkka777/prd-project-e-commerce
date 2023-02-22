@@ -1,0 +1,125 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: monospace;
+}
+
+.navbar {
+    margin: auto;
+    height: 80px;
+    width: 100%;
+    box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
+}
+
+.content {
+    width: 100%;
+    margin: auto;
+    margin-top: 100px;
+}
+
+.content-box {
+    width: 100%;
+    text-align: center;
+    margin: 40px 0 40px 0;
+    padding: 20px 0 20px 0;
+    /* border: 1px solid black; */
+}
+
+.content-box>p{
+    font-size: 40px;
+    margin-bottom: 40px;
+}
+
+.product-details {
+    width: 90%;
+    height: 600px;
+    margin: auto;
+    padding: 10px 10px;
+    display: flex;
+    gap: 40px;
+    /* border: 1px solid black; */
+}
+
+.product-details>div {
+    width: 33%;
+}
+
+.category,
+.product,
+.shipping {
+    width: 100%;
+    margin: auto;
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+    /* border: 1px solid gainsboro; */
+}
+
+.category {
+    height: 40%;
+}
+
+.product {
+    height: 100%;
+}
+
+.shipping {
+    height: 70%;
+}
+
+.category>h2,
+.product>h2,
+.shipping>h2 {
+    margin: 20px 20px;
+    font-size: 32px;
+    font-weight: 500;
+}
+
+.category>label,
+.product>label,
+.shipping>label {
+    font-size: 17px;
+}
+
+.shipping>select {
+    width: 90%;
+    height: 30px;
+    margin: 10px 0 10px 0;
+    padding-left: 10px;
+    outline: none;
+    border: 0.5px solid gainsboro;
+    border-radius: 5px;
+}
+
+.category>input,
+.product>input,
+.shipping>input {
+    width: 90%;
+    height: 30px;
+    margin: 10px 0 10px 0;
+    padding: 10px 10px;
+    outline: none;
+    border: 0.5px solid gainsboro;
+    border-radius: 5px;
+}
+
+.cat-submit,
+.prd-submit,
+.ship-submit {
+    margin: 20px 20px;
+    width: 40%;
+    height: 40px;
+    border: none;
+    outline: none;
+    background-color: rgb(194, 217, 225);
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.cat-submit:hover,
+.prd-submit:hover,
+.ship-submit:hover {
+    background-color: black;
+    color: white;
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>welcome!</title>
+    <link rel="stylesheet" href="./styles/navbar.css">
+    <link rel="stylesheet" href="/forms/styles/admin.css">
+</head>
+
+<body>
+    <div class="navbar"></div>
+    <div class="content">
+        <div class="content-box">
+            <p>Admin/Seller dashboard</p>
+            <div class="product-details">
+                <div class="category">
+                    <h2>Add Category</h2>
+                    <!-- <label for="category-name">Category</label> -->
+                    <input type="text" name="category-name" id="cat-name" placeholder="Category name">
+                    <button class="cat-submit">Submit</button>
+                </div>
+                <div class="product">
+                    <h2>Add Product details</h2>
+                    <!-- <label for="category-name">Product Name</label> -->
+                    <input type="text" name="product-name" id="prd-name" placeholder="Product name">
+                    <!-- <label for="category-name">Product Image URL</label> -->
+                    <input type="url" name="product-image" id="prd-img" placeholder="Product Image URL">
+                    <!-- <label for="category-name">Product Price</label> -->
+                    <input type="number" name="product-price" id="prd-prc" placeholder="Product price">
+                    <!-- <label for="category-name">Product Ratings</label> -->
+                    <input type="number" name="product-ratings" id="prd-rat" placeholder="Product ratings (0.0 - 5.0)">
+                    <!-- <label for="category-name">Product Stock number</label> -->
+                    <input type="number" name="product-stock" id="prd-stk" placeholder="Product stock number">
+                    <!-- <label for="category-name">Product Category</label> -->
+                    <input type="text" name="product-category" id="prd-cat" placeholder="Product category">
+                    <button class="prd-submit">Submit</button>
+                </div>
+                <div class="shipping">
+                    <h2>Add Shipping details</h2>
+                    <!-- <label for="shipping-type">Shipping Type</label> -->
+                    <select name="shipping-type" id="ship-type">
+                        <option value="select">Select shipping type</option>
+                        <option value="air">AIR</option>
+                        <option value="sea">SEA</option>
+                        <option value="road">ROAD</option>
+                        <option value="rail">RAIL</option>
+                    </select>
+                    <!-- <label for="shipping-company">Shipping Company</label> -->
+                    <input type="text" name="shipping-company" id="ship-comp" placeholder="Shipping company name">
+                    <!-- <label for="shipping-phone">Phone</label> -->
+                    <input type="text" name="shipping-phone" id="ship-phn" placeholder="Phone number">
+                    <button class="ship-submit">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer"></div>
+</body>
+
+</html>
+<script src="./forms/scripts/admin.js" type="module"></script>
