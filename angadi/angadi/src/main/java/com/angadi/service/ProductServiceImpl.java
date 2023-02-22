@@ -136,14 +136,14 @@ public class ProductServiceImpl implements ProductService {
 
                 Set<Product> products = c.getProducts();
 
-                /*List<Product> dList = productRepository.findByCategoryAndPriceBetween(category, minPrice, maxPrice);
+                List<Product> dList = productRepository.findByCategoryAndPriceBetween(category, minPrice, maxPrice);
                 if (dList.isEmpty()) {
                     throw new ProductException("No products found right now, please try again some time!");
                 }
                 dList.sort(new SortByRatingHighToLow());
-                return new HashSet<>(dList);*/
+                return new HashSet<>(dList);
 
-                List<Product> list = new ArrayList<>(products);
+                /*List<Product> list = new ArrayList<>(products);
 
                 List<Product> resultList = new ArrayList<>();
 
@@ -152,7 +152,7 @@ public class ProductServiceImpl implements ProductService {
                 }
 
                 resultList.sort(new SortByPriceHighToLow());
-                return new HashSet<>(resultList);
+                return new HashSet<>(resultList);*/
             }
         }
         throw new CustomerException("Invalid user name/password provided or Please login first!");
@@ -173,14 +173,14 @@ public class ProductServiceImpl implements ProductService {
 
                 Set<Product> products = c.getProducts();
 
-                /*List<Product> dList = productRepository.findByCategoryAndPriceBetween(category, minPrice, maxPrice);
+                List<Product> dList = productRepository.findByCategoryAndPriceBetween(category, minPrice, maxPrice);
                 if (dList.isEmpty()) {
                     throw new ProductException("No products found right now, please try again some time!");
                 }
-                dList.sort(new SortByRatingLowToHigh());
-                return new HashSet<>(dList);*/
+                dList.sort(new SortByPriceLowToHigh());
+                return new HashSet<>(dList);
 
-                List<Product> list = new ArrayList<>(products);
+                /*List<Product> list = new ArrayList<>(products);
 
                 List<Product> resultList = new ArrayList<>();
 
@@ -189,7 +189,7 @@ public class ProductServiceImpl implements ProductService {
                 }
 
                 resultList.sort(new SortByPriceLowToHigh());
-                return new HashSet<>(resultList);
+                return new HashSet<>(resultList);*/
             }
         }
         throw new CustomerException("Invalid user name/password provided or Please login first!");
@@ -210,14 +210,14 @@ public class ProductServiceImpl implements ProductService {
 
                 Set<Product> products = c.getProducts();
 
-                /*List<Product> dList = productRepository.findByCategoryAndRatingBetween(category, minRating, maxRating);
+                List<Product> dList = productRepository.findByCategoryAndRatingBetween(category, minRating, maxRating);
                 if (dList.isEmpty()) {
                     throw new ProductException("No products found for the provided criteria");
                 }
                 dList.sort(new SortByRatingHighToLow());
-                return new HashSet<>(dList);*/
+                return new HashSet<>(dList);
 
-                List<Product> list = new ArrayList<>(products);
+                /*List<Product> list = new ArrayList<>(products);
 
                 List<Product> resultList = new ArrayList<>();
 
@@ -226,7 +226,7 @@ public class ProductServiceImpl implements ProductService {
                 }
 
                 resultList.sort(new SortByRatingHighToLow());
-                return new HashSet<>(resultList);
+                return new HashSet<>(resultList);*/
             }
         }
         throw new CustomerException("Invalid user name/password provided or Please login first!");
@@ -247,14 +247,14 @@ public class ProductServiceImpl implements ProductService {
 
                 Set<Product> products = c.getProducts();
 
-                /*List<Product> dList = productRepository.findByCategoryAndRatingBetween(category, minRating, maxRating);
+                List<Product> dList = productRepository.findByCategoryAndRatingBetween(category, minRating, maxRating);
                 if (dList.isEmpty()) {
                     throw new ProductException("No products found for the provided criteria");
                 }
-                dList.sort(new SortByRatingLowToHigh());
-                return new HashSet<>(dList);*/
+                dList.sort(new SortByRatingsLowToHigh());
+                return new HashSet<>(dList);
 
-                List<Product> list = new ArrayList<>(products);
+                /*List<Product> list = new ArrayList<>(products);
 
                 List<Product> resultList = new ArrayList<>();
 
@@ -263,7 +263,7 @@ public class ProductServiceImpl implements ProductService {
                 }
 
                 resultList.sort(new SortByRatingsLowToHigh());
-                return new HashSet<>(resultList);
+                return new HashSet<>(resultList);*/
             }
         }
         throw new CustomerException("Invalid user name/password provided or Please login first!");
