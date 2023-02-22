@@ -24,14 +24,14 @@ public class Address {
     @NotBlank(message = "Street cannot be blank")
     @NotEmpty(message = "Street cannot be empty")
     @NotNull(message = "Street cannot be null")
-    @Pattern(regexp = "^[a-zA-Z]{4,20}", message = "Street name can contain a-z or A-Z or 0-9 characters and " +
+    @Pattern(regexp = "^(?![ .]+$)[a-zA-Z0-9 .]*${4,55}", message = "Street name can contain a-z or A-Z or 0-9 characters and " +
             "should have length of minimum 4 and maximum of 20 characters")
     private String street;
 
     @NotBlank(message = "City cannot be blank")
     @NotEmpty(message = "City cannot be empty")
     @NotNull(message = "City cannot be null")
-    @Pattern(regexp = "^[a-zA-Z]{4,20}", message = "City name can contain a-z or A-Z or 0-9 characters and " +
+    @Pattern(regexp = "^(?![ .]+$)[a-zA-Z0-9 .]*${4,55}", message = "City name can contain a-z or A-Z or 0-9 characters and " +
             "should have length of minimum 4 and maximum of 20 characters")
     private String city;
 
@@ -45,14 +45,14 @@ public class Address {
     @NotBlank(message = "State cannot be blank")
     @NotEmpty(message = "State cannot be empty")
     @NotNull(message = "State cannot be null")
-    @Pattern(regexp = "^[a-zA-Z]{4,20}", message = "State name can contain a-z or A-Z or 0-9 characters and " +
+    @Pattern(regexp = "^(?![ .]+$)[a-zA-Z .]*${4,55}", message = "State name can contain a-z or A-Z or 0-9 characters and " +
             "should have length of minimum 4 and maximum of 20 characters")
     private String state;
 
     @NotBlank(message = "Country cannot be blank")
     @NotEmpty(message = "Country cannot be empty")
     @NotNull(message = "Country cannot be null")
-    @Pattern(regexp = "^[a-zA-Z]{4,20}", message = "Country name can contain a-z or A-Z or 0-9 characters and " +
+    @Pattern(regexp = "^(?![ .]+$)[a-zA-Z .]*${4,55}", message = "Country name can contain a-z or A-Z or 0-9 characters and " +
             "should have length of minimum 4 and maximum of 20 characters")
     private String country;
 
