@@ -58,7 +58,7 @@ public class CustomerController {
     }
 
     /* admin specific functionality */
-    @GetMapping("/getAllCustomerDetails/")
+    @GetMapping("/getAllCustomerDetails")
     public ResponseEntity<List<Customer>> getAllCustomersHandler() throws CustomerException {
         return new ResponseEntity<>(customerService.getAllCustomerDetails(), HttpStatus.CREATED);
     }

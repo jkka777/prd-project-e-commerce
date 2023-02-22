@@ -23,7 +23,7 @@ public class Customer {
     @NotBlank(message = "Name cannot be blank")
     @NotEmpty(message = "Name cannot be empty")
     @NotNull(message = "Name cannot be null")
-    @Pattern(regexp = "^[a-zA-Z0-9]{4,25}", message = "Name should contain minimum of 4 and maximum of 25 characters and can contain a-z or A-Z or 0-9")
+    @Pattern(regexp = "^(?![ .]+$)[a-zA-Z .]*${4,55}", message = "Name should contain minimum of 4 and maximum of 55 characters and can contain a-z or A-Z or 0-9")
     private String name;
 
     @NotBlank(message = "Mobile cannot be blank")

@@ -24,7 +24,7 @@ public class Product {
     @NotBlank(message = "Product name cannot be blank")
     @NotEmpty(message = "Product name cannot be empty")
     @NotNull(message = "Product name cannot be null")
-    @Pattern(regexp = "^[a-zA-Z0-9]{4,55}", message = "Product name should contain minimum of 4 and maximum of 15 characters " +
+    @Pattern(regexp = "^(?![ .]+$)[a-zA-Z0-9 .]*${4,55}", message = "Product name should contain minimum of 4 and maximum of 15 characters " +
             "and can contain a-z or A-Z or 0-9")
     private String productName;
 
@@ -45,6 +45,7 @@ public class Product {
     @JoinColumn(name = "categoryId")
     private Category category;
 
+    @JsonIgnore
     @JsonProperty(value = "seller")
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customerId")

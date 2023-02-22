@@ -28,7 +28,7 @@ public class Category {
     @NotBlank(message = "Category name cannot be blank")
     @NotEmpty(message = "Category name cannot be empty")
     @NotNull(message = "Category name cannot be null")
-    @Pattern(regexp = "^[a-zA-Z]{4,15}", message = "Category name should contain minimum of 4 and maximum of 15 characters " +
+    @Pattern(regexp = "^(?![ .]+$)[a-zA-Z .]*${4,55}", message = "Category name should contain minimum of 4 and maximum of 15 characters " +
             "and can contain a-z or A-Z or 0-9")
     private String categoryName;
 
