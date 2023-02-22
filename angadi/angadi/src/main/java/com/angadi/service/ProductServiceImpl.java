@@ -133,10 +133,11 @@ public class ProductServiceImpl implements ProductService {
             if (optional.isPresent()) {
 
                 Category c = optional.get();
+                String cat = String.valueOf(c);
 
                 Set<Product> products = c.getProducts();
 
-                List<Product> dList = productRepository.findByCategoryAndPriceBetween(category, minPrice, maxPrice);
+                List<Product> dList = productRepository.findByCategoryAndPriceBetween(cat, minPrice, maxPrice);
                 if (dList.isEmpty()) {
                     throw new ProductException("No products found right now, please try again some time!");
                 }
@@ -170,10 +171,11 @@ public class ProductServiceImpl implements ProductService {
             if (optional.isPresent()) {
 
                 Category c = optional.get();
+                String cat = String.valueOf(c);
 
                 Set<Product> products = c.getProducts();
 
-                List<Product> dList = productRepository.findByCategoryAndPriceBetween(category, minPrice, maxPrice);
+                List<Product> dList = productRepository.findByCategoryAndPriceBetween(cat, minPrice, maxPrice);
                 if (dList.isEmpty()) {
                     throw new ProductException("No products found right now, please try again some time!");
                 }
@@ -207,10 +209,11 @@ public class ProductServiceImpl implements ProductService {
             if (optional.isPresent()) {
 
                 Category c = optional.get();
+                String cat = String.valueOf(c);
 
                 Set<Product> products = c.getProducts();
 
-                List<Product> dList = productRepository.findByCategoryAndRatingBetween(category, minRating, maxRating);
+                List<Product> dList = productRepository.findByCategoryAndRatingBetween(cat, minRating, maxRating);
                 if (dList.isEmpty()) {
                     throw new ProductException("No products found for the provided criteria");
                 }
@@ -244,10 +247,11 @@ public class ProductServiceImpl implements ProductService {
             if (optional.isPresent()) {
 
                 Category c = optional.get();
+                String cat = String.valueOf(c);
 
                 Set<Product> products = c.getProducts();
 
-                List<Product> dList = productRepository.findByCategoryAndRatingBetween(category, minRating, maxRating);
+                List<Product> dList = productRepository.findByCategoryAndRatingBetween(cat, minRating, maxRating);
                 if (dList.isEmpty()) {
                     throw new ProductException("No products found for the provided criteria");
                 }
