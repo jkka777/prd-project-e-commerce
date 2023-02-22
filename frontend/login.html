@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>angadi sign-up / login</title>
+    <link rel="stylesheet" href="/forms/styles/login.css">
+    <link rel="stylesheet" href="/styles/navbar.css">
+</head>
+
+<body>
+    <div class="navbar"></div>
+    <div class="content">
+        <div class="heading">
+            <h1>angadi</h1>
+        </div>
+        <div class="content-box">
+            <div class="content-login">
+                <div>
+                    <h2>welcome!</h2>
+                </div>
+                <div>
+                    <p>sign in to your account</p>
+                </div>
+                <div class="login-form">
+                    <input type="email" name="email" id="email" placeholder="email">
+                    <input type="password" name="password" id="password" placeholder="password">
+                    <button class="login">log in</button>
+                </div>
+            </div>
+            <div class="content-signup">
+                <div>
+                    <img src="./forms/utility/person.png" alt="anon-logo">
+                    <h2>create account</h2>
+                </div>
+                <div class="signup-form">
+                    <input type="text" name="name" id="name" placeholder="name">
+                    <input type="text" name="mobile" id="mobile" placeholder="mobile">
+                    <input type="email" name="signup-email" id="signup-email" placeholder="email">
+                    <input type="password" name="signup-password" id="signup-password" placeholder="password">
+                    <select name="role" id="role">
+                        <option value="select-role">select role</option>
+                        <option value="USER">USER</option>
+                        <option value="ADMIN">ADMIN</option>
+                        <option value="SELLER">SELLER</option>
+                    </select>
+                    <div>
+                        <button class="signup">sign up</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="details"></div>
+    </div>
+    <div class="footer"></div>
+</body>
+
+</html>
+<script src="/forms/scripts/login.js" type="module"></script>
