@@ -13,7 +13,7 @@ import lombok.*;
 public class OrderItem {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer orderItemId;
 
     @ManyToOne(cascade = CascadeType.ALL)
