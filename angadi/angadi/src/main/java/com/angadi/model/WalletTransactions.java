@@ -21,7 +21,7 @@ public class WalletTransactions {
 
     private LocalDateTime transactionTime;
 
-    @Digits(integer = 5, fraction = 2, message = "Amount cannot be more than 10000 and less than 100")
+    @Digits(integer = 6, fraction = 2, message = "Amount cannot be more than 100000 and less than 100")
     private Integer amount;
 
     /*@NotNull(message = "Description cannot be null")
@@ -33,7 +33,9 @@ public class WalletTransactions {
     @JoinColumn(name = "walletId")
     private Wallet wallet;
 
-    private Integer orderId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "orderId")
+    private Orders orders;
 
     private TransactionStatus transactionStatus = TransactionStatus.DUE;
 
