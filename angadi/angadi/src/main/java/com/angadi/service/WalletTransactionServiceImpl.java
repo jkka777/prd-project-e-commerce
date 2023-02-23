@@ -51,8 +51,8 @@ public class WalletTransactionServiceImpl implements WalletTransactionService {
                 walletTransactions.setTransactionStatus(TransactionStatus.PAID);
 
                 transactions.add(walletTransactions);
+                wallet.setWalletTransactions(transactions);
 
-                walletRepository.save(wallet);
                 walletTransactionRepository.save(walletTransactions);
             }
             throw new WalletException("No wallet found! Add wallet to your profile!");
@@ -71,38 +71,6 @@ public class WalletTransactionServiceImpl implements WalletTransactionService {
             Wallet srcWallet = customer.getWallet();
 
             if (srcWallet != null) {
-
-                /*Optional<Orders> optionalOrders = orderRepository.findById(orderId);
-
-                if (optionalOrders.isPresent()) {
-
-                    Orders orders = optionalOrders.get();
-                    Integer amount = 0;
-
-                    amount = orders.getTotalOrderPrice();
-
-                    if (amount > srcWallet.getWalletBalance()) {
-                        throw new WalletException("Insufficient funds! please add balance to you wallet!");
-                    }
-                    walletTransactions.setTransactionTime(LocalDateTime.now());
-                    walletTransactions.setAmount(amount);
-                    walletTransactions.setDescription("Product purchase");
-                    walletTransactions.setWallet(srcWallet);
-                    walletTransactions.setTransactionStatus(TransactionStatus.PAID);
-
-                    orders.setWalletTransactions(walletTransactions);
-                    walletTransactions.setOrders(orders);
-
-                    Set<WalletTransactions> srcWtSet = srcWallet.getWalletTransactions();
-                    srcWtSet.add(walletTransactions);
-                    srcWallet.setWalletTransactions(srcWtSet);
-
-                    srcWallet.setWalletBalance(srcWallet.getWalletBalance() - amount);
-
-                    srcWallet.setCustomer(customer);
-                    customer.setWallet(srcWallet);
-                }
-                throw new OrderException("No order found with given order Id -> " + orderId);*/
 
                 Set<Orders> cOrders = customer.getOrders();
 
@@ -136,6 +104,8 @@ public class WalletTransactionServiceImpl implements WalletTransactionService {
 
                         srcWallet.setCustomer(customer);
                         customer.setWallet(srcWallet);
+
+                        return walletTransactionRepository.save(walletTransactions);
                     }
                 }
             }

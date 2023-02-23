@@ -4,6 +4,7 @@ import com.angadi.exception.CustomerException;
 import com.angadi.exception.OrderException;
 import com.angadi.model.Orders;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface OrderService {
@@ -17,6 +18,10 @@ public interface OrderService {
     public Orders getOrderById(Integer orderId) throws OrderException, CustomerException;
 
     public List<Orders> getAllOrdersOfCustomer() throws OrderException, CustomerException;
+
+    public List<Orders> getAllOrdersBetweenDates(LocalDate dateFrom, LocalDate dateTo) throws OrderException, CustomerException;
+
+    public List<Orders> getAllOrdersByDeliveryAddress(Integer addressId) throws CustomerException, OrderException;
 
     /* admin specific method */
     public List<Orders> getAllOrders();
