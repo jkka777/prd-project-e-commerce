@@ -72,31 +72,25 @@ public class WalletTransactionServiceImpl implements WalletTransactionService {
 
             if (srcWallet != null) {
 
-                Set<Orders> customerOrders = customer.getOrders();
+                Optional<Orders> optionalOrders = orderRepository.findById(orderId);
+                if (optionalOrders.isPresent()) {
 
-                Orders orders;
-                Integer amount = 0;
+                    Orders orders = optionalOrders.get();
+                    Integer amount = 0;
 
-                if (!customerOrders.isEmpty()) {
+                    amount = orders.getTotalOrderPrice();
 
-                    for (Orders ord : customerOrders) {
-                        if (ord.getOrderId().equals(orderId)) {
-                            orders = ord;
-                            amount = orders.getTotalOrderPrice();
-
-                            if (amount > srcWallet.getWalletBalance()) {
-                                throw new WalletException("Insufficient funds! please add balance to you wallet!");
-                            }
-                            walletTransactions.setTransactionTime(LocalDateTime.now());
-                            walletTransactions.setAmount(amount);
-                            walletTransactions.setDescription("Product purchase");
-                            walletTransactions.setWallet(srcWallet);
-                            walletTransactions.setTransactionStatus(TransactionStatus.PAID);
-
-                            orders.setWalletTransactions(walletTransactions);
-                            walletTransactions.setOrders(orders);
-                        }
+                    if (amount > srcWallet.getWalletBalance()) {
+                        throw new WalletException("Insufficient funds! please add balance to you wallet!");
                     }
+                    walletTransactions.setTransactionTime(LocalDateTime.now());
+                    walletTransactions.setAmount(amount);
+                    walletTransactions.setDescription("Product purchase");
+                    walletTransactions.setWallet(srcWallet);
+                    walletTransactions.setTransactionStatus(TransactionStatus.PAID);
+
+                    orders.setWalletTransactions(walletTransactions);
+                    walletTransactions.setOrders(orders);
 
                     Set<WalletTransactions> srcWtSet = srcWallet.getWalletTransactions();
                     srcWtSet.add(walletTransactions);
