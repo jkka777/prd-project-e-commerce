@@ -15,10 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class WalletTransactionServiceImpl implements WalletTransactionService {
@@ -77,10 +74,17 @@ public class WalletTransactionServiceImpl implements WalletTransactionService {
 
             if (srcWallet != null) {
 
-                Optional<Orders> ordersOptional = orderRepository.findById(orderId);
+                Set<Orders> customerOrders = customer.getOrders();
 
-                if (ordersOptional.isPresent()) {
-                    Orders orders = ordersOptional.get();
+                Orders orders = new Orders();
+
+                if (!customerOrders.isEmpty()) {
+
+                    for (Orders ord : customerOrders) {
+                        if (ord.getOrderId().equals(orderId)) {
+                            orders = ord;
+                        }
+                    }
 
                     Integer amount = orders.getTotalOrderPrice();
                     if (amount > srcWallet.getWalletBalance()) {
