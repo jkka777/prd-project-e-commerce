@@ -26,8 +26,8 @@ public class WalletTransactionController {
         return new ResponseEntity<>(walletTransactionService.addTransaction(walletTransactions), HttpStatus.CREATED);
     }
 
-    @PutMapping("/makePayment")
-    public ResponseEntity<WalletTransactions> makePaymentToOrder(@Valid @RequestBody WalletTransactions walletTransactions, @RequestParam Integer orderId) throws CustomerException, WalletException, OrderException {
+    @PutMapping("/makePayment/{orderId}")
+    public ResponseEntity<WalletTransactions> makePaymentToOrder(@Valid @RequestBody WalletTransactions walletTransactions, @PathVariable Integer orderId) throws CustomerException, WalletException, OrderException {
         return new ResponseEntity<>(walletTransactionService.makePaymentToOrder(walletTransactions, orderId), HttpStatus.OK);
     }
 
