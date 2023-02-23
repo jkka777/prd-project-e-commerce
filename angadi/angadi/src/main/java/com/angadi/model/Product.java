@@ -18,7 +18,7 @@ import java.util.Set;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer productId;
 
     @NotBlank(message = "Product name cannot be blank")

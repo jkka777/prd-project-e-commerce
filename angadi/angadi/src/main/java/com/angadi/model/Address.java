@@ -19,7 +19,7 @@ import java.util.Set;
 public class Address {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer addressId;
     @NotBlank(message = "Street cannot be blank")
     @NotEmpty(message = "Street cannot be empty")
