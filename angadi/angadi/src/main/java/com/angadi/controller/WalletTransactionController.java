@@ -1,6 +1,7 @@
 package com.angadi.controller;
 
 import com.angadi.exception.CustomerException;
+import com.angadi.exception.OrderException;
 import com.angadi.exception.WalletException;
 import com.angadi.exception.WalletTransactionException;
 import com.angadi.model.WalletTransactions;
@@ -23,6 +24,11 @@ public class WalletTransactionController {
     @PostMapping("/addWalletTransaction")
     public ResponseEntity<WalletTransactions> saveWalletTransactionHandler(@Valid @RequestBody WalletTransactions walletTransactions) throws CustomerException, WalletException {
         return new ResponseEntity<>(walletTransactionService.addTransaction(walletTransactions), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/makePayment")
+    public ResponseEntity<WalletTransactions> makePaymentToOrder(@Valid @RequestBody WalletTransactions walletTransactions, @RequestParam Integer orderId) throws CustomerException, WalletException, OrderException {
+        return new ResponseEntity<>(walletTransactionService.makePaymentToOrder(walletTransactions, orderId), HttpStatus.OK);
     }
 
     @GetMapping("/viewTransactions")

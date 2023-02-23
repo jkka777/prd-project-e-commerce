@@ -20,7 +20,7 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer walletId;
 
-    @Digits(integer = 5, fraction = 2, message = "Balance you want to add should not be less than 100 and more than 10000")
+    @Digits(integer = 6, fraction = 2, message = "Balance you want to add should not be less than 100 and more than 100000")
     private Integer walletBalance;
 
     @JsonIgnore

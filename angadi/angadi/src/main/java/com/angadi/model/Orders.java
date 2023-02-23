@@ -47,4 +47,8 @@ public class Orders {
     private Shipping shipping;
 
     private LocalDate deliveryDate;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "orders", cascade = CascadeType.ALL)
+    private WalletTransactions walletTransactions;
 }

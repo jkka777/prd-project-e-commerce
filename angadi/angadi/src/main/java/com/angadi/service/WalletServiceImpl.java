@@ -59,7 +59,18 @@ public class WalletServiceImpl implements WalletService {
                 Wallet w = optional.get();
                 w.setWalletBalance(w.getWalletBalance() + amount);
 
+                WalletTransactions walletTransactions = new WalletTransactions();
+                walletTransactions.setTransactionTime(LocalDateTime.now());
+                walletTransactions.setAmount(amount);
+                walletTransactions.setWallet(w);
+                walletTransactions.setDescription("CREDITED AMOUNT");
+
+                Set<WalletTransactions> wtSet = w.getWalletTransactions();
+                wtSet.add(walletTransactions);
+                w.setWalletTransactions(wtSet);
+
                 customer.setWallet(w);
+                w.setCustomer(customer);
 
                 return walletRepository.save(w);
             }
