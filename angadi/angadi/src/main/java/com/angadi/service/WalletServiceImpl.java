@@ -112,11 +112,9 @@ public class WalletServiceImpl implements WalletService {
 
         if (sourceCustomer != null) {
 
-            Optional<Wallet> optional = walletRepository.findById(sourceCustomer.getWallet().getWalletId());
+            Wallet sourceWallet = sourceCustomer.getWallet();
 
-            if (optional.isPresent()) {
-
-                Wallet sourceWallet = optional.get();
+            if (sourceWallet != null) {
 
                 Integer sourceBalance = sourceWallet.getWalletBalance();
 
@@ -131,8 +129,8 @@ public class WalletServiceImpl implements WalletService {
 
                 walletTransactions.setTransactionTime(LocalDateTime.now());
                 walletTransactions.setAmount(transferAmount);
-                walletTransactions.setWallet(sourceWallet);
                 walletTransactions.setDescription(description);
+                walletTransactions.setWallet(sourceWallet);
 
                 Set<WalletTransactions> transactions = sourceWallet.getWalletTransactions();
                 transactions.add(walletTransactions);
@@ -158,8 +156,8 @@ public class WalletServiceImpl implements WalletService {
 
                         wt.setTransactionTime(LocalDateTime.now());
                         wt.setAmount(transferAmount);
-                        wt.setWallet(destinationWallet);
                         wt.setDescription(description);
+                        wt.setWallet(destinationWallet);
 
                         Set<WalletTransactions> destWalletTransactionSet = destinationWallet.getWalletTransactions();
                         destWalletTransactionSet.add(wt);

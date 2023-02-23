@@ -253,6 +253,55 @@ public class OrderServiceImpl implements OrderService {
         throw new CustomerException("Invalid user name/password provided or Please login first!");
     }
 
+    @Override
+    public List<Orders> getAllOrdersBetweenDates(LocalDate dateFrom, LocalDate dateTo) throws OrderException, CustomerException {
+
+        Customer customer = currentUser.getLoggedInCustomer();
+
+        if (customer != null) {
+
+            List<Orders> orderSet = orderRepository.findByOrdersBetweenDates(dateFrom, dateTo);
+
+            if (orderSet.isEmpty()) {
+                throw new OrderException("No order details found, Please add orders first!");
+            }
+            Set<Orders> resultSet = new HashSet<>();
+            for (Orders o : orderSet) {
+
+                if (o.getCustomer() != null && o.getCustomer().getCustomerId() == customer.getCustomerId()) {
+                    resultSet.add(o);
+                }
+            }
+
+            if (resultSet.isEmpty()) throw new OrderException("No orders found in between given dates.");
+            return new ArrayList<>(resultSet);
+        }
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
+    }
+
+    @Override
+    public List<Orders> getAllOrdersByDeliveryAddress(Integer addressId) throws CustomerException, OrderException {
+
+        Customer customer = currentUser.getLoggedInCustomer();
+
+        if (customer != null) {
+
+            List<Orders> ordersList = orderRepository.findAll();
+            Set<Orders> result = new HashSet<>();
+
+            for (Orders o : ordersList) {
+
+                if (o != null && o.getDeliveryAddress().getAddressId() == addressId) {
+                    result.add(o);
+                }
+            }
+
+            if (result.isEmpty()) throw new OrderException("No orders found in between given dates.");
+        }
+        throw new CustomerException("Invalid user name/password provided or Please login first!");
+    }
+
+
     /* Get all the set of order details in database (internal purpose) */
     @Override
     public List<Orders> getAllOrders() {
