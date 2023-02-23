@@ -99,6 +99,8 @@ public class WalletTransactionServiceImpl implements WalletTransactionService {
 
                     orders.setWalletTransactions(walletTransactions);
 
+                    srcWallet.setWalletBalance(srcWallet.getWalletBalance() - amount);
+
                     srcWallet.setCustomer(customer);
                     customer.setWallet(srcWallet);
                 }
