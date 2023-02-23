@@ -10,8 +10,6 @@ import com.angadi.repository.OrderRepository;
 import com.angadi.repository.WalletRepository;
 import com.angadi.repository.WalletTransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -76,32 +74,33 @@ public class WalletTransactionServiceImpl implements WalletTransactionService {
 
                 Set<Orders> customerOrders = customer.getOrders();
 
-                Orders orders = new Orders();
+                Orders orders;
+                Integer amount = 0;
 
                 if (!customerOrders.isEmpty()) {
 
                     for (Orders ord : customerOrders) {
                         if (ord.getOrderId().equals(orderId)) {
                             orders = ord;
+                            amount = orders.getTotalOrderPrice();
+
+                            if (amount > srcWallet.getWalletBalance()) {
+                                throw new WalletException("Insufficient funds! please add balance to you wallet!");
+                            }
+                            walletTransactions.setTransactionTime(LocalDateTime.now());
+                            walletTransactions.setAmount(amount);
+                            walletTransactions.setDescription("Product purchase");
+                            walletTransactions.setWallet(srcWallet);
+                            walletTransactions.setTransactionStatus(TransactionStatus.PAID);
+
+                            orders.setWalletTransactions(walletTransactions);
+                            walletTransactions.setOrders(orders);
                         }
                     }
-
-                    Integer amount = orders.getTotalOrderPrice();
-                    if (amount > srcWallet.getWalletBalance()) {
-                        throw new WalletException("Insufficient funds! please add balance to you wallet!");
-                    }
-                    walletTransactions.setTransactionTime(LocalDateTime.now());
-                    walletTransactions.setAmount(amount);
-                    walletTransactions.setDescription("Product purchase");
-                    walletTransactions.setWallet(srcWallet);
-                    walletTransactions.setOrders(orders);
-                    walletTransactions.setTransactionStatus(TransactionStatus.PAID);
 
                     Set<WalletTransactions> srcWtSet = srcWallet.getWalletTransactions();
                     srcWtSet.add(walletTransactions);
                     srcWallet.setWalletTransactions(srcWtSet);
-
-                    orders.setWalletTransactions(walletTransactions);
 
                     srcWallet.setWalletBalance(srcWallet.getWalletBalance() - amount);
 
