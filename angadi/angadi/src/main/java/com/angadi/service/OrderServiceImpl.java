@@ -260,7 +260,7 @@ public class OrderServiceImpl implements OrderService {
 
         if (customer != null) {
 
-            List<Orders> orderSet = orderRepository.findByOrdersBetweenDates(dateFrom, dateTo);
+            List<Orders> orderSet = orderRepository.findOrdersBetweenDates(dateFrom, dateTo);
 
             if (orderSet.isEmpty()) {
                 throw new OrderException("No order details found, Please add orders first!");
