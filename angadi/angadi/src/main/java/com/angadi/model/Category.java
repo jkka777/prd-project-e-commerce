@@ -22,7 +22,7 @@ import java.util.Set;
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer categoryId;
 
     @NotBlank(message = "Category name cannot be blank")

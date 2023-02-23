@@ -17,7 +17,7 @@ import java.util.Set;
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer customerId;
 
     @NotBlank(message = "Name cannot be blank")

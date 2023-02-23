@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class WalletTransactions {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer walletTransactionId;
 
     private LocalDateTime transactionTime;

@@ -14,7 +14,7 @@ import lombok.*;
 public class Seller {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer sellerId;
 
     @NotBlank(message = "Company name cannot be blank")

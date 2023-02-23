@@ -16,7 +16,7 @@ import java.util.Set;
 public class Orders {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer orderId;
 
     private LocalDate orderDate;
