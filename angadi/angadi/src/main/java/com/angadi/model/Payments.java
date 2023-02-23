@@ -19,7 +19,7 @@ import java.time.LocalDate;
 public class Payments {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer paymentsId;
 
     private PaymentType paymentType;

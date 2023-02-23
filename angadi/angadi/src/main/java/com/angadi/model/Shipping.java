@@ -14,7 +14,7 @@ import lombok.*;
 public class Shipping {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer shippingId;
 
     private ShippingType shippingType;

@@ -17,7 +17,7 @@ import java.util.Set;
 public class Wallet {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer walletId;
 
     @Digits(integer = 6, fraction = 2, message = "Balance you want to add should not be less than 100 and more than 100000")
