@@ -1,6 +1,8 @@
 # angadi e commerce application
 A simple end to end and fully functional e-commerce web application built using vanilla java script, html, css. For the backend spring boot to generate REST API with spring security for authentication and authorization are used.
-Structuring and finalizing the entities and relations between them will be finalized.
+
+<h2>Entity relationship schema</h2>
+<img src="./schema/er.svg" alt="er-schema"/>
 
 Admin, Seller and User are main stakeholders of this application
 
