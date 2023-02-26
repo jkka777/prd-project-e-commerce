@@ -57,15 +57,15 @@ public class Customer {
     private LocalDateTime registeredTime;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<Orders> orders = new HashSet<>();
 
     @JsonIgnore
-    @OneToOne(mappedBy = "customer")
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     private Wallet wallet;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "customer")
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     private Cart cart;
 
 }

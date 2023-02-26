@@ -26,7 +26,7 @@ public class Cart {
     @JoinColumn(name = "customerId")
     private Customer customer;
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     @JsonIgnore
     @ToString.Exclude
     private Set<CartItem> cartItems = new HashSet<>();
