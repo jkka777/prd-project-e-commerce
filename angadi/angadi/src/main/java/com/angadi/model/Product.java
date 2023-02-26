@@ -46,11 +46,9 @@ public class Product {
     @JoinColumn(name = "categoryId")
     private Category category;
 
-    @JsonIgnore
-    @JsonProperty(value = "seller")
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customerId")
-    private Customer customer;
+    private String sellerName;
+
+    private Integer walletId;
 
     @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
