@@ -23,8 +23,7 @@ import java.util.Set;
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mysql_sequence")
-    @GenericGenerator(name = "mysql_sequence", strategy = "com.angadi.generator.MySQLSequenceGenerator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer categoryId;
 
     @NotBlank(message = "Category name cannot be blank")

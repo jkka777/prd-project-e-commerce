@@ -17,8 +17,7 @@ import java.util.Set;
 public class Orders {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mysql_sequence")
-    @GenericGenerator(name = "mysql_sequence", strategy = "com.angadi.generator.MySQLSequenceGenerator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer orderId;
 
     private LocalDate orderDate;
