@@ -68,7 +68,4 @@ public class Customer {
     @OneToOne(mappedBy = "customer")
     private Cart cart;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "customer")
-    private Product product;
 }

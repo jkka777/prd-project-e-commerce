@@ -52,8 +52,8 @@ public class ProductServiceImpl implements ProductService {
                 category.setProducts(set);
                 product.setCategory(category);
 
-                customer.setProduct(product);
-                product.setCustomer(customer);
+                product.setSellerName(customer.getName());
+                product.setWalletId(customer.getWallet().getWalletId());
 
                 return productRepository.save(product);
             }
@@ -75,6 +75,9 @@ public class ProductServiceImpl implements ProductService {
 
                 Product p = optional.get();
                 product.setCategory(p.getCategory());
+                product.setSellerName(customer.getName());
+                product.setWalletId(customer.getWallet().getWalletId());
+
                 return productRepository.save(product);
             }
             throw new ProductException("No Product found with the given details!");
