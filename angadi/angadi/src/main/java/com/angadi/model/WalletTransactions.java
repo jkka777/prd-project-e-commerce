@@ -31,11 +31,11 @@ public class WalletTransactions {
     @NotEmpty(message = "Description cannot be empty")*/
     private String description;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "walletId")
     private Wallet wallet;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "orderId")
     private Orders orders;
 
