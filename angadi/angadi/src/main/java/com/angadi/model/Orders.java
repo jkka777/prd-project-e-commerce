@@ -3,6 +3,7 @@ package com.angadi.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -16,7 +17,8 @@ import java.util.Set;
 public class Orders {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "mysql_sequence")
+    @GenericGenerator(name = "mysql_sequence", strategy = "com.angadi.generator.MySQLSequenceGenerator")
     private Integer orderId;
 
     private LocalDate orderDate;
