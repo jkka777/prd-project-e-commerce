@@ -18,11 +18,11 @@ public class OrderItem {
     @GenericGenerator(name = "mysql_sequence", strategy = "com.angadi.generator.MySQLSequenceGenerator")
     private Integer orderItemId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "orderId")
     private Orders orders;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "cartItemId")
     private CartItem cartItem;
 

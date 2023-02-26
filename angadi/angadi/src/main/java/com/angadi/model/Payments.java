@@ -31,7 +31,7 @@ public class Payments {
     private PaymentStatus paymentStatus;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "payments", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "payments")
     private Orders orders;
 
 }
